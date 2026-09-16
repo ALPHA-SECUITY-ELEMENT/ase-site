@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASE — Recruiter Dashboard</title>
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/pages.css" />
+<style>
+  body { cursor: auto; background: #0a0c0b; color: #e9e6df; }
+  .admin-shell { max-width: 1200px; margin: 0 auto; padding: 120px 32px 80px; }
+  .gate { max-width: 420px; margin: 20vh auto 0; padding: 40px; border: 1px solid rgba(233,230,223,.08); background: #111513; }
+  .gate h1 { font-family: 'Oswald', sans-serif; font-size: 22px; letter-spacing: .1em; margin-bottom: 24px; }
+  .gate input { width: 100%; padding: 12px; background: #0a0c0b; border: 1px solid rgba(233,230,223,.08); color: #e9e6df; font-family: inherit; margin-bottom: 16px; }
+  .admin-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 40px; border-bottom: 1px solid rgba(233,230,223,.08); padding-bottom: 20px; }
+  .admin-head h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 32px; letter-spacing: .06em; }
+  .admin-head .meta { font-size: 11px; letter-spacing: .25em; color: #8b8f88; }
+  .queue { display: grid; gap: 16px; margin-bottom: 60px; }
+  .card { border: 1px solid rgba(233,230,223,.08); background: #111513; padding: 26px 28px; }
+  .card.pending { border-left: 3px solid #c8a94a; }
+  .card.approved { border-left: 3px solid #3ba55d; opacity: .7; }
+  .card.denied { border-left: 3px solid #ed4245; opacity: .7; }
+  .card-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 18px; gap: 24px; }
+  .card-head h3 { font-family: 'Oswald', sans-serif; font-size: 20px; letter-spacing: .06em; }
+  .card-head .id { font-size: 10px; letter-spacing: .2em; color: #8b8f88; margin-top: 4px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 24px; font-size: 13px; margin-bottom: 18px; }
+  .card-grid .k { font-size: 10px; letter-spacing: .25em; color: #8b8f88; display: block; margin-bottom: 3px; }
+  .card-grid .v { color: #e9e6df; }
+  .card-why { font-size: 13px; color: #8b8f88; border-top: 1px solid rgba(233,230,223,.08); padding-top: 16px; margin-top: 16px; white-space: pre-wrap; }
+  .card-actions { display: flex; gap: 10px; margin-top: 20px; }
+  .card-actions button { padding: 10px 22px; font-size: 11px; letter-spacing: .2em; border: 1px solid rgba(233,230,223,.08); background: none; color: #e9e6df; transition: all .25s; cursor: pointer; }
+  .card-actions .approve:hover { border-color: #3ba55d; color: #3ba55d; }
+  .card-actions .deny:hover { border-color: #ed4245; color: #ed4245; }
+  .section-title { font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: .3em; color: #8b8f88; margin-bottom: 20px; }
+  .empty { color: #8b8f88; font-size: 13px; padding: 24px 0; }
+  .btn { display: inline-flex; align-items: center; justify-content: center; padding: 14px 28px; font-size: 11px; letter-spacing: .28em; font-weight: 600; border: 1px solid #c8a94a; background: #c8a94a; color: #0a0c0b; transition: all .35s; }
+  .btn:hover { background: transparent; color: #c8a94a; }
+</style>
+</head>
+<body>
+
+<div class="gate" id="gate">
+  <h1>RECRUITER ACCESS</h1>
+  <input type="password" id="token-input" placeholder="ADMIN TOKEN" autocomplete="off" />
+  <input type="text" id="recruiter-input" placeholder="YOUR CALLSIGN" autocomplete="off" />
+  <button class="btn" style="width:100%" id="gate-btn">UNLOCK</button>
+  <p style="font-size:11px;color:#8b8f88;margin-top:16px;letter-spacing:.15em;">Token stored in sessionStorage only.</p>
+</div>
+
+<div class="admin-shell" id="shell" hidden>
+  <div class="admin-head">
+    <h1>RECRUITMENT QUEUE</h1>
+    <div class="meta"><span id="recruiter-label">—</span> · <a href="#" id="logout" style="color:#c8a94a">LOGOUT</a></div>
+  </div>
+  <div class="section-title">PENDING</div>
+  <div class="queue" id="queue-pending"><div class="empty">Loading…</div></div>
+  <div class="section-title">RECENT DECISIONS</div>
+  <div class="queue" id="queue-decided"></div>
+</div>
+
+<script>
+(() => {
+  const API_BASE = 'https://ase-api.1sfodboot.workers.dev';
+  const API_LIST = API_BASE + '/admin/list';
+  const API_DECIDE = API_BASE + '/admin/decide';
+
+  const gate = document.getElementById('gate');
+  const shell = document.getElementById('shell');
+  const tokenIn = document.getElementById('token-input');
+  const recruiterIn = document.getElementById('recruiter-input');
+  const gateBtn = document.getElementById('gate-btn');
+  const logout = document.getElementById('logout');
+  const recruiterLabel = document.getElementById('recruiter-label');
+
+  const getToken = () => sessionStorage.getItem('ase_admin_token');
+  const getRecruiter = () => sessionStorage.getItem('ase_recruiter') || 'recruiter';
+
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const fmtDate = (iso) => iso ? new Date(iso).toLocaleString() : '—';
+
+  const unlock = (token, recruiter) => {
+    sessionStorage.setItem('ase_admin_token', token);
+    sessionStorage.setItem('ase_recruiter', recruiter);
+    gate.hidden = true;
+    shell.hidden = false;
+    recruiterLabel.textContent = recruiter.toUpperCase();
+    load();
+  };
+
+  gateBtn.addEventListener('click', () => {
+    const t = tokenIn.value.trim();
+    const r = recruiterIn.value.trim() || 'recruiter';
+    if (!t) return;
+    unlock(t, r);
+  });
+
+  logout.addEventListener('click', (e) => {
+    e.preventDefault();
+    sessionStorage.removeItem('ase_admin_token');
+    sessionStorage.removeItem('ase_recruiter');
+    location.reload();
+  });
+
+  if (getToken()) unlock(getToken(), getRecruiter());
+
+  const card = (rec, pendingView) => {
+    const d = rec.data;
+    const cls = pendingView ? 'pending' : rec.status;
+    return `
+      <div class="card ${cls}" id="card-${esc(rec.id)}">
+        <div class="card-head">
+          <div><h3>${esc(d.callsign)}</h3><div class="id">ID ${esc(rec.id)} · ${fmtDate(rec.submitted_at)}</div></div>
+          <div class="id">${pendingView ? 'PENDING' : esc(rec.status.toUpperCase())}</div>
+        </div>
+        <div class="card-grid">
+          <div><span class="k">DISCORD</span><span class="v">${esc(d.discord)}</span></div>
+          <div><span class="k">REGION</span><span class="v">${esc(d.tz)}</span></div>
+          <div><span class="k">AGE</span><span class="v">${esc(d.age)}</span></div>
+          <div><span class="k">HOURS</span><span class="v">${esc(d.hours)}</span></div>
+          <div><span class="k">ROLE</span><span class="v">${esc(d.role)}</span></div>
+          <div><span class="k">AVAILABILITY</span><span class="v">${esc(d.availability)}</span></div>
+        </div>
+        <div class="card-why"><strong style="color:#e9e6df">WHY ASE?</strong><br>${esc(d.why)}</div>
+        ${pendingView ? `
+          <div class="card-actions">
+            <button class="approve" data-act="approve" data-id="${esc(rec.id)}">APPROVE</button>
+            <button class="deny" data-act="deny" data-id="${esc(rec.id)}">DENY</button>
+          </div>
+        ` : `
+          <div class="card-why">Decided ${fmtDate(rec.decided_at)} by ${esc(rec.decided_by)}${rec.note ? ` — ${esc(rec.note)}` : ''}</div>
+        `}
+      </div>
+    `;
+  };
+
+  const load = async () => {
+    const token = getToken();
+    if (!token) return;
+    try {
+      const r = await fetch(API_LIST, { headers: { 'x-ase-token': token } });
+      if (r.status === 401) { logout.click(); return; }
+      const { pending, decided } = await r.json();
+      document.getElementById('queue-pending').innerHTML =
+        pending.length ? pending.map(r => card(r, true)).join('') : '<div class="empty">No pending applications.</div>';
+      document.getElementById('queue-decided').innerHTML =
+        decided.length ? decided.map(r => card(r, false)).join('') : '<div class="empty">No decisions yet.</div>';
+    } catch (e) {
+      document.getElementById('queue-pending').innerHTML = '<div class="empty">Failed to load. Check console.</div>';
+    }
+  };
+
+  document.addEventListener('click', async (e) => {
+    const btn = e.target.closest('[data-act]');
+    if (!btn) return;
+    const { act, id } = btn.dataset;
+    const note = act === 'deny' ? (prompt('Reason for denial (optional):') || '') : '';
+    btn.disabled = true;
+    btn.textContent = '…';
+    try {
+      const r = await fetch(API_DECIDE, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-ase-token': getToken(), 'x-ase-recruiter': getRecruiter() },
+        body: JSON.stringify({ id, decision: act, note })
+      });
+      if (!r.ok) throw new Error(await r.text());
+      load();
+    } catch (err) {
+      btn.disabled = false;
+      btn.textContent = act.toUpperCase();
+      alert('Action failed: ' + err.message);
+    }
+  });
+
+  setInterval(() => { if (getToken()) load(); }, 30000);
+})();
+</script>
+</body>
+</html>
