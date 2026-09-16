@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SOP Manual — Alpha Security Element</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/cursor.css" />
+<link rel="stylesheet" href="css/pages.css" />
+</head>
+<body data-page="sop">
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<button id="audio-toggle" aria-label="toggle audio">
+  <span class="bars"><i></i><i></i><i></i></span>
+  <span class="label">AUDIO</span>
+</button>
+
+<header class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-mark">ASE</span>
+    <span class="nav-sub">ALPHA SECURITY ELEMENT</span>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="roles.html">ROLES</a>
+    <a href="training.html">TRAINING</a>
+    <a href="sop.html" class="active">SOP</a>
+    <a href="join.html">JOIN</a>
+  </nav>
+</header>
+
+<div id="sop-gate-wrap">
+  <div class="sop-gate">
+    <h1>SOP ACCESS</h1>
+    <p>This manual is unit-internal. Enter the unit password to continue.</p>
+    <input type="password" id="sop-password" placeholder="PASSWORD" autocomplete="off" />
+    <button id="sop-submit">UNLOCK</button>
+    <div class="error" id="sop-error"></div>
+  </div>
+</div>
+
+<main id="sop-content" class="sop" hidden></main>
+
+<footer class="footer">
+  <div class="footer-col">
+    <span class="nav-mark">ASE</span>
+    <p>Alpha Security Element<br>Arma Reforger · PvP Only</p>
+  </div>
+  <div class="footer-col">
+    <h4>UNIT</h4>
+    <a href="about.html">About</a>
+    <a href="roles.html">Roles</a>
+    <a href="training.html">Training</a>
+  </div>
+  <div class="footer-col">
+    <h4>ENLIST</h4>
+    <a href="join.html">Apply</a>
+    <a href="https://discord.gg/tNP7dctAjB">Discord</a>
+    <a href="rules.html">Server Rules</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Alpha Security Element</span>
+    <span>Fight. Learn. Improve. Lead.</span>
+  </div>
+</footer>
+
+<script src="js/audio.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+(() => {
+  const API = 'https://ase-api.1sfodboot.workers.dev/sop/unlock';
+  const gate = document.getElementById('sop-gate-wrap');
+  const content = document.getElementById('sop-content');
+  const input = document.getElementById('sop-password');
+  const btn = document.getElementById('sop-submit');
+  const errorEl = document.getElementById('sop-error');
+
+  setTimeout(() => input.focus(), 300);
+
+  const unlock = async () => {
+    const password = input.value.trim();
+    if (!password) return;
+    errorEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'CHECKING…';
+
+    try {
+      const r = await fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password })
+      });
+
+      if (r.status === 401) {
+        errorEl.textContent = 'Incorrect password.';
+        btn.disabled = false;
+        btn.textContent = 'UNLOCK';
+        input.select();
+        return;
+      }
+      if (!r.ok) throw new Error('server error');
+
+      const { html } = await r.json();
+      content.innerHTML = html;
+      gate.hidden = true;
+      content.hidden = false;
+    } catch (err) {
+      errorEl.textContent = 'Could not verify. Try again.';
+      btn.disabled = false;
+      btn.textContent = 'UNLOCK';
+    }
+  };
+
+  btn.addEventListener('click', unlock);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+})();
+</script>
+</body>
+</html>
