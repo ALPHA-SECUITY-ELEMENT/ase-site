@@ -115,13 +115,30 @@
       if (current > 0) { current--; render(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
     });
 
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      if (!validateStep(current)) return;
-      // TODO: wire to a real endpoint (Discord webhook / Formspree / worker)
-      form.querySelectorAll('.fstep, .form-actions').forEach(el => el.hidden = true);
-      resultEl.hidden = false;
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  if (!validateStep(current)) return;
+
+  submitBtn.disabled = true;
+  submitBtn.textContent = 'TRANSMITTING…';
+
+  const payload = Object.fromEntries(new FormData(form).entries());
+
+  try {
+    const r = await fetch('https://ase-api.1sfodboot.workers.dev/apply', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
     });
+    if (!r.ok) throw new Error(await r.text().catch(() => 'submission failed'));
+    form.querySelectorAll('.fstep, .form-actions').forEach(el => el.hidden = true);
+    resultEl.hidden = false;
+  } catch (err) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'SUBMIT APPLICATION';
+    alert('Transmission failed: ' + err.message);
+  }
+});
 
     render();
   }
