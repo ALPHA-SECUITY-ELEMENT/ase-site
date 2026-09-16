@@ -405,3 +405,90 @@
   .discord-wrap{ grid-template-columns:1fr; gap:48px; }
   .discord-stats{ gap:32px; }
 }
+/* ============ SOP MANUAL ============ */
+.sop{
+  max-width:1000px;
+  margin:0 auto;
+  padding:120px clamp(20px,4vw,56px);
+}
+.sop-section{
+  padding:60px 0;
+  border-bottom:1px solid var(--line);
+}
+.sop-section:last-child{ border-bottom:none; }
+.sop-section h2{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:clamp(28px,3.6vw,44px);
+  letter-spacing:.04em;
+  margin:16px 0 32px;
+}
+.sop-section h3{
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:18px;
+  letter-spacing:.1em;
+  color:var(--accent);
+  margin:32px 0 14px;
+  text-transform:uppercase;
+}
+.sop-section .principle-list li{
+  font-size:14px;
+  line-height:1.7;
+}
+.sop-gate{
+  max-width:460px;
+  margin:20vh auto;
+  padding:48px 40px;
+  border:1px solid var(--line);
+  background:var(--bg-2);
+  text-align:center;
+}
+.sop-gate h1{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:24px;
+  letter-spacing:.1em;
+  margin-bottom:12px;
+}
+.sop-gate p{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:32px;
+  line-height:1.7;
+}
+.sop-gate input{
+  width:100%;
+  padding:14px 16px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:var(--ink);
+  font-family:inherit;
+  font-size:15px;
+  margin-bottom:16px;
+  outline:none;
+  transition:border-color .3s var(--ease);
+}
+.sop-gate input:focus{ border-color:var(--accent); }
+.sop-gate button{
+  width:100%;
+  padding:16px 24px;
+  background:var(--accent);
+  color:var(--bg);
+  font-family:inherit;
+  font-size:11px;
+  letter-spacing:.28em;
+  font-weight:600;
+  border:1px solid var(--accent);
+  cursor:none;
+  transition:all .3s var(--ease);
+}
+.sop-gate button:hover{ background:transparent; color:var(--accent); }
+.sop-gate button:disabled{ opacity:.5; pointer-events:none; }
+.sop-gate .error{
+  color:#ed4245;
+  font-size:12px;
+  letter-spacing:.1em;
+  margin-top:16px;
+  min-height:16px;
+}
