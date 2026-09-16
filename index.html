@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Alpha Security Element — Arma Reforger PvP</title>
+<meta name="description" content="Alpha Security Element — Arma Reforger PvP-only unit on Old Guard Revival. Teamwork, discipline, adaptability." />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/cursor.css" />
+<link rel="stylesheet" href="css/pages.css" />
+</head>
+<body data-page="home">
+
+<!-- LOADER -->
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div class="loader-crest">
+      <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="lbg" cx="50%" cy="45%" r="70%">
+            <stop offset="0%" stop-color="#151a18"/>
+            <stop offset="100%" stop-color="#0a0c0b"/>
+          </radialGradient>
+        </defs>
+        <circle class="pl pl-ring-1" cx="256" cy="256" r="248" fill="url(#lbg)" stroke="#3a3d3a" stroke-width="2"/>
+        <circle class="pl pl-ring-2" cx="256" cy="256" r="216" fill="none" stroke="#2a2d2a" stroke-width="1"/>
+        <path class="pl pl-a" d="M256 96 L400 384 L344 384 L256 200 L168 384 L112 384 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-a-inner" d="M256 200 L320 320 L192 320 Z" fill="none" stroke="#e9e6df" stroke-width="2" stroke-linejoin="round"/>
+        <path class="pl pl-arrow" d="M256 140 L296 244 L272 244 L272 372 L240 372 L240 244 L216 244 Z" fill="none" stroke="#c8a94a" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-e" d="M320 208 L400 208 L400 240 L352 240 L352 264 L392 264 L392 296 L352 296 L352 320 L400 320 L400 352 L320 352 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-star-l" d="M96 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
+        <path class="pl pl-star-r" d="M410 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
+      </svg>
+    </div>
+    <div class="loader-bar"><span></span></div>
+    <div class="loader-text">INITIALIZING SECURITY ELEMENT…</div>
+  </div>
+</div>
+
+<!-- CURSOR -->
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<!-- AUDIO TOGGLE -->
+<button id="audio-toggle" aria-label="toggle audio">
+  <span class="bars"><i></i><i></i><i></i></span>
+  <span class="label">AUDIO</span>
+</button>
+
+<!-- NAV -->
+<header class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-mark">ASE</span>
+    <span class="nav-sub">ALPHA SECURITY ELEMENT</span>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html" class="active">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="roles.html">ROLES</a>
+    <a href="training.html">TRAINING</a>
+    <a href="join.html">JOIN</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <p class="hero-eyebrow" data-anim="fade-up">ARMA REFORGER · PVP ONLY · OLD GUARD REVIVAL</p>
+    <h1 class="hero-title" data-anim="fade-up">
+      <span>ALPHA</span>
+      <span>SECURITY</span>
+      <span class="accent">ELEMENT</span>
+    </h1>
+    <p class="hero-tag" data-anim="fade-up">"When the fight starts, fight as one."</p>
+    <div class="hero-cta" data-anim="fade-up">
+      <a href="join.html" class="btn btn-primary">JOIN ASE</a>
+      <a href="about.html" class="btn btn-ghost">WHO WE ARE</a>
+    </div>
+  </div>
+  <div class="hero-scroll">SCROLL</div>
+</section>
+
+<!-- PILLARS -->
+<section class="pillars">
+  <div class="pillars-inner">
+    <article class="pillar" data-anim="fade-up">
+      <span class="pillar-num">01</span>
+      <h3>PVP ONLY</h3>
+      <p>No scripted PvE. Real players. Real consequences. Old Guard Revival operations, every night.</p>
+    </article>
+    <article class="pillar" data-anim="fade-up">
+      <span class="pillar-num">02</span>
+      <h3>ORGANIZED</h3>
+      <p>Squad and fireteam tactics. Structured leadership. Communication that survives contact.</p>
+    </article>
+    <article class="pillar" data-anim="fade-up">
+      <span class="pillar-num">03</span>
+      <h3>STRUCTURED TRAINING</h3>
+      <p>Fire &amp; maneuver. Urban combat. Suppression. Skills that matter when it kicks off.</p>
+    </article>
+    <article class="pillar" data-anim="fade-up">
+      <span class="pillar-num">04</span>
+      <h3>ACTIVE COMMUNITY</h3>
+      <p>Play together. Grow together. Ego-driven behavior has no seat at the table.</p>
+    </article>
+  </div>
+</section>
+
+<!-- DISCORD -->
+<section class="discord-section" data-anim="fade-up">
+  <div class="discord-wrap">
+    <div class="discord-copy">
+      <span class="section-num">05 / COMMUNITY</span>
+      <h2>LIVE ON<br><span class="accent">DISCORD.</span></h2>
+      <p class="discord-lede">
+        Operations are coordinated on Discord. Voice channels, briefings, after-action.
+        See who's on right now.
+      </p>
+      <div class="discord-stats">
+        <div class="stat"><span id="dc-online">—</span><small>ONLINE NOW</small></div>
+        <div class="stat"><span id="dc-members">—</span><small>MEMBERS</small></div>
+      </div>
+      <a href="https://discord.gg/tNP7dctAjB" class="btn btn-primary" target="_blank" rel="noopener">JOIN THE DISCORD</a>
+    </div>
+    <div class="discord-embed">
+      <iframe
+        src="https://discord.com/widget?id=1531665229493174442&theme=dark"
+        width="350" height="500"
+        allowtransparency="true"
+        frameborder="0"
+        sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"
+        title="ASE Discord widget">
+      </iframe>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-strip" data-anim="fade-up">
+  <h2>YOUR TEAM IS WAITING.</h2>
+  <a href="join.html" class="btn btn-primary">ENLIST NOW</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-col">
+    <span class="nav-mark">ASE</span>
+    <p>Alpha Security Element<br>Arma Reforger · PvP Only</p>
+  </div>
+  <div class="footer-col">
+    <h4>UNIT</h4>
+    <a href="about.html">About</a>
+    <a href="roles.html">Roles</a>
+    <a href="training.html">Training</a>
+  </div>
+  <div class="footer-col">
+    <h4>ENLIST</h4>
+    <a href="join.html">Apply</a>
+    <a href="https://discord.gg/tNP7dctAjB">Discord</a>
+    <a href="#">Server Rules</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Alpha Security Element</span>
+    <span>Fight. Learn. Improve. Lead.</span>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/three-hero.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/discord.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

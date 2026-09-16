@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Join — Alpha Security Element</title>
+<meta name="description" content="Apply to Alpha Security Element — Arma Reforger PvP-only unit." />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/cursor.css" />
+<link rel="stylesheet" href="css/pages.css" />
+</head>
+<body data-page="join">
+
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div class="loader-crest">
+      <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="lbg" cx="50%" cy="45%" r="70%">
+            <stop offset="0%" stop-color="#151a18"/>
+            <stop offset="100%" stop-color="#0a0c0b"/>
+          </radialGradient>
+        </defs>
+        <circle class="pl pl-ring-1" cx="256" cy="256" r="248" fill="url(#lbg)" stroke="#3a3d3a" stroke-width="2"/>
+        <circle class="pl pl-ring-2" cx="256" cy="256" r="216" fill="none" stroke="#2a2d2a" stroke-width="1"/>
+        <path class="pl pl-a" d="M256 96 L400 384 L344 384 L256 200 L168 384 L112 384 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-a-inner" d="M256 200 L320 320 L192 320 Z" fill="none" stroke="#e9e6df" stroke-width="2" stroke-linejoin="round"/>
+        <path class="pl pl-arrow" d="M256 140 L296 244 L272 244 L272 372 L240 372 L240 244 L216 244 Z" fill="none" stroke="#c8a94a" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-e" d="M320 208 L400 208 L400 240 L352 240 L352 264 L392 264 L392 296 L352 296 L352 320 L400 320 L400 352 L320 352 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-star-l" d="M96 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
+        <path class="pl pl-star-r" d="M410 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
+      </svg>
+    </div>
+    <div class="loader-bar"><span></span></div>
+    <div class="loader-text">INITIALIZING SECURITY ELEMENT…</div>
+  </div>
+</div>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<button id="audio-toggle" aria-label="toggle audio">
+  <span class="bars"><i></i><i></i><i></i></span>
+  <span class="label">AUDIO</span>
+</button>
+
+<header class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-mark">ASE</span>
+    <span class="nav-sub">ALPHA SECURITY ELEMENT</span>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="roles.html">ROLES</a>
+    <a href="training.html">TRAINING</a>
+    <a href="join.html" class="active">JOIN</a>
+  </nav>
+</header>
+
+<section class="page-hero compact">
+  <div class="page-hero-inner">
+    <p class="hero-eyebrow" data-anim="fade-up">RECRUITMENT</p>
+    <h1 class="page-title" data-anim="fade-up">ENLIST IN<br><span class="accent">ASE.</span></h1>
+    <p class="page-lede" data-anim="fade-up">
+      We're not looking for perfect players. We're looking for good teammates.
+      No prior MILSIM experience required.
+    </p>
+  </div>
+</section>
+
+<section class="join-section">
+  <div class="join-wrap">
+
+    <div class="join-progress" data-anim="fade-up">
+      <div class="progress-track"><span id="progress-bar"></span></div>
+      <div class="progress-steps">
+        <div class="pstep active" data-step="1"><span>01</span>IDENTITY</div>
+        <div class="pstep" data-step="2"><span>02</span>EXPERIENCE</div>
+        <div class="pstep" data-step="3"><span>03</span>ROLE</div>
+        <div class="pstep" data-step="4"><span>04</span>CONFIRM</div>
+      </div>
+    </div>
+
+    <form id="join-form" class="join-form" novalidate>
+
+      <fieldset class="fstep active" data-step="1">
+        <legend>Identity</legend>
+        <label class="field">
+          <span>Callsign / Handle</span>
+          <input type="text" name="callsign" required minlength="2" placeholder="e.g. REAPER" />
+        </label>
+        <label class="field">
+          <span>Discord Tag</span>
+          <input type="text" name="discord" required placeholder="username#0000 or @username" />
+        </label>
+        <label class="field">
+          <span>Time Zone / Region</span>
+          <input type="text" name="tz" required placeholder="e.g. EST / EU / APAC" />
+        </label>
+        <label class="field">
+          <span>Age Confirmation</span>
+          <select name="age" required>
+            <option value="">Select…</option>
+            <option value="under16">Under 16</option>
+            <option value="16-17">16–17</option>
+            <option value="18+">18+</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset class="fstep" data-step="2">
+        <legend>Experience</legend>
+        <label class="field">
+          <span>Hours in Arma Reforger</span>
+          <select name="hours" required>
+            <option value="">Select…</option>
+            <option value="0-50">0–50</option>
+            <option value="50-200">50–200</option>
+            <option value="200-500">200–500</option>
+            <option value="500+">500+</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Previous MILSIM / Unit Experience</span>
+          <textarea name="milsim" rows="3" placeholder="Optional — prior units, roles, or 'none'"></textarea>
+        </label>
+        <label class="field">
+          <span>Why ASE?</span>
+          <textarea name="why" rows="4" required minlength="20" placeholder="Short paragraph — what draws you to the unit?"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset class="fstep" data-step="3">
+        <legend>Preferred Role</legend>
+        <div class="role-pick">
+          <label class="pick"><input type="radio" name="role" value="rifleman" required /><span>RIFLEMAN</span></label>
+          <label class="pick"><input type="radio" name="role" value="ar" /><span>AUTO RIFLEMAN</span></label>
+          <label class="pick"><input type="radio" name="role" value="marksman" /><span>MARKSMAN</span></label>
+          <label class="pick"><input type="radio" name="role" value="medic" /><span>COMBAT MEDIC</span></label>
+          <label class="pick"><input type="radio" name="role" value="comms" /><span>COMMS / RADIO</span></label>
+          <label class="pick"><input type="radio" name="role" value="recon" /><span>RECON</span></label>
+          <label class="pick"><input type="radio" name="role" value="vehicle" /><span>VEHICLE / CREW</span></label>
+          <label class="pick"><input type="radio" name="role" value="flexible" /><span>FLEXIBLE</span></label>
+        </div>
+        <label class="field">
+          <span>Weekly Availability</span>
+          <select name="availability" required>
+            <option value="">Select…</option>
+            <option value="casual">Casual — when I can</option>
+            <option value="weekend">Weekends mostly</option>
+            <option value="regular">3–4 nights a week</option>
+            <option value="hardcore">Most nights</option>
+          </select>
+        </label>
+      </fieldset>
+
+      <fieldset class="fstep" data-step="4">
+        <legend>Confirm</legend>
+        <label class="check">
+          <input type="checkbox" name="ack_mic" required />
+          <span>I have a working microphone and will use it during operations.</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" name="ack_team" required />
+          <span>I will follow leadership during organized operations and communicate with my team.</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" name="ack_rules" required />
+          <span>I agree to the unit rules: no toxicity, no team killing, no harassment, no hate speech, no sabotage, no ego-driven behavior.</span>
+        </label>
+        <label class="check">
+          <input type="checkbox" name="ack_rl" required />
+          <span>I understand real life comes first and will communicate absences.</span>
+        </label>
+
+        <div class="summary" id="summary"></div>
+      </fieldset>
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-ghost" id="back-btn" disabled>BACK</button>
+        <button type="button" class="btn btn-primary" id="next-btn">NEXT</button>
+        <button type="submit" class="btn btn-primary" id="submit-btn" hidden>SUBMIT APPLICATION</button>
+      </div>
+
+      <div class="form-result" id="form-result" hidden>
+        <h3>APPLICATION RECEIVED.</h3>
+        <p>Recruitment will review and reach out via Discord. Watch your DMs.</p>
+        <a href="index.html" class="btn btn-ghost">RETURN HOME</a>
+      </div>
+    </form>
+
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="footer-col">
+    <span class="nav-mark">ASE</span>
+    <p>Alpha Security Element<br>Arma Reforger · PvP Only</p>
+  </div>
+  <div class="footer-col">
+    <h4>UNIT</h4>
+    <a href="about.html">About</a>
+    <a href="roles.html">Roles</a>
+    <a href="training.html">Training</a>
+  </div>
+  <div class="footer-col">
+    <h4>ENLIST</h4>
+    <a href="join.html">Apply</a>
+    <a href="https://discord.gg/tNP7dctAjB">Discord</a>
+    <a href="#">Server Rules</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Alpha Security Element</span>
+    <span>Fight. Learn. Improve. Lead.</span>
+  </div>
+</footer>
+
+<script src="js/audio.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/pages.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

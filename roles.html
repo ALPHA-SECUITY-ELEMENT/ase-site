@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Roles — Alpha Security Element</title>
+<meta name="description" content="Alpha Security Element — combat roles and specializations." />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/cursor.css" />
+<link rel="stylesheet" href="css/pages.css" />
+</head>
+<body data-page="roles">
+
+<div id="loader" aria-hidden="true">
+  <div class="loader-inner">
+    <div class="loader-crest">
+      <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="lbg" cx="50%" cy="45%" r="70%">
+            <stop offset="0%" stop-color="#151a18"/>
+            <stop offset="100%" stop-color="#0a0c0b"/>
+          </radialGradient>
+        </defs>
+        <circle class="pl pl-ring-1" cx="256" cy="256" r="248" fill="url(#lbg)" stroke="#3a3d3a" stroke-width="2"/>
+        <circle class="pl pl-ring-2" cx="256" cy="256" r="216" fill="none" stroke="#2a2d2a" stroke-width="1"/>
+        <path class="pl pl-a" d="M256 96 L400 384 L344 384 L256 200 L168 384 L112 384 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-a-inner" d="M256 200 L320 320 L192 320 Z" fill="none" stroke="#e9e6df" stroke-width="2" stroke-linejoin="round"/>
+        <path class="pl pl-arrow" d="M256 140 L296 244 L272 244 L272 372 L240 372 L240 244 L216 244 Z" fill="none" stroke="#c8a94a" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-e" d="M320 208 L400 208 L400 240 L352 240 L352 264 L392 264 L392 296 L352 296 L352 320 L400 320 L400 352 L320 352 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
+        <path class="pl pl-star-l" d="M96 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
+        <path class="pl pl-star-r" d="M410 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
+      </svg>
+    </div>
+    <div class="loader-bar"><span></span></div>
+    <div class="loader-text">INITIALIZING SECURITY ELEMENT…</div>
+  </div>
+</div>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<button id="audio-toggle" aria-label="toggle audio">
+  <span class="bars"><i></i><i></i><i></i></span>
+  <span class="label">AUDIO</span>
+</button>
+
+<header class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-mark">ASE</span>
+    <span class="nav-sub">ALPHA SECURITY ELEMENT</span>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="roles.html" class="active">ROLES</a>
+    <a href="training.html">TRAINING</a>
+    <a href="join.html">JOIN</a>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="page-hero-inner">
+    <p class="hero-eyebrow" data-anim="fade-up">SPECIALIZATIONS</p>
+    <h1 class="page-title" data-anim="fade-up">CHOOSE YOUR<br><span class="accent">ROLE.</span></h1>
+    <p class="page-lede" data-anim="fade-up">
+      Every member starts as a rifleman. As you gain experience, you specialize. Each role has a
+      place on the element — the fight is won by the team, not the individual.
+    </p>
+  </div>
+</section>
+
+<section class="roles-grid-section">
+  <div class="roles-grid" id="roles-grid"></div>
+</section>
+
+<section class="cta-strip" data-anim="fade-up">
+  <h2>FIND YOUR PLACE.</h2>
+  <a href="join.html" class="btn btn-primary">ENLIST NOW</a>
+</section>
+
+<footer class="footer">
+  <div class="footer-col">
+    <span class="nav-mark">ASE</span>
+    <p>Alpha Security Element<br>Arma Reforger · PvP Only</p>
+  </div>
+  <div class="footer-col">
+    <h4>UNIT</h4>
+    <a href="about.html">About</a>
+    <a href="roles.html">Roles</a>
+    <a href="training.html">Training</a>
+  </div>
+  <div class="footer-col">
+    <h4>ENLIST</h4>
+    <a href="join.html">Apply</a>
+    <a href="https://discord.gg/tNP7dctAjB">Discord</a>
+    <a href="#">Server Rules</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Alpha Security Element</span>
+    <span>Fight. Learn. Improve. Lead.</span>
+  </div>
+</footer>
+
+<script src="js/audio.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/pages.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
