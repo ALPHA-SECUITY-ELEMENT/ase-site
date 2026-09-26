@@ -158,7 +158,7 @@
 }
 .role-card:hover .glow{ opacity:1; }
 
-/* TRAINING */
+/* TRAINING — base accordion */
 .training-section{
   max-width:1100px; margin:0 auto;
   padding:120px clamp(20px,4vw,56px);
@@ -406,7 +406,65 @@
   .discord-stats{ gap:32px; }
 }
 
-/* ============ SOP MANUAL — FULL ============ */
+/* SOP — gate */
+.sop-gate{
+  max-width:460px;
+  margin:20vh auto;
+  padding:48px 40px;
+  border:1px solid var(--line);
+  background:var(--bg-2);
+  text-align:center;
+}
+.sop-gate h1{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:24px;
+  letter-spacing:.1em;
+  margin-bottom:12px;
+}
+.sop-gate p{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:32px;
+  line-height:1.7;
+}
+.sop-gate input{
+  width:100%;
+  padding:14px 16px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  color:var(--ink);
+  font-family:inherit;
+  font-size:15px;
+  margin-bottom:16px;
+  outline:none;
+  transition:border-color .3s var(--ease);
+}
+.sop-gate input:focus{ border-color:var(--accent); }
+.sop-gate button{
+  width:100%;
+  padding:16px 24px;
+  background:var(--accent);
+  color:var(--bg);
+  font-family:inherit;
+  font-size:11px;
+  letter-spacing:.28em;
+  font-weight:600;
+  border:1px solid var(--accent);
+  cursor:none;
+  transition:all .3s var(--ease);
+}
+.sop-gate button:hover{ background:transparent; color:var(--accent); }
+.sop-gate button:disabled{ opacity:.5; pointer-events:none; }
+.sop-gate .error{
+  color:#ed4245;
+  font-size:12px;
+  letter-spacing:.1em;
+  margin-top:16px;
+  min-height:16px;
+}
+
+/* SOP MANUAL — full */
 .sop-shell{
   display:grid;
   grid-template-columns:260px 1fr;
@@ -568,7 +626,6 @@
   margin-top:14px;
 }
 
-/* operational flow diagram */
 .sop-flow{
   display:grid;
   grid-template-columns:1fr 240px;
@@ -621,7 +678,7 @@
   margin:8px 0;
 }
 
-/* ============ INTEL SUBMIT ============ */
+/* INTEL SUBMIT */
 .intel-shell{
   max-width:900px;
   margin:0 auto;
@@ -822,4 +879,414 @@
 .intel-result button:hover{
   background:var(--accent);
   color:var(--bg);
+}
+
+/* TRAINING PIPELINE */
+.pipeline-meta{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:24px;
+  margin-top:56px;
+  max-width:820px;
+  padding-top:32px;
+  border-top:1px solid var(--line);
+}
+.pmeta{ display:flex; flex-direction:column; gap:6px; }
+.pmeta span{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.3em;
+  color:var(--muted);
+}
+.pmeta strong{
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:16px;
+  letter-spacing:.08em;
+  color:var(--accent);
+}
+@media (max-width:720px){
+  .pipeline-meta{ grid-template-columns:repeat(2,1fr); gap:20px; }
+}
+
+.pipeline-schematic-wrap{
+  padding:80px clamp(20px,4vw,56px);
+  border-bottom:1px solid var(--line);
+  background:var(--bg-2);
+}
+.pipeline-schematic{
+  max-width:1300px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.schem-node{
+  flex:1 1 140px;
+  min-width:120px;
+  max-width:180px;
+  padding:20px 14px;
+  border:1px solid var(--line);
+  background:var(--bg);
+  text-align:center;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  position:relative;
+  transition:border-color .3s var(--ease), transform .3s var(--ease);
+}
+.schem-node:hover{ border-color:var(--accent-dim); transform:translateY(-2px); }
+.schem-node.schem-final{
+  border-color:var(--accent);
+  background:rgba(200,169,74,.06);
+}
+.schem-id{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.3em;
+  color:var(--accent);
+}
+.schem-name{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:14px;
+  letter-spacing:.1em;
+  color:var(--ink);
+}
+.schem-time{
+  font-family:'JetBrains Mono',monospace;
+  font-size:9px;
+  letter-spacing:.24em;
+  color:var(--muted);
+}
+.schem-arrow{
+  color:var(--accent);
+  font-size:18px;
+  opacity:.5;
+}
+@media (max-width:780px){
+  .schem-arrow{ display:none; }
+  .schem-node{ flex:1 1 45%; }
+}
+
+.pipeline-wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:100px clamp(20px,4vw,56px);
+  display:flex;
+  flex-direction:column;
+  gap:0;
+}
+
+.pstage{
+  display:grid;
+  grid-template-columns:120px 1fr;
+  gap:40px;
+  padding:56px 0;
+  position:relative;
+}
+.pstage-side{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  padding-top:8px;
+}
+.pstage-id{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.32em;
+  color:var(--accent);
+}
+.pstage-num{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:56px;
+  line-height:1;
+  color:var(--line);
+  transition:color .4s var(--ease);
+}
+.pstage:hover .pstage-num{ color:var(--accent-dim); }
+.pstage-final .pstage-num{ color:var(--accent); }
+
+.pstage-body{
+  border-left:2px solid var(--line);
+  padding-left:40px;
+  padding-top:8px;
+  transition:border-color .4s var(--ease);
+}
+.pstage:hover .pstage-body{ border-left-color:var(--accent-dim); }
+.pstage-final .pstage-body{ border-left-color:var(--accent); }
+
+.pstage-head{
+  display:flex;
+  align-items:baseline;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+}
+.pstage-head h2{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:clamp(28px,3.6vw,44px);
+  letter-spacing:.04em;
+  color:var(--ink);
+}
+.pstage-tags{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.pstage-tags span{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.2em;
+  color:var(--muted);
+  padding:6px 10px;
+  border:1px solid var(--line);
+}
+.pstage-purpose{
+  font-size:15px;
+  line-height:1.8;
+  color:var(--muted);
+  margin-bottom:32px;
+  max-width:720px;
+}
+.pstage-block{ margin-bottom:28px; }
+.pstage-block h4{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.32em;
+  color:var(--accent);
+  margin-bottom:16px;
+}
+.pstage-list{
+  list-style:none;
+  margin:0;
+  padding:0;
+}
+.pstage-list li{
+  padding:12px 0 12px 26px;
+  position:relative;
+  font-size:14px;
+  line-height:1.7;
+  color:var(--muted);
+  border-bottom:1px solid var(--line);
+}
+.pstage-list li:last-child{ border-bottom:none; }
+.pstage-list li::before{
+  content:'▸';
+  position:absolute;
+  left:0;
+  color:var(--accent);
+  font-size:12px;
+  top:14px;
+}
+.pstage-list li strong{
+  color:var(--ink);
+  font-weight:600;
+  margin-right:6px;
+}
+
+.pstage-output{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:16px 20px;
+  border:1px solid var(--line);
+  background:rgba(200,169,74,.03);
+  flex-wrap:wrap;
+}
+.pstage-output span{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.3em;
+  color:var(--muted);
+}
+.pstage-output strong{
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:14px;
+  letter-spacing:.1em;
+  color:var(--accent);
+}
+.pstage-output-final{
+  border-color:var(--accent);
+  background:rgba(200,169,74,.1);
+}
+.pstage-output-final strong{ font-size:18px; }
+
+.spec-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:1px;
+  background:var(--line);
+  border:1px solid var(--line);
+}
+.spec-cell{
+  background:var(--bg-2);
+  padding:20px 18px;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+  transition:background .3s var(--ease);
+}
+.spec-cell:hover{ background:#161b18; }
+.spec-cell strong{
+  font-family:'Oswald',sans-serif;
+  font-weight:600;
+  font-size:14px;
+  letter-spacing:.1em;
+  color:var(--accent);
+}
+.spec-cell span{
+  font-size:12px;
+  color:var(--muted);
+  letter-spacing:.02em;
+}
+
+.pgate{
+  display:flex;
+  align-items:center;
+  gap:20px;
+  padding:20px 0 20px 120px;
+}
+.pgate-line{
+  flex:1;
+  height:1px;
+  background:var(--line);
+}
+.pgate-mark{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:10px 18px;
+  border:1px solid var(--accent-dim);
+  background:var(--bg);
+  white-space:nowrap;
+}
+.pgate-mark-final{
+  border-color:var(--accent);
+  background:rgba(200,169,74,.08);
+}
+.pgate-lock{
+  color:var(--accent);
+  font-size:14px;
+}
+.pgate-text{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.28em;
+  color:var(--accent);
+}
+.pgate-crit{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.24em;
+  color:var(--muted);
+  padding-left:14px;
+  border-left:1px solid var(--line);
+}
+@media (max-width:780px){
+  .pstage{ grid-template-columns:1fr; gap:20px; padding:40px 0; }
+  .pstage-side{ flex-direction:row; align-items:center; gap:16px; padding-top:0; }
+  .pstage-num{ font-size:40px; }
+  .pstage-body{ padding-left:24px; }
+  .pgate{ padding:16px 0; flex-wrap:wrap; }
+  .pgate-line{ display:none; }
+  .pgate-mark{ width:100%; justify-content:center; white-space:normal; }
+  .pgate-crit{ padding-left:0; border-left:none; width:100%; text-align:center; margin-top:6px; }
+}
+
+.course-footer{
+  padding:80px clamp(20px,4vw,56px);
+  background:var(--bg-2);
+  border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);
+}
+.course-footer-inner{
+  max-width:1100px;
+  margin:0 auto;
+  display:grid;
+  grid-template-columns:repeat(3,1fr) auto;
+  gap:60px;
+  align-items:center;
+}
+@media (max-width:900px){
+  .course-footer-inner{ grid-template-columns:1fr; gap:32px; }
+}
+.course-col{ display:flex; flex-direction:column; gap:10px; }
+.course-label{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.32em;
+  color:var(--accent);
+}
+.course-col p{
+  font-size:13px;
+  line-height:1.7;
+  color:var(--muted);
+}
+.course-sign{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  min-width:200px;
+}
+.course-sign > span:first-child{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:18px;
+  letter-spacing:.16em;
+  color:var(--accent);
+}
+.course-sig-line{
+  height:1px;
+  background:var(--accent-dim);
+}
+.course-sig-sub{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.24em;
+  color:var(--muted);
+}
+
+/* CURRICULUM REFERENCE */
+.curriculum-section{
+  padding:120px 0;
+  border-top:1px solid var(--line);
+  background:var(--bg-2);
+}
+.curriculum-head{
+  max-width:900px;
+  margin:0 auto 60px;
+  padding:0 clamp(20px,4vw,56px);
+  text-align:center;
+}
+.curriculum-tag{
+  font-family:'JetBrains Mono',monospace;
+  font-size:10px;
+  letter-spacing:.4em;
+  color:var(--accent);
+  display:block;
+  margin-bottom:20px;
+}
+.curriculum-head h2{
+  font-family:'Oswald',sans-serif;
+  font-weight:700;
+  font-size:clamp(32px,4.6vw,58px);
+  letter-spacing:.03em;
+  line-height:1.05;
+  margin-bottom:24px;
+}
+.curriculum-head h2 .accent{ color:var(--accent); }
+.curriculum-head p{
+  font-size:14px;
+  color:var(--muted);
+  line-height:1.8;
+}
+.curriculum-section .training-section{
+  padding-top:0;
 }
