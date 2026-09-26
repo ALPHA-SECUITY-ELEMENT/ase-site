@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Intel Submit — Alpha Security Element</title>
+<meta name="robots" content="noindex" />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/cursor.css" />
+<link rel="stylesheet" href="css/pages.css" />
+</head>
+<body data-page="intel">
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<button id="audio-toggle" aria-label="toggle audio">
+  <span class="bars"><i></i><i></i><i></i></span>
+  <span class="label">AUDIO</span>
+</button>
+
+<header class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-mark">ASE</span>
+    <span class="nav-sub">ALPHA SECURITY ELEMENT</span>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="roles.html">ROLES</a>
+    <a href="training.html">TRAINING</a>
+    <a href="sop.html">SOP</a>
+    <a href="intel.html" class="active">INTEL</a>
+    <a href="join.html">JOIN</a>
+  </nav>
+</header>
+
+<!-- GATE -->
+<div id="intel-gate-wrap">
+  <div class="sop-gate">
+    <h1>INTEL ACCESS</h1>
+    <p>Bounty submission is unit-internal. Enter the intel password to continue.</p>
+    <input type="password" id="intel-password" placeholder="PASSWORD" autocomplete="off" />
+    <button id="intel-unlock">UNLOCK</button>
+    <div class="error" id="intel-error"></div>
+  </div>
+</div>
+
+<!-- FORM -->
+<main id="intel-panel" class="intel-shell" hidden>
+
+  <header class="intel-head">
+    <span class="intel-class">⌖  CLASSIFIED // ASE INTEL DIVISION</span>
+    <h1>BOUNTY SUBMISSION</h1>
+    <p>Submit confirmed OPFOR eliminations. Every entry is logged to the intel channel. False reports are traceable to the submitting member.</p>
+  </header>
+
+  <form id="intel-form" class="intel-form" enctype="multipart/form-data" novalidate>
+
+    <div class="intel-row">
+      <label class="field">
+        <span>REPORTING OPERATOR</span>
+        <input type="text" name="uploader" required placeholder="Your callsign" />
+      </label>
+      <label class="field">
+        <span>OPFOR OPERATOR NAME</span>
+        <input type="text" name="opfor_name" required placeholder="Exact in-game name" />
+      </label>
+    </div>
+
+    <div class="intel-row">
+      <label class="field">
+        <span>TERROR CELL / AFFILIATION</span>
+        <input type="text" name="opfor_cell" required placeholder="e.g. Redline Syndicate / BTR-91" />
+      </label>
+      <label class="field">
+        <span>OPFOR ALLEGIANCE</span>
+        <select name="opfor_allegiance" required>
+          <option value="">Select…</option>
+          <option value="RUSSIA">RUSSIA</option>
+          <option value="NATO">NATO</option>
+          <option value="INDEPENDENT">INDEPENDENT</option>
+          <option value="UNKNOWN">UNKNOWN</option>
+        </select>
+      </label>
+    </div>
+
+    <label class="field">
+      <span>ENGAGEMENT CONTEXT <em>(optional)</em></span>
+      <textarea name="kill_context" rows="3" placeholder="Map, time, distance, circumstance…"></textarea>
+    </label>
+
+    <label class="field file-field">
+      <span>SCREENSHOT / SNIPPET</span>
+      <input type="file" name="screenshot" accept="image/*" required id="intel-file" />
+      <div class="file-drop" id="file-drop">
+        <strong>DROP IMAGE OR CLICK TO SELECT</strong>
+        <small>PNG · JPG · WEBP · max 8MB</small>
+      </div>
+      <div class="file-preview" id="file-preview" hidden>
+        <img id="file-preview-img" alt="" />
+        <button type="button" id="file-clear">REMOVE</button>
+      </div>
+    </label>
+
+    <div class="intel-actions">
+      <button type="submit" id="intel-submit">TRANSMIT TO COMMAND</button>
+    </div>
+
+    <div class="intel-result" id="intel-result" hidden>
+      <span class="intel-class">⌖  TRANSMISSION RECEIVED</span>
+      <h3>INTEL LOGGED</h3>
+      <p>Your submission has been posted to the ASE intel channel.</p>
+      <p class="ref-line">REF — <strong id="intel-ref">—</strong></p>
+      <button type="button" id="intel-again">SUBMIT ANOTHER</button>
+    </div>
+
+  </form>
+
+</main>
+
+<footer class="footer">
+  <div class="footer-col">
+    <span class="nav-mark">ASE</span>
+    <p>Alpha Security Element<br>Arma Reforger · PvP Only</p>
+  </div>
+  <div class="footer-col">
+    <h4>UNIT</h4>
+    <a href="about.html">About</a>
+    <a href="roles.html">Roles</a>
+    <a href="training.html">Training</a>
+  </div>
+  <div class="footer-col">
+    <h4>ENLIST</h4>
+    <a href="join.html">Apply</a>
+    <a href="https://discord.gg/tNP7dctAjB">Discord</a>
+    <a href="rules.html">Server Rules</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Alpha Security Element</span>
+    <span>Fight. Learn. Improve. Lead.</span>
+  </div>
+</footer>
+
+<script src="js/audio.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+(() => {
+  const API_BASE = 'https://ase-api.1sfodboot.workers.dev';
+  const gate = document.getElementById('intel-gate-wrap');
+  const panel = document.getElementById('intel-panel');
+  const input = document.getElementById('intel-password');
+  const btn = document.getElementById('intel-unlock');
+  const errorEl = document.getElementById('intel-error');
+  const form = document.getElementById('intel-form');
+  const fileInput = document.getElementById('intel-file');
+  const fileDrop = document.getElementById('file-drop');
+  const filePreview = document.getElementById('file-preview');
+  const filePreviewImg = document.getElementById('file-preview-img');
+  const fileClear = document.getElementById('file-clear');
+  const submitBtn = document.getElementById('intel-submit');
+  const result = document.getElementById('intel-result');
+  const refEl = document.getElementById('intel-ref');
+  const againBtn = document.getElementById('intel-again');
+
+  let unlockedPassword = '';
+
+  setTimeout(() => input.focus(), 300);
+
+  const unlock = async () => {
+    const pw = input.value.trim();
+    if (!pw) return;
+    errorEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'CHECKING…';
+    try {
+      const r = await fetch(API_BASE + '/intel/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+      if (r.status === 401) {
+        errorEl.textContent = 'Incorrect password.';
+        btn.disabled = false;
+        btn.textContent = 'UNLOCK';
+        input.select();
+        return;
+      }
+      if (!r.ok) throw new Error('server error');
+      unlockedPassword = pw;
+      gate.hidden = true;
+      panel.hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      errorEl.textContent = 'Could not verify. Try again.';
+      btn.disabled = false;
+      btn.textContent = 'UNLOCK';
+    }
+  };
+
+  btn.addEventListener('click', unlock);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+
+  // file handling
+  fileDrop.addEventListener('click', () => fileInput.click());
+  fileInput.addEventListener('change', () => {
+    const f = fileInput.files[0];
+    if (!f) return;
+    showPreview(f);
+  });
+
+  fileDrop.addEventListener('dragover', e => {
+    e.preventDefault();
+    fileDrop.classList.add('dragging');
+  });
+  fileDrop.addEventListener('dragleave', () => fileDrop.classList.remove('dragging'));
+  fileDrop.addEventListener('drop', e => {
+    e.preventDefault();
+    fileDrop.classList.remove('dragging');
+    const f = e.dataTransfer.files[0];
+    if (!f) return;
+    if (!f.type.startsWith('image/')) return;
+    const dt = new DataTransfer();
+    dt.items.add(f);
+    fileInput.files = dt.files;
+    showPreview(f);
+  });
+
+  fileClear.addEventListener('click', () => {
+    fileInput.value = '';
+    filePreview.hidden = true;
+    fileDrop.hidden = false;
+  });
+
+  function showPreview(file) {
+    const url = URL.createObjectURL(file);
+    filePreviewImg.src = url;
+    filePreview.hidden = false;
+    fileDrop.hidden = true;
+  }
+
+  // submit
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+    if (!fileInput.files[0]) {
+      alert('Screenshot required.');
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'TRANSMITTING…';
+
+    const fd = new FormData(form);
+    fd.append('password', unlockedPassword);
+
+    try {
+      const r = await fetch(API_BASE + '/intel/submit', {
+        method: 'POST',
+        body: fd
+      });
+      if (r.status === 401) {
+        alert('Password rejected. Reload and re-enter.');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'TRANSMIT TO COMMAND';
+        return;
+      }
+      if (!r.ok) {
+        const t = await r.text().catch(() => '');
+        throw new Error(t.slice(0, 200) || 'submission failed');
+      }
+      const { ref } = await r.json();
+      refEl.textContent = ref || '—';
+      form.querySelectorAll('.intel-row, .field, .intel-actions').forEach(el => el.hidden = true);
+      result.hidden = false;
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'TRANSMIT TO COMMAND';
+      alert('Transmission failed: ' + err.message);
+    }
+  });
+
+  againBtn.addEventListener('click', () => {
+    form.reset();
+    filePreview.hidden = true;
+    fileDrop.hidden = false;
+    result.hidden = true;
+    form.querySelectorAll('.intel-row, .field, .intel-actions').forEach(el => el.hidden = false);
+    submitBtn.disabled = false;
+    submitBtn.textContent = 'TRANSMIT TO COMMAND';
+  });
+})();
+</script>
+</body>
+</html>
