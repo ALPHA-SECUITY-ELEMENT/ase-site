@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASE // INTERNAL ACCESS</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/cursor.css" />
+<link rel="stylesheet" href="css/pages.css" />
+<style>
+  /* inline overrides specifically for the portal page */
+  .portal-shell {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 140px clamp(20px, 4vw, 56px) 100px;
+  }
+  .portal-hero {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .portal-hero h1 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(36px, 5vw, 64px);
+    letter-spacing: .08em;
+    color: var(--ink);
+    margin-bottom: 16px;
+  }
+  .portal-hero p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 520px;
+    margin: 0 auto;
+    line-height: 1.8;
+  }
+  .portal-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 24px;
+  }
+  .portal-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 36px 32px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    color: inherit;
+    text-decoration: none;
+    transition: all .3s var(--ease);
+    overflow: hidden;
+  }
+  .portal-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .4s var(--ease);
+  }
+  .portal-card:hover {
+    border-color: var(--accent-dim);
+    transform: translateY(-2px);
+  }
+  .portal-card:hover::before {
+    transform: scaleX(1);
+  }
+  .portal-card h3 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    letter-spacing: .06em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .portal-card p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+    margin: 0;
+    flex: 1;
+  }
+  .portal-card .arrow {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px;
+    letter-spacing: .24em;
+    color: var(--accent);
+    margin-top: 8px;
+  }
+</style>
+</head>
+<body data-page="portal">
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<button id="audio-toggle" aria-label="toggle audio">
+  <span class="bars"><i></i><i></i><i></i></span>
+  <span class="label">AUDIO</span>
+</button>
+
+<header class="nav">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-mark">ASE</span>
+    <span class="nav-sub">ALPHA SECURITY ELEMENT</span>
+  </a>
+  <nav class="nav-links">
+    <a href="index.html">HOME</a>
+    <a href="about.html">ABOUT</a>
+    <a href="roles.html">ROLES</a>
+    <a href="training.html">TRAINING</a>
+    <a href="sop.html">SOP</a>
+    <a href="intel.html">INTEL</a>
+    <a href="join.html">JOIN</a>
+  </nav>
+</header>
+
+<!-- GATE -->
+<div id="portal-gate" style="max-width:460px; margin:20vh auto; padding:48px 40px; border:1px solid var(--line); background:var(--bg-2); text-align:center;">
+  <h1 style="font-family:'Oswald',sans-serif; font-weight:700; font-size:24px; letter-spacing:.1em; margin-bottom:12px;">RESTRICTED ACCESS</h1>
+  <p style="font-size:13px; color:var(--muted); margin-bottom:32px; line-height:1.7;">Enter the unit password to proceed.</p>
+  <input type="password" id="portal-password" placeholder="PASSWORD" autocomplete="off" style="width:100%; padding:14px 16px; background:var(--bg); border:1px solid var(--line); color:var(--ink); font-family:inherit; font-size:15px; margin-bottom:16px; outline:none; text-align:center; transition:border-color .3s;" />
+  <button id="portal-unlock" style="width:100%; padding:16px 24px; background:var(--accent); color:var(--bg); font-family:inherit; font-size:11px; letter-spacing:.28em; font-weight:600; border:1px solid var(--accent); cursor:none; transition:all .3s;">UNLOCK</button>
+  <div id="portal-error" style="color:#ed4245; font-size:12px; letter-spacing:.1em; margin-top:16px; min-height:16px;"></div>
+</div>
+
+<!-- PORTAL CONTENT -->
+<div id="portal-content" style="display:none;">
+  <section class="portal-shell">
+    <div class="portal-hero">
+      <h1>MEMBERS PORTAL</h1>
+      <p>Internal tools, forms, and dashboards. Authorized personnel only.</p>
+    </div>
+
+    <div class="portal-grid">
+      <a href="admin.html" class="portal-card">
+        <h3>RECRUITMENT ADMIN</h3>
+        <p>Review incoming applications, approve or deny candidates, and log decisions to the recruit channel.</p>
+        <span class="arrow">OPEN DASHBOARD →</span>
+      </a>
+
+      <a href="dossier.html" class="portal-card">
+        <h3>DOSSIER TERMINAL</h3>
+        <p>Create and manage personnel dossiers, service records, and internal intelligence files.</p>
+        <span class="arrow">OPEN TERMINAL →</span>
+      </a>
+
+      <a href="sop.html" class="portal-card">
+        <h3>SOP MANUAL</h3>
+        <p>Standard Operating Procedures, communications protocols, operational flow, and unit doctrine.</p>
+        <span class="arrow">OPEN MANUAL →</span>
+      </a>
+
+      <a href="intel.html" class="portal-card">
+        <h3>INTEL SUBMISSION</h3>
+        <p>Submit confirmed OPFOR eliminations, bounties, and screenshots directly to the intel channel.</p>
+        <span class="arrow">SUBMIT INTEL →</span>
+      </a>
+    </div>
+  </section>
+</div>
+
+<footer class="footer">
+  <div class="footer-col">
+    <span class="nav-mark">ASE</span>
+    <p>Alpha Security Element<br>Arma Reforger · PvP Only</p>
+  </div>
+  <div class="footer-col">
+    <h4>UNIT</h4>
+    <a href="about.html">About</a>
+    <a href="roles.html">Roles</a>
+    <a href="training.html">Training</a>
+  </div>
+  <div class="footer-col">
+    <h4>ENLIST</h4>
+    <a href="join.html">Apply</a>
+    <a href="https://discord.gg/tNP7dctAjB">Discord</a>
+    <a href="rules.html">Server Rules</a>
+  </div>
+  <div class="footer-bottom">
+    <span>© <span id="year"></span> Alpha Security Element</span>
+    <span>Fight. Learn. Improve. Lead.</span>
+  </div>
+</footer>
+
+<script src="js/audio.js"></script>
+<script src="js/cursor.js"></script>
+<script src="js/transitions.js"></script>
+<script src="js/main.js"></script>
+
+<script>
+(() => {
+  const API_BASE = 'https://ase-api.1sfodboot.workers.dev';
+  const gate = document.getElementById('portal-gate');
+  const content = document.getElementById('portal-content');
+  const input = document.getElementById('portal-password');
+  const btn = document.getElementById('portal-unlock');
+  const errorEl = document.getElementById('portal-error');
+
+  setTimeout(() => input.focus(), 300);
+
+  const unlock = async () => {
+    const pw = input.value.trim();
+    if (!pw) return;
+    errorEl.textContent = '';
+    btn.disabled = true;
+    btn.textContent = 'CHECKING…';
+
+    try {
+      const r = await fetch(API_BASE + '/intel/unlock', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ password: pw })
+      });
+
+      if (r.status === 401) {
+        errorEl.textContent = 'Incorrect password.';
+        btn.disabled = false;
+        btn.textContent = 'UNLOCK';
+        input.select();
+        return;
+      }
+      if (!r.ok) throw new Error('server error');
+
+      gate.style.display = 'none';
+      content.style.display = 'block';
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      sessionStorage.setItem('ase_portal_unlocked', '1');
+    } catch (err) {
+      errorEl.textContent = 'Could not verify. Try again.';
+      btn.disabled = false;
+      btn.textContent = 'UNLOCK';
+    }
+  };
+
+  btn.addEventListener('click', unlock);
+  input.addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+
+  if (sessionStorage.getItem('ase_portal_unlocked') === '1') {
+    gate.style.display = 'none';
+    content.style.display = 'block';
+  }
+})();
+</script>
+</body>
+</html>
