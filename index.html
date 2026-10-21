@@ -13,6 +13,62 @@
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/cursor.css" />
 <link rel="stylesheet" href="css/pages.css" />
+<style>
+  /* ───── MILSIM WIDGET SECTION ───── */
+  .widget-section {
+    padding: 120px clamp(20px, 4vw, 56px);
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .widget-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .widget-inner {
+      grid-template-columns: 1fr;
+      gap: 48px;
+    }
+  }
+  .widget-copy h2 {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(32px, 4.6vw, 56px);
+    letter-spacing: .03em;
+    line-height: 1.05;
+    margin: 20px 0 24px;
+  }
+  .widget-copy h2 .accent {
+    color: var(--accent);
+  }
+  .widget-copy p {
+    color: var(--muted);
+    font-size: 15px;
+    max-width: 420px;
+    line-height: 1.8;
+    margin-bottom: 32px;
+  }
+  .widget-embed {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 32px;
+    min-height: 300px; /* Prevents layout jump while loading */
+  }
+  /* Force the widget to fit nicely in the container if it has fixed widths */
+  #milsim-unit-widget {
+    width: 100%;
+    max-width: 500px;
+  }
+</style>
 </head>
 <body data-page="home">
 
@@ -63,8 +119,6 @@
     <a href="about.html">ABOUT</a>
     <a href="roles.html">ROLES</a>
     <a href="training.html">TRAINING</a>
-    <!-- <a href="sop.html">SOP</a> -->
-    <!-- <a href="intel.html">INTEL</a> -->
     <a href="03951-S18Z.html">03951-S18Z</a>
     <a href="join.html">JOIN</a>
   </nav>
@@ -145,6 +199,26 @@
   </div>
 </section>
 
+<!-- MILSIM WIDGET -->
+<section class="widget-section" data-anim="fade-up">
+  <div class="widget-inner">
+    <div class="widget-copy">
+      <span class="section-num">06 / RANKINGS</span>
+      <h2>MILSIM UNITS<br><span class="accent">LEADERBOARD.</span></h2>
+      <p>We track our stats and activity on the global MILSIM Units board. Check our current standing below.</p>
+      <a href="https://milsimunits.com/units/c2244458-55dc-44a7-b592-3ff1136629c5" target="_blank" rel="noopener" class="btn btn-ghost">VIEW FULL PROFILE ↗</a>
+    </div>
+    <div class="widget-embed">
+      <!-- MILSIM WIDGET CODE -->
+      <div id="milsim-unit-widget"
+        data-unit-id="c2244458-55dc-44a7-b592-3ff1136629c5"
+        data-ranking-type="overall"
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- CTA -->
 <section class="cta-strip" data-anim="fade-up">
   <h2>YOUR TEAM IS WAITING.</h2>
@@ -183,5 +257,7 @@
 <script src="js/discord.js"></script>
 <script src="js/main.js"></script>
 <script src="js/title-scroll.js"></script>
+<!-- MILSIM WIDGET SCRIPT -->
+<script src="https://milsimunits.com/embed/widget.js"></script>
 </body>
 </html>
