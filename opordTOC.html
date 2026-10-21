@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASE // OPERATIONS DESK</title>
+<style>
+  /* ───── RESET & VARIABLES ───── */
+  :root {
+    --bg: #0a0c0b;
+    --bg-2: #111513;
+    --ink: #e9e6df;
+    --muted: #8b8f88;
+    --accent: #c8a94a;
+    --line: rgba(233,230,223,.08);
+    --font-head: 'Oswald', 'Impact', sans-serif;
+    --font-body: 'Inter', system-ui, sans-serif;
+    --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { 
+    background: var(--bg); color: var(--ink); font-family: var(--font-body); 
+    min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 40px 20px;
+  }
+  a { color: inherit; text-decoration: none; }
+  button, select, input, textarea { font-family: inherit; cursor: pointer; outline: none; }
+
+  .desk-wrap {
+    width: 100%; max-width: 900px;
+    background: var(--bg-2); border: 1px solid var(--line);
+    border-radius: 8px; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+  }
+
+  .desk-header {
+    padding: 24px; border-bottom: 1px solid var(--line);
+    background: #0c100e; display: flex; align-items: center; gap: 24px;
+  }
+  .desk-crest {
+    width: 80px; height: 80px; flex-shrink: 0;
+    filter: drop-shadow(0 0 10px rgba(200,169,74,0.15));
+  }
+  .desk-header-text h1 {
+    font-family: var(--font-head); font-size: 24px; font-weight: 600; letter-spacing: .1em; color: var(--accent);
+    margin-bottom: 8px; text-transform: uppercase;
+  }
+  .desk-header-text p { font-size: 13px; color: var(--muted); }
+
+  /* ───── TABS ───── */
+  .desk-tabs { display: flex; gap: 24px; padding: 0 24px; border-bottom: 1px solid var(--line); background: #0c100e; flex-shrink: 0; }
+  .desk-tab { padding: 16px 0; font-family: var(--font-head); font-size: 13px; font-weight: 600; letter-spacing: .1em; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; white-space: nowrap; }
+  .desk-tab:hover { color: var(--ink); }
+  .desk-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  
+  .desk-view { display: none; }
+  .desk-view.active { display: block; }
+
+  /* ───── BRIEF BUILDER ───── */
+  .builder-body {
+    padding: 32px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  @media (max-width: 600px) { .builder-body { grid-template-columns: 1fr; } }
+
+  .field-group { display: flex; flex-direction: column; gap: 8px; }
+  .field-group.full-width { grid-column: 1 / -1; }
+  .field-group label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: .15em; text-transform: uppercase; }
+  .field-group label span { color: #ed4245; }
+  .field-group input, .field-group select, .field-group textarea {
+    background: var(--bg); border: 1px solid var(--line); color: var(--ink);
+    padding: 12px; font-size: 14px; border-radius: 2px; transition: border .2s;
+  }
+  .field-group input:focus, .field-group select:focus, .field-group textarea:focus { border-color: var(--accent); }
+  .field-group.invalid input, .field-group.invalid textarea { border-color: #ed4245; background: rgba(237,66,69,0.05); }
+  .field-group textarea { resize: vertical; min-height: 80px; }
+
+  .builder-footer {
+    padding: 24px 32px; border-top: 1px solid var(--line);
+    background: #0c100e; display: flex; gap: 16px; justify-content: flex-end;
+  }
+  .builder-footer button {
+    padding: 14px 28px; font-family: var(--font-head); font-size: 13px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase; border-radius: 2px; transition: all .2s;
+  }
+  .btn-send { background: var(--accent); color: var(--bg); border: 1px solid var(--accent); }
+  .btn-send:hover { background: transparent; color: var(--accent); }
+  .btn-send:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn-download { background: transparent; color: var(--ink); border: 1px solid var(--line); }
+  .btn-download:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* ───── RADIO BOARD ───── */
+  .radio-body { padding: 32px; display: flex; flex-direction: column; gap: 32px; }
+  
+  .radio-section h2 {
+    font-family: var(--font-head); font-size: 18px; font-weight: 600; letter-spacing: .05em;
+    color: var(--accent); margin-bottom: 16px; border-bottom: 1px solid var(--line); padding-bottom: 8px;
+  }
+
+  .radio-nets { display: grid; gap: 12px; }
+  .radio-row { display: grid; grid-template-columns: 1fr 100px 100px; gap: 16px; align-items: center; }
+  @media (max-width: 600px) { .radio-row { grid-template-columns: 1fr; gap: 8px; } }
+  .radio-row label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
+  .radio-row input { background: var(--bg); border: 1px solid var(--line); color: var(--ink); padding: 10px; font-size: 13px; border-radius: 2px; }
+  .radio-row input:focus { border-color: var(--accent); }
+  .radio-row input.invalid { border-color: #ed4245; background: rgba(237,66,69,0.05); }
+
+  .checklist { display: grid; gap: 8px; }
+  .check-item {
+    display: flex; align-items: center; gap: 12px; padding: 12px 16px;
+    background: var(--bg); border: 1px solid var(--line); border-radius: 2px; cursor: pointer;
+    transition: all .2s;
+  }
+  .check-item:hover { border-color: var(--accent-dim); }
+  .check-item.checked { background: rgba(59,165,93,0.1); border-color: #3ba55d; }
+  .check-item.invalid { border-color: #ed4245; }
+  .check-box {
+    width: 18px; height: 18px; border: 1px solid var(--muted); border-radius: 2px;
+    display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--bg);
+    flex-shrink: 0;
+  }
+  .check-item.checked .check-box { background: #3ba55d; border-color: #3ba55d; color: #fff; }
+  .check-text { font-size: 14px; color: var(--ink); flex: 1; }
+  .check-item.checked .check-text { color: var(--muted); text-decoration: line-through; }
+
+  .readiness-status {
+    padding: 16px; background: var(--bg); border: 1px dashed var(--line); border-radius: 4px;
+    text-align: center; font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .1em;
+    margin-top: 16px;
+  }
+  .readiness-status.ready { border-color: #3ba55d; color: #3ba55d; background: rgba(59,165,93,0.05); }
+  .readiness-status.error { border-color: #ed4245; color: #ed4245; background: rgba(237,66,69,0.05); }
+
+  /* ───── CUSTOM CURSOR ───── */
+  body, a, button, * { cursor: none !important; }
+  .cursor-dot, .cursor-ring {
+    position: fixed; top: 0; left: 0; pointer-events: none; z-index: 10000;
+    transform: translate(-50%, -50%); will-change: transform; mix-blend-mode: difference;
+  }
+  .cursor-dot { width: 6px; height: 6px; background: #fff; border-radius: 50%; }
+  .cursor-ring {
+    width: 38px; height: 38px; border: 1px solid #fff; border-radius: 50%;
+    transition: width .25s ease, height .25s ease, border-color .25s ease, background .25s ease;
+  }
+  .cursor-ring.hover { width: 62px; height: 62px; border-color: #c8a94a; background: rgba(200,169,74,.08); }
+  .cursor-ring.click { width: 26px; height: 26px; background: rgba(200,169,74,.25); }
+  @media (pointer: coarse) {
+    .cursor-dot, .cursor-ring { display: none; }
+    body, a, button, * { cursor: auto !important; }
+  }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<div class="desk-wrap">
+  <div class="desk-header">
+    <!-- ASE Crest SVG -->
+    <svg class="desk-crest" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <radialGradient id="bg" cx="50%" cy="45%" r="70%">
+          <stop offset="0%" stop-color="#151a18"/>
+          <stop offset="100%" stop-color="#0a0c0b"/>
+        </radialGradient>
+        <linearGradient id="metal" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#e9e6df"/>
+          <stop offset="55%" stop-color="#cfcbc2"/>
+          <stop offset="100%" stop-color="#9b9890"/>
+        </linearGradient>
+        <filter id="grain" x="0" y="0" width="100%" height="100%">
+          <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" seed="7"/>
+          <feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .12 0"/>
+          <feComposite in2="SourceGraphic" operator="over"/>
+        </filter>
+      </defs>
+
+      <!-- Outer Ring -->
+      <circle cx="256" cy="256" r="248" fill="url(#bg)" stroke="#3a3d3a" stroke-width="4"/>
+      <circle cx="256" cy="256" r="216" fill="none" stroke="#2a2d2a" stroke-width="2"/>
+
+      <!-- Topo Lines -->
+      <g stroke="#3a3d3a" stroke-width="2" fill="none" opacity="0.3">
+        <path d="M60 210 Q140 180 200 220 T360 240 T470 210"/>
+        <path d="M50 260 Q150 240 240 280 T400 290 T480 260"/>
+        <path d="M70 320 Q160 300 250 330 T420 340"/>
+        <path d="M90 380 Q180 360 260 380 T430 390"/>
+      </g>
+
+      <!-- Big Chevron / A Frame -->
+      <g filter="url(#grain)">
+        <path d="M256 96 L400 384 L344 384 L256 200 L168 384 L112 384 Z" fill="url(#metal)"/>
+        <path d="M256 200 L320 320 L192 320 Z" fill="url(#bg)"/>
+      </g>
+
+      <!-- Central Arrow -->
+      <g filter="url(#grain)">
+        <path d="M256 140 L296 244 L272 244 L272 372 L240 372 L240 244 L216 244 Z" fill="url(#metal)"/>
+      </g>
+
+      <!-- E Block -->
+      <g filter="url(#grain)">
+        <path d="M320 208 L400 208 L400 240 L352 240 L352 264 L392 264 L392 296 L352 296 L352 320 L400 320 L400 352 L320 352 Z" fill="url(#metal)"/>
+      </g>
+
+      <!-- Stars -->
+      <g fill="#e9e6df">
+        <path d="M96 256 l6 -10 6 10 -6 3 z"/>
+        <path d="M410 256 l6 -10 6 10 -6 3 z"/>
+      </g>
+
+      <!-- Arced Text -->
+      <defs>
+        <path id="arc-top" d="M60 256 A196 196 0 0 1 452 256"/>
+        <path id="arc-bottom" d="M60 256 A196 196 0 0 0 452 256"/>
+      </defs>
+      <text font-family="'Oswald',sans-serif" font-weight="700" font-size="28" letter-spacing="6" fill="#e9e6df">
+        <textPath href="#arc-top" startOffset="50%" text-anchor="middle">ALPHA SECURITY ELEMENT</textPath>
+      </text>
+      <text font-family="'Oswald',sans-serif" font-weight="600" font-size="14" letter-spacing="4" fill="#8b8f88">
+        <textPath href="#arc-bottom" startOffset="50%" text-anchor="middle">ARMED SECURITY | PSD UNIT | S.A.G. SERVICES</textPath>
+      </text>
+    </svg>
+
+    <div class="desk-header-text">
+      <h1>OPERATIONS DESK</h1>
+      <p>Planning tools and readiness checklists for your next deployment.</p>
+    </div>
+  </div>
+
+  <div class="desk-tabs">
+    <div class="desk-tab active" onclick="switchTab('brief', this)">OP BRIEF BUILDER</div>
+    <div class="desk-tab" onclick="switchTab('radio', this)">RADIO & READINESS</div>
+  </div>
+
+  <!-- VIEW: BRIEF BUILDER -->
+  <div id="view-brief" class="desk-view active">
+    <div class="builder-body">
+      <div class="field-group">
+        <label>Operation Name <span>*</span></label>
+        <input type="text" id="b-name" placeholder="E.g. OPERATION BROKEN ARROW">
+      </div>
+      <div class="field-group">
+        <label>Game / Environment <span>*</span></label>
+        <select id="b-game">
+          <option value="">Select…</option>
+          <option value="ARMA REFORGER">ARMA REFORGER</option>
+          <option value="SQUAD">SQUAD</option>
+          <option value="ARMA 3">ARMA 3</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label>AO / Map <span>*</span></label>
+        <input type="text" id="b-ao" placeholder="E.g. Everon - Northern Sector">
+      </div>
+      <div class="field-group">
+        <label>Time (ZULU) <span>*</span></label>
+        <input type="text" id="b-time" placeholder="E.g. 2100 HRS">
+      </div>
+      <div class="field-group">
+        <label>Commander <span>*</span></label>
+        <input type="text" id="b-cmdr" placeholder="Callsign">
+      </div>
+      
+      <div class="field-group full-width">
+        <label>1. Situation <span>*</span></label>
+        <textarea id="b-situation" placeholder="Enemy forces, terrain, weather..."></textarea>
+      </div>
+      <div class="field-group full-width">
+        <label>2. Mission <span>*</span></label>
+        <textarea id="b-mission" placeholder="Primary objective..."></textarea>
+      </div>
+      <div class="field-group full-width">
+        <label>3. Execution <span>*</span></label>
+        <textarea id="b-execution" placeholder="Commander's intent, maneuver plan..."></textarea>
+      </div>
+      <div class="field-group full-width">
+        <label>4. Sustainment <span>*</span></label>
+        <textarea id="b-sustainment" placeholder="Logistics, resupply, medevac..."></textarea>
+      </div>
+      <div class="field-group full-width">
+        <label>5. Command & Signal <span>*</span></label>
+        <textarea id="b-signals" placeholder="Frequencies, callsigns, passwords..."></textarea>
+      </div>
+    </div>
+
+    <div class="builder-footer">
+      <button class="btn-download" onclick="downloadBrief()">.TXT</button>
+      <button class="btn-send" id="btn-send" onclick="sendToDiscord()">TRANSMIT TO COMMAND</button>
+    </div>
+  </div>
+
+  <!-- VIEW: RADIO & READINESS -->
+  <div id="view-radio" class="desk-view">
+    <div class="radio-body">
+      
+      <div class="radio-section">
+        <h2>RADIO NETS</h2>
+        <div class="radio-nets">
+          <div class="radio-row">
+            <label>Command Net <span style="color:#ed4245">*</span></label>
+            <input type="text" placeholder="CH 1 / 48.0 MHz" id="net-command">
+            <input type="text" placeholder="Primary" id="net-command-status">
+          </div>
+          <div class="radio-row">
+            <label>Fireteam Net <span style="color:#ed4245">*</span></label>
+            <input type="text" placeholder="CH 2 / 51.2 MHz" id="net-fireteam">
+            <input type="text" placeholder="Intra-element" id="net-fireteam-status">
+          </div>
+          <div class="radio-row">
+            <label>Emergency Net <span style="color:#ed4245">*</span></label>
+            <input type="text" placeholder="CH 3 / 32.4 MHz" id="net-emergency">
+            <input type="text" placeholder="Contact/CAS" id="net-emergency-status">
+          </div>
+          <div class="radio-row">
+            <label>CAS / Air Support <span style="color:#ed4245">*</span></label>
+            <input type="text" placeholder="CH 4 / 40.0 MHz" id="net-cas">
+            <input type="text" placeholder="JTAC / Rotary" id="net-cas-status">
+          </div>
+        </div>
+      </div>
+
+      <div class="radio-section">
+        <h2>PRE-OP CHECKLIST</h2>
+        <div class="checklist" id="pre-op-checklist">
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div>
+            <div class="check-text">Radio functioning and frequency verified</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div>
+            <div class="check-text">Map and compass ready</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div>
+            <div class="check-text">Medical supplies stocked (bandages, tourniquets, morphine)</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div>
+            <div class="check-text">Ammunition loaded and checked</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div>
+            <div class="check-text">Uniform and armbands properly marked</div>
+          </div>
+          <div class="check-item" onclick="toggleCheck(this)">
+            <div class="check-box">✓</div>
+            <div class="check-text">Comms check completed with squad</div>
+          </div>
+        </div>
+        
+        <div class="readiness-status" id="readiness-status">
+          0 / 6 CHECKS COMPLETE · NOT READY FOR DEPLOYMENT
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+// ───── CUSTOM CURSOR ─────
+(() => {
+  const dot = document.querySelector('.cursor-dot');
+  const ring = document.querySelector('.cursor-ring');
+  if (!dot || !ring) return;
+  if (window.matchMedia('(pointer: coarse)').matches) return;
+
+  let mx = window.innerWidth / 2, my = window.innerHeight / 2;
+  let rx = mx, ry = my;
+
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.transform = `translate(${mx}px, ${my}px) translate(-50%, -50%)`;
+  });
+
+  const loop = () => {
+    rx += (mx - rx) * 0.16;
+    ry += (my - ry) * 0.16;
+    ring.style.transform = `translate(${rx}px, ${ry}px) translate(-50%, -50%)`;
+    requestAnimationFrame(loop);
+  };
+  loop();
+
+  const hoverables = 'button, select, input, textarea, .desk-tab, .check-item';
+  document.addEventListener('mouseover', e => {
+    if (e.target.closest(hoverables)) ring.classList.add('hover');
+  });
+  document.addEventListener('mouseout', e => {
+    if (e.target.closest(hoverables)) ring.classList.remove('hover');
+  });
+
+  window.addEventListener('mousedown', () => ring.classList.add('click'));
+  window.addEventListener('mouseup', () => ring.classList.remove('click'));
+})();
+
+// ───── TAB LOGIC ─────
+function switchTab(tabId, el) {
+  document.querySelectorAll('.desk-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.desk-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + tabId).classList.add('active');
+}
+
+// ───── CHECKLIST LOGIC ─────
+function toggleCheck(el) {
+  el.classList.toggle('checked');
+  el.classList.remove('invalid'); // clear error on click
+  updateReadiness();
+}
+
+function updateReadiness() {
+  const total = document.querySelectorAll('.check-item').length;
+  const checked = document.querySelectorAll('.check-item.checked').length;
+  const status = document.getElementById('readiness-status');
+  
+  status.textContent = `${checked} / ${total} CHECKS COMPLETE · ${checked === total ? 'READY FOR DEPLOYMENT' : 'NOT READY'}`;
+  
+  if (checked === total) {
+    status.classList.add('ready');
+    status.classList.remove('error');
+  } else {
+    status.classList.remove('ready');
+  }
+}
+
+// ───── VALIDATION LOGIC ─────
+function validateAll() {
+  let isValid = true;
+  let firstErrorTab = null;
+
+  // 1. Validate Brief Builder
+  const briefFields = ['b-name', 'b-game', 'b-ao', 'b-time', 'b-cmdr', 'b-situation', 'b-mission', 'b-execution', 'b-sustainment', 'b-signals'];
+  
+  briefFields.forEach(id => {
+    const el = document.getElementById(id);
+    const group = el.closest('.field-group');
+    if (!el.value.trim()) {
+      group.classList.add('invalid');
+      isValid = false;
+      if (!firstErrorTab) firstErrorTab = 'brief';
+    } else {
+      group.classList.remove('invalid');
+    }
+  });
+
+  // 2. Validate Radio Nets
+  const radioFields = ['net-command', 'net-fireteam', 'net-emergency', 'net-cas'];
+  radioFields.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el.value.trim()) {
+      el.classList.add('invalid');
+      isValid = false;
+      if (!firstErrorTab) firstErrorTab = 'radio';
+    } else {
+      el.classList.remove('invalid');
+    }
+  });
+
+  // 3. Validate Checklist
+  const totalChecks = document.querySelectorAll('.check-item').length;
+  const checkedChecks = document.querySelectorAll('.check-item.checked').length;
+  
+  if (checkedChecks < totalChecks) {
+    isValid = false;
+    document.getElementById('readiness-status').classList.add('error');
+    document.querySelectorAll('.check-item:not(.checked)').forEach(el => el.classList.add('invalid'));
+    if (!firstErrorTab) firstErrorTab = 'radio';
+  } else {
+    document.getElementById('readiness-status').classList.remove('error');
+  }
+
+  // Switch tab to show the first error if invalid
+  if (!isValid && firstErrorTab) {
+    const tabEl = document.querySelector(`.desk-tab[onclick*="${firstErrorTab}"]`);
+    if (tabEl) switchTab(firstErrorTab, tabEl);
+  }
+
+  return isValid;
+}
+
+// ───── BRIEF BUILDER LOGIC ─────
+const WEBHOOK_URL = 'https://discord.com/api/webhooks/1562321702598344774/pNQ9ltsVHxq_SdEUHfKD5lPICHcoSXhunlc2u1_ruGmGZ7WqweMXoY8BJRO9ds5wlLig';
+const THREAD_ID = '1562322123932831755';
+
+function getFormData() {
+  return {
+    name: document.getElementById('b-name').value,
+    game: document.getElementById('b-game').value,
+    ao: document.getElementById('b-ao').value,
+    time: document.getElementById('b-time').value,
+    cmdr: document.getElementById('b-cmdr').value,
+    sit: document.getElementById('b-situation').value,
+    mis: document.getElementById('b-mission').value,
+    exe: document.getElementById('b-execution').value,
+    sus: document.getElementById('b-sustainment').value,
+    sig: document.getElementById('b-signals').value,
+    nets: {
+      cmd: document.getElementById('net-command').value,
+      fireteam: document.getElementById('net-fireteam').value,
+      emergency: document.getElementById('net-emergency').value,
+      cas: document.getElementById('net-cas').value
+    }
+  };
+}
+
+async function sendToDiscord() {
+  if (!validateAll()) {
+    alert('Cannot transmit. Ensure all brief fields, radio nets, and checklist items are completed.');
+    return;
+  }
+
+  const btn = document.getElementById('btn-send');
+  const data = getFormData();
+  
+  btn.disabled = true;
+  btn.textContent = 'TRANSMITTING…';
+
+  const embed = {
+    title: `OPERATION BRIEF — ${data.name.toUpperCase()}`,
+    description: `**Game:** ${data.game}\n**AO:** ${data.ao}\n**Time:** ${data.time}\n**Commander:** ${data.cmdr}`,
+    color: 0xc8a94a,
+    fields: [
+      { name: '1. SITUATION', value: data.sit },
+      { name: '2. MISSION', value: data.mis },
+      { name: '3. EXECUTION', value: data.exe },
+      { name: '4. SUSTAINMENT', value: data.sus },
+      { name: '5. COMMAND & SIGNAL', value: data.sig },
+      { name: '📡 RADIO NETS', value: `**CMD:** ${data.nets.cmd}\n**FT:** ${data.nets.fireteam}\n**EMERG:** ${data.nets.emergency}\n**CAS:** ${data.nets.cas}` }
+    ],
+    footer: { text: 'ASE COMMAND // SECURE TRANSMISSION' },
+    timestamp: new Date().toISOString()
+  };
+
+  const payload = {
+    username: 'ASE Command',
+    embeds: [embed]
+  };
+
+  try {
+    const url = new URL(WEBHOOK_URL);
+    url.searchParams.set('thread_id', THREAD_ID);
+    url.searchParams.set('wait', 'true');
+
+    const res = await fetch(url.toString(), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const err = await res.text();
+      throw new Error(`Discord rejected: ${res.status} ${err}`);
+    }
+
+    btn.textContent = 'TRANSMITTED ✓';
+    btn.style.background = '#3ba55d';
+    btn.style.borderColor = '#3ba55d';
+    
+    setTimeout(() => {
+      btn.textContent = 'TRANSMIT TO COMMAND';
+      btn.style.background = 'var(--accent)';
+      btn.style.borderColor = 'var(--accent)';
+      btn.disabled = false;
+    }, 3000);
+
+  } catch (err) {
+    alert(`Transmission failed: ${err.message}`);
+    btn.textContent = 'TRANSMIT TO COMMAND';
+    btn.disabled = false;
+  }
+}
+
+function downloadBrief() {
+  const data = getFormData();
+  const text = `# ASE — ${data.name.toUpperCase()}
+**Game:** ${data.game}
+
+**AO**
+${data.ao}
+
+**Time**
+${data.time}
+
+**Commander**
+${data.cmdr}
+
+**1. SITUATION**
+${data.sit}
+
+**2. MISSION**
+${data.mis}
+
+**3. EXECUTION**
+${data.exe}
+
+**4. SUSTAINMENT**
+${data.sus}
+
+**5. COMMAND & SIGNAL**
+${data.sig}
+
+**RADIO NETS**
+CMD: ${data.nets.cmd}
+FT: ${data.nets.fireteam}
+EMERG: ${data.nets.emergency}
+CAS: ${data.nets.cas}`;
+
+  const blob = new Blob([text], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `ASE_Brief_${data.name.replace(/\s+/g, '_')}.txt`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+</script>
+</body>
+</html>
