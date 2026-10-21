@@ -199,21 +199,13 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         Recruitment Admin
       </a>
-      <a href="dossier.html">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        Dossier Terminal
-      </a>
-      <a href="#" onclick="switchView('nightjar')" data-view="nightjar">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-        Operation Nightjar
+      <a href="#" onclick="switchView('intel')" data-view="intel">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+        Intelligence
       </a>
       <a href="sop.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
         SOP Manual
-      </a>
-      <a href="intel.html">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
-        Intel Submission
       </a>
     </div>
 
@@ -281,13 +273,9 @@
                 <h3>RECRUITMENT ADMIN <span>→</span></h3>
                 <p>Review incoming applications, approve or deny candidates, and log decisions to the recruit channel.</p>
               </a>
-              <a href="dossier.html" class="portal-card">
-                <h3>DOSSIER TERMINAL <span>→</span></h3>
-                <p>Create and manage personnel dossiers, service records, and internal intelligence files.</p>
-              </a>
-              <a href="#" onclick="switchView('nightjar')" class="portal-card">
-                <h3>OPERATION NIGHTJAR <span>→</span></h3>
-                <p>KODEX/Nightjar threat simulator. Investigate Discord servers, log evidence, and unmask ringleaders.</p>
+              <a href="#" onclick="switchView('intel')" class="portal-card">
+                <h3>INTELLIGENCE <span>→</span></h3>
+                <p>Submit confirmed OPFOR eliminations and view intel reports.</p>
               </a>
               <a href="sop.html" class="portal-card">
                 <h3>SOP MANUAL <span>→</span></h3>
@@ -307,7 +295,7 @@
                 </div>
                 <div class="feed-item">
                   <div class="feed-time">SYS_00:02</div>
-                  <div class="feed-text">Nightjar game module loaded. Secured connection to Server Hub established.</div>
+                  <div class="feed-text">Terminal online. Awaiting input.</div>
                 </div>
                 <div class="feed-item">
                   <div class="feed-time">SYS_00:03</div>
@@ -322,17 +310,13 @@
             <div class="side-panel">
               <h3>QUICK ACTIONS</h3>
               <div class="action-list">
-                <a href="#" onclick="switchView('nightjar')" class="action-btn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"></polygon></svg>
-                  Launch Nightjar
-                </a>
-                <a href="intel.html" class="action-btn">
+                <a href="#" onclick="switchView('intel')" class="action-btn">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
                   Submit New Intel
                 </a>
-                <a href="dossier.html" class="action-btn">
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
-                  Create Dossier
+                <a href="admin.html" class="action-btn">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
+                  Review Applications
                 </a>
               </div>
             </div>
@@ -351,9 +335,9 @@
       </div>
     </div>
 
-    <!-- VIEW: NIGHTJAR (GAME) -->
-    <div id="view-nightjar" class="portal-view">
-      <iframe src="game.html" class="iframe-container" title="Operation Nightjar"></iframe>
+    <!-- VIEW: INTELLIGENCE (INTEL.HTML) -->
+    <div id="view-intel" class="portal-view">
+      <iframe src="intel.html" class="iframe-container" title="Intelligence Submission"></iframe>
     </div>
 
   </main>
