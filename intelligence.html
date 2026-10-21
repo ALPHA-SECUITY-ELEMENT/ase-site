@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASE // INTELLIGENCE</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #0a0c0b; color: #e9e6df; font-family: system-ui, -apple-system, sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  
+  .tabs { display: flex; gap: 24px; padding: 0 24px; border-bottom: 1px solid rgba(233,230,223,.08); background: #0c100e; flex-shrink: 0; }
+  .tab { padding: 16px 0; font-family: 'Oswald', sans-serif; font-size: 13px; font-weight: 600; letter-spacing: .1em; color: #8b8f88; cursor: pointer; border-bottom: 2px solid transparent; transition: all .2s; }
+  .tab:hover { color: #e9e6df; }
+  .tab.active { color: #c8a94a; border-bottom-color: #c8a94a; }
+  
+  .view { display: none; flex: 1; width: 100%; height: 100%; }
+  .view.active { display: block; }
+  iframe { width: 100%; height: 100%; border: none; display: block; }
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('game', this)">OPERATION NIGHTJAR</div>
+  <div class="tab" onclick="switchTab('form', this)">INTEL SUBMISSION</div>
+</div>
+
+<div id="view-game" class="view active">
+  <iframe src="game.html" title="Game"></iframe>
+</div>
+
+<div id="view-form" class="view">
+  <iframe src="intel.html" title="Intel Form"></iframe>
+</div>
+
+<script>
+function switchTab(tabName, el) {
+  // Update active tab styling
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  
+  // Update view visibility
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.getElementById('view-' + tabName).classList.add('active');
+}
+</script>
+
+</body>
+</html>
