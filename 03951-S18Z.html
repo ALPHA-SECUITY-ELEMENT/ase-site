@@ -201,6 +201,7 @@
   .roster-table td { color: var(--muted); }
   .roster-table td strong { color: var(--ink); }
   .roster-loading { padding: 40px; text-align: center; font-family: var(--font-mono); color: var(--muted); }
+  .roster-section-header { background: var(--bg-3); font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: .1em; text-transform: uppercase; border-bottom: 2px solid var(--accent) !important; }
 
   /* ───── VIEW: INTELLIGENCE (IFRAME APP) ───── */
   .intel-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
@@ -815,9 +816,12 @@ async function fetchRosterData() {
   try {
     const sheetId = '1R2VbRaVoMNuVdrchM37F-KKisscrJ_Zr';
     const gid = '2037947315';
-    const url = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
+    const targetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
     
-    const res = await fetch(url);
+    // Route through CORS proxy to bypass Google's fetch restrictions
+    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
+    
+    const res = await fetch(proxyUrl);
     if (!res.ok) throw new Error('Failed to fetch CSV');
     const csvText = await res.text();
     
@@ -839,16 +843,23 @@ async function fetchRosterData() {
     rows.slice(1).forEach(row => {
       if (row.join('').trim() === '') return;
       
-      html += '<tr>';
-      row.forEach(cell => {
-        const displayCell = cell ? cell : '&nbsp;';
-        if (cell.toUpperCase() === 'VACANT') {
-          html += `<td style="color: var(--muted); font-style: italic;">${displayCell}</td>`;
-        } else {
-          html += `<td>${displayCell}</td>`;
-        }
-      });
-      html += '</tr>';
+      // Detect section headers (first cell has text, rest are empty)
+      const isHeader = row[0] && row.slice(1).every(cell => !cell);
+      
+      if (isHeader) {
+        html += `<tr><td colspan="5" class="roster-section-header">${row[0]}</td></tr>`;
+      } else {
+        html += '<tr>';
+        row.forEach(cell => {
+          const displayCell = cell ? cell : '&nbsp;';
+          if (cell.toUpperCase() === 'VACANT') {
+            html += `<td style="color: var(--muted); font-style: italic;">${displayCell}</td>`;
+          } else {
+            html += `<td>${displayCell}</td>`;
+          }
+        });
+        html += '</tr>';
+      }
     });
     html += '</tbody></table>';
 
