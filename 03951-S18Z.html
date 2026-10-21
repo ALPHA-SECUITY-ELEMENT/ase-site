@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>ASE // COMMUNITY PORTAL</title>
+<title>ASE // COMMAND PORTAL</title>
 <style>
   /* ───── RESET & VARIABLES ───── */
   :root {
@@ -355,7 +355,7 @@
     </svg>
     <div>
       <div class="logo">ASE</div>
-      <div class="sub">Community Portal</div>
+      <div class="sub">Command Portal</div>
     </div>
   </div>
   
@@ -486,6 +486,12 @@
             Personnel Dossiers
           </span>
         </button>
+        <button class="admin-nav-item" onclick="switchAdminSection('roster', this)">
+          <span style="display:flex; align-items:center; gap:8px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+            Unit Roster
+          </span>
+        </button>
         <button class="admin-nav-item" onclick="switchAdminSection('operator', this)">
           <span style="display:flex; align-items:center; gap:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
@@ -533,6 +539,13 @@
             <div class="admin-section-view" id="admin-section-dossiers" style="height: 100%;">
               <div class="admin-iframe-wrap" style="height: 75vh; margin-top: 20px;">
                 <iframe src="dossier.html" title="Dossiers"></iframe>
+              </div>
+            </div>
+
+            <!-- Section: Roster -->
+            <div class="admin-section-view" id="admin-section-roster" style="height: 100%;">
+              <div class="admin-iframe-wrap" style="height: 75vh; margin-top: 20px;">
+                <iframe src="https://docs.google.com/spreadsheets/d/e/2PACX-1vTZngR7ZrtIXra3A1x7J9AvnGkB1rOxlzbRom_3p9vyJrsw9ud-Qtr102XF0rtnfQ/pubhtml?widget=true&amp;headers=false" title="Unit Roster"></iframe>
               </div>
             </div>
 
