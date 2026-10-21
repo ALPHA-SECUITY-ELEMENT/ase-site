@@ -136,7 +136,6 @@
   }
   .admin-nav-item:hover { color: var(--ink); background: rgba(233,230,223,.03); }
   .admin-nav-item.active { background: rgba(233,230,223,.08); color: var(--ink); border-radius: 4px; }
-  .admin-nav-item .badge { background: var(--accent); color: var(--bg); font-size: 10px; font-weight: bold; padding: 2px 6px; border-radius: 10px; }
   .admin-nav-divider { height: 1px; background: var(--line); margin: 16px 8px; }
 
   /* Admin Main Content Area */
@@ -478,56 +477,19 @@
         <button class="admin-nav-item active" onclick="switchAdminSection('queue', this)">
           <span style="display:flex; align-items:center; gap:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
-            Dashboard
+            Recruitment Queue
           </span>
         </button>
-        <button class="admin-nav-item">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            New Request
-          </span>
-        </button>
-        <button class="admin-nav-item">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/></svg>
-            NIGHTJAR
-          </span>
-        </button>
-        <button class="admin-nav-item">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-            Messages
-          </span>
-          <span class="badge">0</span>
-        </button>
-        
-        <div class="admin-nav-divider"></div>
-
-        <button class="admin-nav-item">
+        <button class="admin-nav-item" onclick="switchAdminSection('dossiers', this)">
           <span style="display:flex; align-items:center; gap:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            Documents
+            Personnel Dossiers
           </span>
         </button>
-        <button class="admin-nav-item">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
-            Contacts
-          </span>
-        </button>
-
-        <div class="admin-nav-divider"></div>
-
-        <button class="admin-nav-item">
+        <button class="admin-nav-item" onclick="switchAdminSection('operator', this)">
           <span style="display:flex; align-items:center; gap:8px;">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Agency Profile
-          </span>
-        </button>
-        <button class="admin-nav-item">
-          <span style="display:flex; align-items:center; gap:8px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
-            Help & Support
+            Operator Generator
           </span>
         </button>
       </aside>
