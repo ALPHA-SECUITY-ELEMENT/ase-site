@@ -33,6 +33,7 @@
     .widget-inner {
       grid-template-columns: 1fr;
       gap: 48px;
+      text-align: center;
     }
   }
   .widget-copy h2 {
@@ -53,6 +54,11 @@
     line-height: 1.8;
     margin-bottom: 32px;
   }
+  @media (max-width: 900px) {
+    .widget-copy p {
+      margin: 0 auto 32px;
+    }
+  }
   .widget-embed {
     display: flex;
     justify-content: center;
@@ -61,12 +67,7 @@
     border: 1px solid var(--line);
     border-radius: 8px;
     padding: 32px;
-    min-height: 300px; /* Prevents layout jump while loading */
-  }
-  /* Force the widget to fit nicely in the container if it has fixed widths */
-  #milsim-unit-widget {
-    width: 100%;
-    max-width: 500px;
+    min-height: 200px;
   }
 </style>
 </head>
@@ -119,7 +120,7 @@
     <a href="about.html">ABOUT</a>
     <a href="roles.html">ROLES</a>
     <a href="training.html">TRAINING</a>
-    <a href="03951-S18Z.html">03951-S18Z</a>
+    <!-- <a href="03951-S18Z.html">03951-S18Z</a> -->
     <a href="join.html">JOIN</a>
   </nav>
 </header>
@@ -206,15 +207,17 @@
       <span class="section-num">06 / RANKINGS</span>
       <h2>MILSIM UNITS<br><span class="accent">LEADERBOARD.</span></h2>
       <p>We track our stats and activity on the global MILSIM Units board. Check our current standing below.</p>
-      <a href="https://milsimunits.com/units/c2244458-55dc-44a7-b592-3ff1136629c5" target="_blank" rel="noopener" class="btn btn-ghost">VIEW FULL PROFILE ↗</a>
+      <a href="https://milsimunits.com/unit/alpha-security-element" target="_blank" rel="noopener" class="btn btn-ghost">VIEW FULL PROFILE ↗</a>
     </div>
     <div class="widget-embed">
-      <!-- MILSIM WIDGET CODE -->
-      <div id="milsim-unit-widget"
-        data-unit-id="c2244458-55dc-44a7-b592-3ff1136629c5"
-        data-ranking-type="overall"
-        >
-      </div>
+      <iframe 
+        src="https://milsimunits.com/embed/alpha-security-element?type=overall"
+        width="100%"
+        height="120"
+        frameborder="0"
+        title="Alpha Security Element - MilSim Units Ranking"
+        style="max-width: 400px; margin: 0 auto; display: block; border-radius: 4px;">
+      </iframe>
     </div>
   </div>
 </section>
@@ -257,7 +260,5 @@
 <script src="js/discord.js"></script>
 <script src="js/main.js"></script>
 <script src="js/title-scroll.js"></script>
-<!-- MILSIM WIDGET SCRIPT -->
-<script src="https://milsimunits.com/embed/widget.js"></script>
 </body>
 </html>
