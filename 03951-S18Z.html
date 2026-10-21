@@ -9,10 +9,14 @@
   :root {
     --bg: #0a0c0b;
     --bg-2: #111513;
+    --bg-3: #0d100e;
     --ink: #e9e6df;
     --muted: #8b8f88;
     --accent: #c8a94a;
     --line: rgba(233,230,223,.08);
+    --red: #ed4245;
+    --green: #3ba55d;
+    --blue: #5865f2;
     --font-head: 'Oswald', 'Impact', sans-serif;
     --font-body: 'Inter', system-ui, sans-serif;
     --font-mono: 'JetBrains Mono', 'Courier New', monospace;
@@ -43,7 +47,7 @@
     body, a, button, * { cursor: auto !important; }
   }
 
-  /* ───── SIDEBAR LAYOUT ───── */
+  /* ───── PRIMARY SIDEBAR ───── */
   .sidebar {
     width: 260px; min-width: 260px; height: 100vh;
     background: var(--bg-2); border-right: 1px solid var(--line);
@@ -68,7 +72,7 @@
   .nav-item.active .icon { opacity: 1; }
 
   .sidebar-footer { padding: 16px 24px; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 10px; color: var(--muted); display: flex; align-items: center; gap: 8px; letter-spacing: .1em; }
-  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: #3ba55d; box-shadow: 0 0 6px #3ba55d; animation: pulse 2s infinite; }
+  .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
   @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.4; } 100% { opacity: 1; } }
 
   /* ───── MAIN CONTENT ───── */
@@ -98,7 +102,7 @@
   .stat-card .value { font-family: var(--font-head); font-size: 18px; color: var(--ink); font-weight: 600; letter-spacing: .05em; }
   .stat-card .value.accent { color: var(--accent); }
   .stat-card .value.status { display: flex; align-items: center; gap: 8px; }
-  .stat-card .value.status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: #3ba55d; box-shadow: 0 0 8px #3ba55d; }
+  .stat-card .value.status::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--green); box-shadow: 0 0 8px var(--green); }
 
   .dash-lower { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
   @media (max-width: 800px) { .dash-lower { grid-template-columns: 1fr; } }
@@ -106,18 +110,35 @@
   .panel { background: var(--bg-2); border: 1px solid var(--line); border-radius: 6px; overflow: hidden; display: flex; flex-direction: column; }
   .panel-header { padding: 16px 20px; border-bottom: 1px solid var(--line); font-family: var(--font-head); font-size: 14px; font-weight: 600; color: var(--ink); letter-spacing: .1em; text-transform: uppercase; }
   
-  /* System Activity Logs */
   .sys-log { padding: 20px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
   .log-item { display: flex; gap: 16px; font-family: var(--font-mono); font-size: 12px; }
   .log-item .time { color: var(--muted); flex-shrink: 0; }
   .log-item .msg { color: var(--ink); line-height: 1.5; }
   .log-item .msg.accent { color: var(--accent); }
 
-  /* Directives */
   .directives { padding: 20px; display: flex; flex-direction: column; gap: 16px; flex: 1; }
   .dir-item { display: flex; flex-direction: column; gap: 6px; }
   .dir-item .tag { font-family: var(--font-mono); font-size: 10px; color: var(--accent); letter-spacing: .1em; text-transform: uppercase; }
   .dir-item p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* ───── VIEW: INTELLIGENCE (IFRAME APP) ───── */
+  .intel-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
+  
+  .intel-tabs-bar { 
+    display: flex; gap: 24px; padding: 0 32px; border-bottom: 1px solid var(--line); 
+    background: var(--bg-2); flex-shrink: 0; height: 56px; align-items: center;
+  }
+  .intel-tab { 
+    padding: 16px 0; font-family: var(--font-head); font-size: 13px; font-weight: 600; 
+    letter-spacing: .1em; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; 
+    transition: all .2s; 
+  }
+  .intel-tab:hover { color: var(--ink); }
+  .intel-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+  
+  .intel-view { display: none; flex: 1; width: 100%; height: 100%; }
+  .intel-view.active { display: block; }
+  .intel-view iframe { width: 100%; height: 100%; border: none; display: block; }
 
   /* ───── VIEW: SOP ───── */
   .sop-gate-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
@@ -152,10 +173,10 @@
   .field-group { display: flex; flex-direction: column; gap: 8px; }
   .field-group.full-width { grid-column: 1 / -1; }
   .field-group label { font-family: var(--font-mono); font-size: 10px; color: var(--muted); letter-spacing: .15em; text-transform: uppercase; }
-  .field-group label span { color: #ed4245; }
+  .field-group label span { color: var(--red); }
   .field-group input, .field-group select, .field-group textarea { background: var(--bg); border: 1px solid var(--line); color: var(--ink); padding: 12px; font-size: 14px; border-radius: 2px; transition: border .2s; }
   .field-group input:focus, .field-group select:focus, .field-group textarea:focus { border-color: var(--accent); }
-  .field-group.invalid input, .field-group.invalid textarea { border-color: #ed4245; background: rgba(237,66,69,0.05); }
+  .field-group.invalid input, .field-group.invalid textarea { border-color: var(--red); background: rgba(237,66,69,0.05); }
   .field-group textarea { resize: vertical; min-height: 80px; }
 
   .builder-footer { padding: 24px 32px; border-top: 1px solid var(--line); background: var(--bg-2); display: flex; gap: 16px; justify-content: flex-end; margin-top: auto; position: sticky; bottom: 0; }
@@ -174,21 +195,21 @@
   .radio-row label { font-family: var(--font-mono); font-size: 11px; color: var(--muted); letter-spacing: .1em; text-transform: uppercase; }
   .radio-row input { background: var(--bg); border: 1px solid var(--line); color: var(--ink); padding: 10px; font-size: 13px; border-radius: 2px; }
   .radio-row input:focus { border-color: var(--accent); }
-  .radio-row input.invalid { border-color: #ed4245; background: rgba(237,66,69,0.05); }
+  .radio-row input.invalid { border-color: var(--red); background: rgba(237,66,69,0.05); }
 
   .checklist { display: grid; gap: 8px; }
   .check-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: var(--bg); border: 1px solid var(--line); border-radius: 2px; cursor: pointer; transition: all .2s; }
   .check-item:hover { border-color: rgba(200,169,74,.3); }
-  .check-item.checked { background: rgba(59,165,93,0.1); border-color: #3ba55d; }
-  .check-item.invalid { border-color: #ed4245; }
+  .check-item.checked { background: rgba(59,165,93,0.1); border-color: var(--green); }
+  .check-item.invalid { border-color: var(--red); }
   .check-box { width: 18px; height: 18px; border: 1px solid var(--muted); border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 12px; color: var(--bg); flex-shrink: 0; }
-  .check-item.checked .check-box { background: #3ba55d; border-color: #3ba55d; color: #fff; }
+  .check-item.checked .check-box { background: var(--green); border-color: var(--green); color: #fff; }
   .check-text { font-size: 14px; color: var(--ink); flex: 1; }
   .check-item.checked .check-text { color: var(--muted); text-decoration: line-through; }
 
   .readiness-status { padding: 16px; background: var(--bg); border: 1px dashed var(--line); border-radius: 4px; text-align: center; font-family: var(--font-mono); font-size: 12px; color: var(--muted); letter-spacing: .1em; margin-top: 16px; }
-  .readiness-status.ready { border-color: #3ba55d; color: #3ba55d; background: rgba(59,165,93,0.05); }
-  .readiness-status.error { border-color: #ed4245; color: #ed4245; background: rgba(237,66,69,0.05); }
+  .readiness-status.ready { border-color: var(--green); color: var(--green); background: rgba(59,165,93,0.05); }
+  .readiness-status.error { border-color: var(--red); color: var(--red); background: rgba(237,66,69,0.05); }
 
   /* ───── VIEW: TACTICAL MAP ───── */
   .map-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
@@ -198,8 +219,8 @@
   .btn-tool:hover, .btn-tool.active, select:hover, select:focus { border-color: var(--accent); color: var(--accent); }
   
   .sync-bar { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 11px; background: rgba(200,169,74,.1); border: 1px solid var(--accent); padding: 6px 12px; border-radius: 4px; color: var(--accent); }
-  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: #3ba55d; box-shadow: 0 0 6px #3ba55d; animation: pulse 2s infinite; }
-  .sync-dot.offline { background: #ed4245; box-shadow: none; animation: none; }
+  .sync-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); animation: pulse 2s infinite; }
+  .sync-dot.offline { background: var(--red); box-shadow: none; animation: none; }
 
   .map-container { flex: 1; position: relative; overflow: hidden; background: #000; cursor: crosshair; }
   canvas { display: block; width: 100%; height: 100%; object-fit: contain; }
@@ -219,7 +240,7 @@
   .marker-item .m-info { display: flex; flex-direction: column; gap: 2px; }
   .marker-item .m-type { font-family: var(--font-head); font-size: 10px; letter-spacing: .1em; color: var(--ink); }
   .marker-item .m-coord { font-family: var(--font-mono); font-size: 11px; color: var(--muted); }
-  .marker-item .m-del { font-size: 10px; color: #ed4245; opacity: 0.5; }
+  .marker-item .m-del { font-size: 10px; color: var(--red); opacity: 0.5; }
   .marker-item:hover .m-del { opacity: 1; }
   .empty-markers { font-size: 12px; color: var(--muted); text-align: center; padding: 20px; }
 
@@ -228,7 +249,7 @@
   .share-modal.open { display: flex; }
   .share-box { background: var(--bg-2); border: 1px solid var(--accent); padding: 32px; border-radius: 4px; width: 100%; max-width: 400px; text-align: center; position: relative; }
   .close-modal { position: absolute; top: 16px; right: 16px; color: var(--muted); font-size: 20px; cursor: pointer; background: none; border: none; }
-  .close-modal:hover { color: #ed4245; }
+  .close-modal:hover { color: var(--red); }
   .share-box h2 { font-family: var(--font-head); font-size: 24px; color: var(--accent); margin-bottom: 12px; }
   .share-box p { font-size: 13px; color: var(--muted); margin-bottom: 24px; line-height: 1.5; }
   .sync-tabs { display: flex; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
@@ -265,12 +286,12 @@
       <p>Enter the exact Room ID from your squad leader.</p>
       <input type="text" id="join-code-input" placeholder="ASE-ROOM-XXXX" style="text-transform: uppercase;">
       <button class="btn-tool" style="width: 100%; background: var(--accent); color: var(--bg); border-color: var(--accent);" id="btn-join">CONNECT</button>
-      <div id="join-error" style="color: #ed4245; font-size: 11px; margin-top: 12px; min-height: 16px;"></div>
+      <div id="join-error" style="color: var(--red); font-size: 11px; margin-top: 12px; min-height: 16px;"></div>
     </div>
   </div>
 </div>
 
-<!-- ───── SIDEBAR ───── -->
+<!-- ───── PRIMARY SIDEBAR ───── -->
 <aside class="sidebar">
   <div class="sidebar-brand">
     <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -296,6 +317,10 @@
     <button class="nav-item active" data-view="dashboard">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
       DASHBOARD
+    </button>
+    <button class="nav-item" data-view="intel">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      INTELLIGENCE
     </button>
 
     <div class="nav-label" style="margin-top: 16px;">Public Ops</div>
@@ -392,6 +417,22 @@
     </div>
   </section>
 
+  <!-- VIEW: INTELLIGENCE (IFRAME APP) -->
+  <section class="view" id="view-intel">
+    <div class="intel-wrapper">
+      <div class="intel-tabs-bar">
+        <div class="intel-tab active" onclick="switchIntelTab('game', this)">OPERATION NIGHTJAR</div>
+        <div class="intel-tab" onclick="switchIntelTab('form', this)">INTEL SUBMISSION</div>
+      </div>
+      <div id="intel-view-game" class="intel-view active">
+        <iframe src="game.html" title="Game"></iframe>
+      </div>
+      <div id="intel-view-form" class="intel-view">
+        <iframe src="intel.html" title="Intel Form"></iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- VIEW: SOP -->
   <section class="view" id="view-sop">
     <div class="sop-gate-wrap" id="sop-gate-wrap">
@@ -400,7 +441,7 @@
         <p>This manual is unit-internal. Enter the unit password to continue.</p>
         <input type="password" id="sop-password" placeholder="••••••••" autocomplete="off">
         <button id="sop-submit">UNLOCK</button>
-        <div id="sop-error" style="color: #ed4245; margin-top: 16px; font-size: 11px; display: none; letter-spacing:1px; min-height: 16px;"></div>
+        <div id="sop-error" style="color: var(--red); margin-top: 16px; font-size: 11px; display: none; letter-spacing:1px; min-height: 16px;"></div>
       </div>
     </div>
     <div class="sop-content" id="sop-content"></div>
@@ -437,10 +478,10 @@
         <div class="radio-section">
           <h2>RADIO NETS</h2>
           <div class="radio-nets">
-            <div class="radio-row"><label>Command Net <span style="color:#ed4245">*</span></label><input type="text" placeholder="CH 1 / 48.0 MHz" id="net-command"><input type="text" placeholder="Primary" id="net-command-status"></div>
-            <div class="radio-row"><label>Fireteam Net <span style="color:#ed4245">*</span></label><input type="text" placeholder="CH 2 / 51.2 MHz" id="net-fireteam"><input type="text" placeholder="Intra-element" id="net-fireteam-status"></div>
-            <div class="radio-row"><label>Emergency Net <span style="color:#ed4245">*</span></label><input type="text" placeholder="CH 3 / 32.4 MHz" id="net-emergency"><input type="text" placeholder="Contact/CAS" id="net-emergency-status"></div>
-            <div class="radio-row"><label>CAS / Air Support <span style="color:#ed4245">*</span></label><input type="text" placeholder="CH 4 / 40.0 MHz" id="net-cas"><input type="text" placeholder="JTAC / Rotary" id="net-cas-status"></div>
+            <div class="radio-row"><label>Command Net <span style="color:var(--red)">*</span></label><input type="text" placeholder="CH 1 / 48.0 MHz" id="net-command"><input type="text" placeholder="Primary" id="net-command-status"></div>
+            <div class="radio-row"><label>Fireteam Net <span style="color:var(--red)">*</span></label><input type="text" placeholder="CH 2 / 51.2 MHz" id="net-fireteam"><input type="text" placeholder="Intra-element" id="net-fireteam-status"></div>
+            <div class="radio-row"><label>Emergency Net <span style="color:var(--red)">*</span></label><input type="text" placeholder="CH 3 / 32.4 MHz" id="net-emergency"><input type="text" placeholder="Contact/CAS" id="net-emergency-status"></div>
+            <div class="radio-row"><label>CAS / Air Support <span style="color:var(--red)">*</span></label><input type="text" placeholder="CH 4 / 40.0 MHz" id="net-cas"><input type="text" placeholder="JTAC / Rotary" id="net-cas-status"></div>
           </div>
         </div>
         <div class="radio-section">
@@ -529,7 +570,7 @@
   };
   loop();
 
-  const hoverables = 'button, select, input, textarea, .check-item, .marker-item, .sync-tab, .nav-item';
+  const hoverables = 'button, select, input, textarea, .check-item, .marker-item, .sync-tab, .nav-item, .intel-tab';
   document.addEventListener('mouseover', e => {
     if (e.target.closest(hoverables)) ring.classList.add('hover');
   });
@@ -544,6 +585,7 @@
 // ───── NAVIGATION ─────
 const viewMeta = {
   dashboard: { title: 'DASHBOARD', crumb: 'MEMBERS PORTAL // ASE OPERATIONS' },
+  intel: { title: 'INTELLIGENCE', crumb: 'OPERATION NIGHTJAR // INTEL SUBMISSION' },
   sop: { title: 'SOP ACCESS', crumb: 'PUBLIC OPS // REFERENCE' },
   ops: { title: 'OPERATIONS DESK', crumb: 'PUBLIC OPS // PLANNING' },
   map: { title: 'TACTICAL MAP', crumb: 'PUBLIC OPS // BOARD' }
@@ -563,6 +605,13 @@ document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
     if (v === 'dashboard') logActivity(`Navigated to Dashboard.`);
   });
 });
+
+function switchIntelTab(tabName, el) {
+  document.querySelectorAll('.intel-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.intel-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('intel-view-' + tabName).classList.add('active');
+}
 
 function logActivity(msg) {
   const anchor = document.getElementById('dynamic-log-anchor');
@@ -748,8 +797,8 @@ async function sendToDiscord() {
     if (!res.ok) throw new Error(`Discord rejected: ${res.status}`);
 
     btn.textContent = 'TRANSMITTED ✓';
-    btn.style.background = '#3ba55d';
-    btn.style.borderColor = '#3ba55d';
+    btn.style.background = 'var(--green)';
+    btn.style.borderColor = 'var(--green)';
     logActivity(`Brief transmitted: ${data.name.toUpperCase()}`);
     
     setTimeout(() => {
@@ -823,11 +872,11 @@ const fileInput = document.getElementById('map-upload');
 const typeSelect = document.getElementById('marker-type');
 
 const styles = {
-  origin:   { color: '#3ba55d', label: 'OP' },
-  target:   { color: '#ed4245', label: 'TGT' },
-  rally:    { color: '#c8a94a', label: 'RLY' },
-  objective:{ color: '#c8a94a', label: 'OBJ' },
-  support:  { color: '#5865f2', label: 'SUP' },
+  origin:   { color: 'var(--green)', label: 'OP' },
+  target:   { color: 'var(--red)', label: 'TGT' },
+  rally:    { color: 'var(--accent)', label: 'RLY' },
+  objective:{ color: 'var(--accent)', label: 'OBJ' },
+  support:  { color: 'var(--blue)', label: 'SUP' },
   hazard:   { color: '#f59e0b', label: 'HAZ' }
 };
 
@@ -1106,8 +1155,8 @@ function updateSyncStatus(status, text) {
     dot.classList.remove('offline');
     label.textContent = text;
     btn.textContent = status === 'host' ? 'ROOM: ' + text : 'CONNECTED';
-    btn.style.borderColor = '#3ba55d';
-    btn.style.color = '#3ba55d';
+    btn.style.borderColor = 'var(--green)';
+    btn.style.color = 'var(--green)';
   } else {
     dot.classList.add('offline');
     label.textContent = text;
