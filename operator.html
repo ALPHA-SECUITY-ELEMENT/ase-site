@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>ASE // OPERATOR GENERATOR</title>
+<meta name="robots" content="noindex, nofollow" />
+<link rel="icon" href="assets/img/favicon.svg" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/reset.css" />
+<link rel="stylesheet" href="css/main.css" />
+<link rel="stylesheet" href="css/cursor.css" />
+<link rel="stylesheet" href="css/pages.css" />
+<style>
+  /* ───── GLOBAL OVERRIDES FOR THIS PAGE ───── */
+  body { background: var(--bg); color: var(--ink); font-family: 'Inter', sans-serif; padding: 120px 20px; }
+  .cursor-dot, .cursor-ring { z-index: 10000 !important; }
+
+  .gen-wrap { max-width: 900px; margin: 0 auto; }
+  
+  .gen-header { text-align: center; margin-bottom: 48px; }
+  .gen-header h1 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 42px; letter-spacing: .08em; margin-bottom: 12px; color: var(--accent); text-transform: uppercase; }
+  .gen-header p { color: var(--muted); font-size: 14px; letter-spacing: .05em; }
+
+  .gen-layout { display: grid; grid-template-columns: 1fr 320px; gap: 40px; align-items: start; }
+  @media (max-width: 800px) { .gen-layout { grid-template-columns: 1fr; } }
+
+  /* ───── DOSSIER CARD ───── */
+  .dossier-card {
+    background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px;
+    padding: 36px; position: relative; overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,.5);
+    min-height: 480px; display: flex; flex-direction: column;
+  }
+  .dossier-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--accent);
+  }
+  
+  .dc-head { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 1px solid var(--line); padding-bottom: 24px; margin-bottom: 28px; }
+  .dc-title h2 { font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 32px; letter-spacing: .06em; margin-bottom: 6px; color: var(--ink); text-transform: uppercase; }
+  .dc-title p { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); letter-spacing: .15em; text-transform: uppercase; }
+  .dc-class { border: 1px solid #ed4245; color: #ed4245; font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; letter-spacing: .15em; padding: 6px 12px; border-radius: 2px; }
+  
+  .dc-body { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+  .dc-stat { display: flex; border-bottom: 1px solid var(--line); padding-bottom: 16px; }
+  .dc-stat:last-child { border-bottom: none; padding-bottom: 0; }
+  .dc-stat-label { width: 140px; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); letter-spacing: .15em; text-transform: uppercase; margin-top: 4px; }
+  .dc-stat-value { flex: 1; font-size: 16px; font-weight: 500; color: var(--ink); }
+  .dc-stat-value.highlight { color: var(--accent); font-family: 'Oswald', sans-serif; font-weight: 600; letter-spacing: .05em; font-size: 18px;}
+  .dc-stat-value.mono { font-family: 'JetBrains Mono', monospace; font-size: 14px; }
+
+  .dc-footer { margin-top: 32px; padding-top: 20px; border-top: 1px dashed var(--line); font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--muted); display: flex; justify-content: space-between; letter-spacing: .1em; }
+
+  /* ───── CONTROLS ───── */
+  .gen-controls { background: var(--bg-2); border: 1px solid var(--line); border-radius: 8px; padding: 28px; }
+  .gen-btn {
+    width: 100%; padding: 18px; background: var(--accent); color: var(--bg);
+    font-family: 'Oswald', sans-serif; font-size: 14px; letter-spacing: .2em; font-weight: 600;
+    border: 1px solid var(--accent); border-radius: 2px; cursor: pointer; transition: all .3s var(--ease);
+    margin-bottom: 24px; text-transform: uppercase;
+  }
+  .gen-btn:hover { background: transparent; color: var(--accent); }
+  .gen-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  .gen-list { list-style: none; }
+  .gen-list li { font-size: 12px; color: var(--muted); padding: 12px 0; border-bottom: 1px solid var(--line); display: flex; gap: 12px; align-items: center; line-height: 1.5; }
+  .gen-list li:last-child { border: none; }
+  .gen-list li::before { content: '▹'; color: var(--accent); font-size: 10px; }
+</style>
+</head>
+<body>
+
+<div class="cursor-dot"></div>
+<div class="cursor-ring"></div>
+
+<div class="gen-wrap">
+  <div class="gen-header">
+    <h1>OPERATOR GENERATOR</h1>
+    <p>Generate a new callsign, specialization, and operational dossier.</p>
+  </div>
+
+  <div class="gen-layout">
+    <!-- DOSSIER DISPLAY -->
+    <div class="dossier-card" id="dossier">
+      <div class="dc-head">
+        <div class="dc-title">
+          <h2 id="op-callsign">—</h2>
+          <p id="op-id">ASE-OP-0000</p>
+        </div>
+        <div class="dc-class">CLASSIFIED</div>
+      </div>
+
+      <div class="dc-body">
+        <div class="dc-stat">
+          <span class="dc-stat-label">Specialization</span>
+          <span class="dc-stat-value highlight" id="op-role">—</span>
+        </div>
+        <div class="dc-stat">
+          <span class="dc-stat-label">Element</span>
+          <span class="dc-stat-value" id="op-element">—</span>
+        </div>
+        <div class="dc-stat">
+          <span class="dc-stat-label">Primary Weapon</span>
+          <span class="dc-stat-value" id="op-weapon">—</span>
+        </div>
+        <div class="dc-stat">
+          <span class="dc-stat-label">Clearance</span>
+          <span class="dc-stat-value" id="op-clearance">—</span>
+        </div>
+        <div class="dc-stat">
+          <span class="dc-stat-label">Blood Type</span>
+          <span class="dc-stat-value mono" id="op-blood">—</span>
+        </div>
+        <div class="dc-stat">
+          <span class="dc-stat-label">Status</span>
+          <span class="dc-stat-value" style="color: #3ba55d;" id="op-status">ACTIVE DUTY</span>
+        </div>
+      </div>
+
+      <div class="dc-footer">
+        <span>ASE COMMAND // SECURE</span>
+        <span id="op-date">—</span>
+      </div>
+    </div>
+
+    <!-- CONTROLS -->
+    <div class="gen-controls">
+      <button class="gen-btn" id="gen-btn">Generate Operator</button>
+      <ul class="gen-list">
+        <li>Names drawn from AU/NZ regional flora & fauna</li>
+        <li>Specializations follow ASE pipeline logic</li>
+        <li>Weaponry matched to role</li>
+        <li>Clearance is randomized (L1–L5)</li>
+        <li>IDs are unique per generation</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<script>
+(() => {
+  // ───── POOLS ─────
+  const callsigns = [
+    'WALLABY', 'EMU', 'DINGO', 'KANGAROO', 'KOALA', 'WOMBAT', 'PLATYPUS', 'ECHIDNA', 
+    'CASSOWARY', 'KOOKABURRA', 'MAGPIE', 'CURRAWONG', 'BROLGA', 'JABIRU', 'PELICAN', 
+    'WEDGE', 'TAIPAN', 'BROWNSNAKE', 'TIGERSNAKE', 'DEATHADDER', 'REDBACK', 'FUNNELWEB',
+    'BULLSHARK', 'GREATWHITE', 'CROCODILE', 'SALTIE', 'FRESHWATER', 'BARRAMUNDI',
+    'MULLOWAY', 'SNIPER', 'GHOST', 'RABBIT', 'HARE', 'FOX', 'CAT', 'PIG', 'BUFFALO',
+    'CAMEL', 'HORSE', 'BRUMBY', 'STALLION', 'MUSTANG', 'BUCK', 'DOE', 'STAG', 'HIND',
+    'FALCON', 'HAWK', 'EAGLE', 'OSPREY', 'KITE', 'HARRIER', 'SPARROW', 'WREN',
+    'ROBIN', 'FINCH', 'SWALLOW', 'MARTIN', 'SWIFT', 'DOVE', 'PIGEON', 'QUAIL',
+    'CROW', 'RAVEN', 'JAY', 'MAGPIE', 'CHOUGH', 'JACKDAW', 'ROOK'
+  ];
+
+  const elements = [
+    '1st Commando Regiment', '2nd Commando Regiment', 'SASR', 
+    'Incident Response Regiment', 'Special Operations Engineer Regiment',
+    'Tactical Assault Group', 'Special Air Service', 'Clearance Diving Team'
+  ];
+
+  const roles = [
+    { title: 'RIFLEMAN', weapons: ['EF88 Austeyr', 'M4A5 Carbine', 'HK416'] },
+    { title: 'MARKSMAN', weapons: ['SR-25', 'HK417', 'M110 SASS'] },
+    { title: 'SNIPER', weapons: ['AI AW50', 'Barrett M82', 'Blaser R93'] },
+    { title: 'RECON', weapons: ['MP5SD', 'MCX Rattler', 'MP7A2'] },
+    { title: 'BREACHER', weapons: ['M1014 JSCS', 'Benelli M4', 'AA-12'] },
+    { title: 'COMBAT MEDIC', weapons: ['EF88 Austeyr', 'MP5K'] },
+    { title: 'COMMS / SIGINT', weapons: ['MP7A1', 'P90', 'EF88C'] },
+    { title: 'HEAVY WEAPONS', weapons: ['M249 SAW', 'Minimi Mk3', 'PKM'] },
+    { title: 'ANTI-ARMOR', weapons: ['M3 MAAWS', 'Carl Gustaf', 'Javelin'] },
+    { title: 'VEHICLE CREW', weapons: ['M2 Browning', 'Mk19 AGL'] }
+  ];
+
+  const bloodTypes = ['O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
+  const clearances = ['LEVEL 1', 'LEVEL 2', 'LEVEL 3', 'LEVEL 4', 'LEVEL 5'];
+
+  // ───── GENERATOR ─────
+  const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+  const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+  const generate = () => {
+    // Callsign
+    const callsign = pick(callsigns);
+    
+    // ID (e.g. ASE-OP-4192)
+    const idNum = randInt(1000, 9999);
+    const id = `ASE-OP-${idNum}`;
+
+    // Role & Weapon
+    const roleObj = pick(roles);
+    const weapon = pick(roleObj.weapons);
+
+    // Element
+    const element = pick(elements);
+
+    // Clearance
+    const clearance = pick(clearances);
+
+    // Blood
+    const blood = pick(bloodTypes);
+
+    // Date
+    const now = new Date();
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+
+    // Populate DOM
+    document.getElementById('op-callsign').textContent = callsign;
+    document.getElementById('op-id').textContent = id;
+    document.getElementById('op-role').textContent = roleObj.title;
+    document.getElementById('op-element').textContent = element;
+    document.getElementById('op-weapon').textContent = weapon;
+    document.getElementById('op-clearance').textContent = clearance;
+    document.getElementById('op-blood').textContent = blood;
+    document.getElementById('op-date').textContent = dateStr;
+
+    // Flash effect
+    const card = document.getElementById('dossier');
+    card.style.opacity = '0.5';
+    setTimeout(() => { card.style.opacity = '1'; }, 150);
+  };
+
+  document.getElementById('gen-btn').addEventListener('click', generate);
+  
+  // Generate one on load
+  generate();
+})();
+</script>
+</body>
+</html>
