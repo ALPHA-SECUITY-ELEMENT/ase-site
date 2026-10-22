@@ -1106,8 +1106,8 @@ function validateAll() {
   return isValid;
 }
 
-const WEBHOOK_URL = 'https://discord.com/api/webhooks/1562321702598344774/pNQ9ltsVHxq_SdEUHfKD5lPICHcoSXhunlc2u1_ruGmGZ7WqweMXoY8BJRO9ds5wlLig';
-const THREAD_ID = '1562322123932831755';
+// NOW POINTS TO EXISTING WORKER
+const BRIEF_API = 'https://ase-api.1sfodboot.workers.dev/brief';
 
 function getFormData() {
   return {
@@ -1142,34 +1142,14 @@ async function sendToDiscord() {
   btn.disabled = true;
   btn.textContent = 'TRANSMITTING…';
 
-  const embed = {
-    title: `OPERATION BRIEF — ${data.name.toUpperCase()}`,
-    description: `**Game:** ${data.game}\n**AO:** ${data.ao}\n**Time:** ${data.time}\n**Commander:** ${data.cmdr}`,
-    color: 0xc8a94a,
-    fields: [
-      { name: '1. SITUATION', value: data.sit },
-      { name: '2. MISSION', value: data.mis },
-      { name: '3. EXECUTION', value: data.exe },
-      { name: '4. SUSTAINMENT', value: data.sus },
-      { name: '5. COMMAND & SIGNAL', value: data.sig },
-      { name: '📡 RADIO NETS', value: `**CMD:** ${data.nets.cmd}\n**FT:** ${data.nets.fireteam}\n**EMERG:** ${data.nets.emergency}\n**CAS:** ${data.nets.cas}` }
-    ],
-    footer: { text: 'ASE COMMAND // SECURE TRANSMISSION' },
-    timestamp: new Date().toISOString()
-  };
-
   try {
-    const url = new URL(WEBHOOK_URL);
-    url.searchParams.set('thread_id', THREAD_ID);
-    url.searchParams.set('wait', 'true');
-
-    const res = await fetch(url.toString(), {
+    const res = await fetch(BRIEF_API, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: 'ASE Command', embeds: [embed] })
+      body: JSON.stringify(data)
     });
 
-    if (!res.ok) throw new Error(`Discord rejected: ${res.status}`);
+    if (!res.ok) throw new Error(`Server rejected: ${res.status}`);
 
     btn.textContent = 'TRANSMITTED ✓';
     btn.style.background = 'var(--green)';
