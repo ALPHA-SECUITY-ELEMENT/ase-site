@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>ASE // PMC // OMEGA COMMS // 0ASW-0618 // UNCLASSIFIED</title>
-<meta name="description" content="Alpha Security Element — combat roles and specializations." />
+<meta name="description" content="Alpha Security Element — combat roles, specializations, and special missions units." />
 <link rel="icon" href="assets/img/favicon.svg" />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,107 +13,69 @@
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/cursor.css" />
 <link rel="stylesheet" href="css/pages.css" />
+<style>
+/* Scoped ASE division directory — no changes to existing site styles */
+.ase-divisions{position:relative;isolation:isolate;padding:clamp(65px,8vw,120px) 24px;background:radial-gradient(ellipse at 50% 0%,#18231c 0%,#0b0e0d 53%,#070909 100%);color:#e6e9e6;overflow:hidden}
+.ase-divisions::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.14;background-image:linear-gradient(#83c68b 1px,transparent 1px),linear-gradient(90deg,#83c68b 1px,transparent 1px);background-size:52px 52px;mask-image:linear-gradient(to bottom,black,transparent 80%)}
+.ase-divisions .ase-wrap{max-width:1240px;margin:auto}
+.ase-divisions .ase-kicker{font:600 12px/1.5 Inter,sans-serif;letter-spacing:.25em;color:#91c69a}
+.ase-divisions .ase-heading{font:700 clamp(34px,5vw,64px)/1.08 Oswald,sans-serif;letter-spacing:.035em;margin:14px 0;color:#f3f4f0}
+.ase-divisions .ase-heading span{color:#a7d1a6}
+.ase-divisions .ase-intro{max-width:750px;font:400 15px/1.8 Inter,sans-serif;color:#a6b1a8;margin:0 0 32px}
+.ase-divisions .ase-status{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 24px;font:600 11px/1.5 Inter,sans-serif;letter-spacing:.12em;color:#a4b3a8}
+.ase-divisions .ase-dot{width:7px;height:7px;border-radius:50%;background:#9add9e;box-shadow:0 0 12px #9add9e}
+.ase-divisions .ase-directory{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:18px}
+.ase-divisions .ase-card{--unit:#83bb88;position:relative;display:flex;flex-direction:column;min-width:0;background:linear-gradient(155deg,#1b211e,#101411 70%);border:1px solid #343d36;border-top:2px solid var(--unit);transition:transform .25s,border-color .25s,box-shadow .25s}
+.ase-divisions .ase-card:hover{transform:translateY(-4px);border-color:var(--unit);box-shadow:0 15px 40px #0008,0 0 24px color-mix(in srgb,var(--unit) 12%,transparent)}
+.ase-divisions .ase-card[data-color=red]{--unit:#e15c5c}.ase-divisions .ase-card[data-color=yellow]{--unit:#d8d64c}.ase-divisions .ase-card[data-color=silver]{--unit:#c4c9c5}
+.ase-divisions .ase-card-top{display:flex;justify-content:space-between;gap:12px;padding:18px 20px 0;color:#a6b2a8;font:600 10px/1.4 Inter,sans-serif;letter-spacing:.13em}
+.ase-divisions .ase-card-top strong{color:var(--unit);font-weight:700}
+.ase-divisions .ase-logo-box{height:230px;display:flex;align-items:center;justify-content:center;padding:14px 24px;background:radial-gradient(ellipse,#2b332b55,transparent 70%)}
+.ase-divisions .ase-logo-box img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 12px 12px #0008)}
+.ase-divisions .ase-card-body{padding:0 22px 22px;display:flex;flex:1;flex-direction:column}
+.ase-divisions .ase-card h3{font:700 25px/1.2 Oswald,sans-serif;letter-spacing:.035em;color:#f4f5f1;margin:0 0 8px}
+.ase-divisions .ase-role{font:600 10px/1.5 Inter,sans-serif;letter-spacing:.13em;color:var(--unit);text-transform:uppercase;margin-bottom:13px}
+.ase-divisions .ase-summary{font:400 13px/1.75 Inter,sans-serif;color:#b2bcb3;margin:0 0 18px;flex:1}
+.ase-divisions .ase-tags{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:18px}
+.ase-divisions .ase-tags span{font:600 10px/1.4 Inter,sans-serif;color:#b7c3b8;background:#252d27;border:1px solid #3a463d;padding:5px 8px}
+.ase-divisions details{border-top:1px solid #354038;padding-top:13px}
+.ase-divisions summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;font:700 11px/1.4 Inter,sans-serif;letter-spacing:.11em;color:var(--unit);padding:5px 0}
+.ase-divisions summary::-webkit-details-marker{display:none}.ase-divisions summary::after{content:'+';font-size:20px;line-height:1}.ase-divisions details[open] summary::after{content:'−'}
+.ase-divisions .ase-detail{font:400 12px/1.8 Inter,sans-serif;color:#b6c1b8;padding:12px 0 0;margin:0}
+.ase-divisions .ase-bottom{display:flex;align-items:center;justify-content:space-between;gap:15px;flex-wrap:wrap;border-top:1px solid #39443a;margin-top:32px;padding-top:24px;font:600 11px/1.6 Inter,sans-serif;letter-spacing:.1em;color:#9daea0}
+.ase-divisions .ase-apply{display:inline-flex;align-items:center;justify-content:center;padding:13px 20px;background:#a8c7a3;color:#101711;text-decoration:none;font:700 12px/1.4 Inter,sans-serif;letter-spacing:.08em;transition:background .2s}
+.ase-divisions .ase-apply:hover{background:#d2e4c8;color:#101711}
+@media(max-width:960px){.ase-divisions .ase-directory{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:620px){.ase-divisions .ase-directory{grid-template-columns:1fr}.ase-divisions .ase-logo-box{height:220px}.ase-divisions{padding-left:18px;padding-right:18px}}
+@media(prefers-reduced-motion:reduce){.ase-divisions .ase-card,.ase-divisions .ase-apply{transition:none}}
+</style>
 </head>
 <body data-page="roles">
-
 <div id="loader" aria-hidden="true">
-  <div class="loader-inner">
-    <div class="loader-crest">
-      <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <defs>
-          <radialGradient id="lbg" cx="50%" cy="45%" r="70%">
-            <stop offset="0%" stop-color="#151a18"/>
-            <stop offset="100%" stop-color="#0a0c0b"/>
-          </radialGradient>
-        </defs>
-        <circle class="pl pl-ring-1" cx="256" cy="256" r="248" fill="url(#lbg)" stroke="#3a3d3a" stroke-width="2"/>
-        <circle class="pl pl-ring-2" cx="256" cy="256" r="216" fill="none" stroke="#2a2d2a" stroke-width="1"/>
-        <path class="pl pl-a" d="M256 96 L400 384 L344 384 L256 200 L168 384 L112 384 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
-        <path class="pl pl-a-inner" d="M256 200 L320 320 L192 320 Z" fill="none" stroke="#e9e6df" stroke-width="2" stroke-linejoin="round"/>
-        <path class="pl pl-arrow" d="M256 140 L296 244 L272 244 L272 372 L240 372 L240 244 L216 244 Z" fill="none" stroke="#c8a94a" stroke-width="3" stroke-linejoin="round"/>
-        <path class="pl pl-e" d="M320 208 L400 208 L400 240 L352 240 L352 264 L392 264 L392 296 L352 296 L352 320 L400 320 L400 352 L320 352 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/>
-        <path class="pl pl-star-l" d="M96 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
-        <path class="pl pl-star-r" d="M410 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/>
-      </svg>
-    </div>
-    <div class="loader-bar"><span></span></div>
-    <div class="loader-text">INITIALIZING SECURITY ELEMENT…</div>
-  </div>
+ <div class="loader-inner"><div class="loader-crest">
+ <svg viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><radialGradient id="lbg" cx="50%" cy="45%" r="70%"><stop offset="0%" stop-color="#151a18"/><stop offset="100%" stop-color="#0a0c0b"/></radialGradient></defs><circle class="pl pl-ring-1" cx="256" cy="256" r="248" fill="url(#lbg)" stroke="#3a3d3a" stroke-width="2"/><circle class="pl pl-ring-2" cx="256" cy="256" r="216" fill="none" stroke="#2a2d2a" stroke-width="1"/><path class="pl pl-a" d="M256 96 L400 384 L344 384 L256 200 L168 384 L112 384 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/><path class="pl pl-a-inner" d="M256 200 L320 320 L192 320 Z" fill="none" stroke="#e9e6df" stroke-width="2" stroke-linejoin="round"/><path class="pl pl-arrow" d="M256 140 L296 244 L272 244 L272 372 L240 372 L240 244 L216 244 Z" fill="none" stroke="#c8a94a" stroke-width="3" stroke-linejoin="round"/><path class="pl pl-e" d="M320 208 L400 208 L400 240 L352 240 L352 264 L392 264 L392 296 L352 296 L352 320 L400 320 L400 352 L320 352 Z" fill="none" stroke="#e9e6df" stroke-width="3" stroke-linejoin="round"/><path class="pl pl-star-l" d="M96 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/><path class="pl pl-star-r" d="M410 256 l6 -10 6 10 -6 3 z" fill="#e9e6df"/></svg>
+ </div><div class="loader-bar"><span></span></div><div class="loader-text">INITIALIZING SECURITY ELEMENT…</div></div>
 </div>
-
-<div class="cursor-dot"></div>
-<div class="cursor-ring"></div>
-
-<button id="audio-toggle" aria-label="toggle audio">
-  <span class="bars"><i></i><i></i><i></i></span>
-  <span class="label">AUDIO</span>
-</button>
-
-<header class="nav">
-  <a href="index.html" class="nav-logo">
-    <span class="nav-mark">ASE</span>
-    <span class="nav-sub">ALPHA SECURITY ELEMENT</span>
-  </a>
-  <nav class="nav-links">
-    <a href="index.html">HOME</a>
-    <a href="about.html">ABOUT</a>
-    <a href="roles.html" class="active">ROLES</a>
-    <a href="training.html">TRAINING</a>
-    <!-- <a href="sop.html">SOP</a> -->
-    <!-- <a href="intel.html">INTEL</a> -->
-    <a href="03951-S18Z.html">03951-S18Z</a>
-    <a href="join.html">JOIN</a>
-  </nav>
-</header>
-
-<section class="page-hero">
-  <div class="page-hero-inner">
-    <p class="hero-eyebrow" data-anim="fade-up">SPECIALIZATIONS</p>
-    <h1 class="page-title" data-anim="fade-up">CHOOSE YOUR<br><span class="accent">ROLE.</span></h1>
-    <p class="page-lede" data-anim="fade-up">
-      Every member starts as a rifleman. As you gain experience, you specialize. Each role has a
-      place on the element — the fight is won by the team, not the individual.
-    </p>
-  </div>
-</section>
-
-<section class="roles-grid-section">
-  <div class="roles-grid" id="roles-grid"></div>
-</section>
-
-<section class="cta-strip" data-anim="fade-up">
-  <h2>FIND YOUR PLACE.</h2>
-  <a href="join.html" class="btn btn-primary">ENLIST NOW</a>
-</section>
-
-<footer class="footer">
-  <div class="footer-col">
-    <span class="nav-mark">ASE</span>
-    <p>Alpha Security Element<br>Arma Reforger · PvP Only</p>
-  </div>
-  <div class="footer-col">
-    <h4>UNIT</h4>
-    <a href="about.html">About</a>
-    <a href="roles.html">Roles</a>
-    <a href="training.html">Training</a>
-  </div>
-  <div class="footer-col">
-    <h4>ENLIST</h4>
-    <a href="join.html">Apply</a>
-    <a href="https://discord.gg/tNP7dctAjB">Discord</a>
-    <a href="rules.html">Server Rules</a>
-  </div>
-  <div class="footer-bottom">
-    <span>© <span id="year"></span> Alpha Security Element</span>
-    <span>Fight. Learn. Improve. Lead.</span>
-  </div>
-</footer>
-
-<script src="js/audio.js"></script>
-<script src="js/cursor.js"></script>
-<script src="js/transitions.js"></script>
-<script src="js/pages.js"></script>
-<script src="js/main.js"></script>
-<script src="js/title-scroll.js"></script>
-</body>
-</html>
+<div class="cursor-dot"></div><div class="cursor-ring"></div>
+<button id="audio-toggle" aria-label="toggle audio"><span class="bars"><i></i><i></i><i></i></span><span class="label">AUDIO</span></button>
+<header class="nav"><a href="index.html" class="nav-logo"><span class="nav-mark">ASE</span><span class="nav-sub">ALPHA SECURITY ELEMENT</span></a><nav class="nav-links"><a href="index.html">HOME</a><a href="about.html">ABOUT</a><a href="roles.html" class="active">ROLES</a><a href="training.html">TRAINING</a><!-- <a href="sop.html">SOP</a> --><!-- <a href="intel.html">INTEL</a> --><a href="03951-S18Z.html">03951-S18Z</a><a href="join.html">JOIN</a></nav></header>
+<section class="page-hero"><div class="page-hero-inner"><p class="hero-eyebrow" data-anim="fade-up">SPECIALIZATIONS</p><h1 class="page-title" data-anim="fade-up">CHOOSE YOUR<br><span class="accent">ROLE.</span></h1><p class="page-lede" data-anim="fade-up">Every member starts as a rifleman. As you gain experience, you specialize. Each role has a place on the element — the fight is won by the team, not the individual.</p></div></section>
+<section class="roles-grid-section"><div class="roles-grid" id="roles-grid"></div></section>
+<section class="ase-divisions" id="divisions" aria-labelledby="ase-divisions-title"><div class="ase-wrap">
+<p class="ase-kicker">ASE // PERSONNEL COMMAND // DIVISION ASSIGNMENTS</p>
+<h2 class="ase-heading" id="ase-divisions-title">SPECIAL MISSIONS <span>UNITS.</span></h2>
+<p class="ase-intro">Explore the operational divisions of Alpha Security Element. Every unit has a distinct mission, specialized responsibilities, and a place in the larger operation. Find where your skills belong.</p>
+<div class="ase-status"><span class="ase-dot" aria-hidden="true"></span> SIX DIVISIONS <span aria-hidden="true">//</span> OPERATIONAL DIRECTORY <span aria-hidden="true">//</span> ASE INTERNAL</div>
+<div class="ase-directory">
+<article class="ase-card" data-color="silver"><div class="ase-card-top"><span>FILE 01 // FOREIGN RELATIONS</span><strong>FAG</strong></div><div class="ase-logo-box"><img src="assets/img/foreign-attachment.png" alt="Foreign Attachment Group division emblem" loading="lazy"></div><div class="ase-card-body"><h3>FOREIGN ATTACHMENT GROUP</h3><div class="ase-role">Foreign relations &amp; diplomacy</div><p class="ase-summary">ASE's diplomatic and liaison element, coordinating embassy relationships, partner units, and foreign intelligence reporting within the milsim environment.</p><div class="ase-tags"><span>EMBASSY</span><span>SIGINT</span><span>HUMINT</span><span>DIPLOMACY</span></div><details><summary>VIEW MISSION PROFILE</summary><p class="ase-detail">Embassy management, diplomatic affairs, inter-unit coordination, signals intelligence and human intelligence for roleplay scenarios.</p></details></div></article>
+<article class="ase-card" data-color="yellow"><div class="ase-card-top"><span>FILE 02 // INTELLIGENCE</span><strong>ASH</strong></div><div class="ase-logo-box"><img src="assets/img/ash-protocol.png" alt="ASH Protocol intelligence division emblem" loading="lazy"></div><div class="ase-card-body"><h3>ASH PROTOCOL</h3><div class="ase-role">Intelligence &amp; command</div><p class="ase-summary">The operational brain of ASE, supporting campaigns through intelligence products, mission planning, and coordinated command oversight.</p><div class="ase-tags"><span>TOC</span><span>INTEL</span><span>PLANNING</span><span>COUNTERINTEL</span></div><details><summary>VIEW MISSION PROFILE</summary><p class="ase-detail">TOC command, campaign management, mission planning, operational coordination, reconnaissance analysis, counterintelligence and strategic operations.</p></details></div></article>
+<article class="ase-card" data-color="red"><div class="ase-card-top"><span>FILE 03 // GROUND FORCES</span><strong>IRN</strong></div><div class="ase-logo-box"><img src="assets/img/iron-rain.png" alt="Iron Rain ground combat division emblem" loading="lazy"></div><div class="ase-card-body"><h3>IRON RAIN</h3><div class="ase-role">Main ground combat element</div><p class="ase-summary">The primary fighting force, delivering infantry, armor, and fire-support capabilities across ASE battlefield operations.</p><div class="ase-tags"><span>INFANTRY</span><span>ARMOR</span><span>ARTILLERY</span><span>DIRECT ACTION</span></div><details><summary>VIEW MISSION PROFILE</summary><p class="ase-detail">Ground combat, counterinsurgency, artillery, mechanized armor, direct action and main-force operations.</p></details></div></article>
+<article class="ase-card" data-color="red"><div class="ase-card-top"><span>FILE 04 // ELECTRONIC WARFARE</span><strong>RPR</strong></div><div class="ase-logo-box"><img src="assets/img/reaper.png" alt="Reaper electronic warfare division emblem" loading="lazy"></div><div class="ase-card-body"><h3>REAPER</h3><div class="ase-role">Reconnaissance &amp; battlespace support</div><p class="ase-summary">Extends the team's awareness through unmanned systems, electronic warfare roleplay, communications, and air-ground integration.</p><div class="ase-tags"><span>EW</span><span>UAS</span><span>RTO</span><span>JTAC</span></div><details><summary>VIEW MISSION PROFILE</summary><p class="ase-detail">Modern electronic warfare, unmanned aerial systems, radio-telephone operations, joint terminal attack control and reconnaissance.</p></details></div></article>
+<article class="ase-card"><div class="ase-card-top"><span>FILE 05 // SPECIAL OPERATIONS</span><strong>HDS</strong></div><div class="ase-logo-box"><img src="assets/img/hades.png" alt="HADES special forces division emblem" loading="lazy"></div><div class="ase-card-body"><h3>HADES</h3><div class="ase-role">Special missions &amp; direct action</div><p class="ase-summary">ASE's specialized mission element, focused on demanding operations, precision objectives, and advanced operator qualifications.</p><div class="ase-tags"><span>SPECIAL FORCES</span><span>HVT</span><span>HOSTAGE RESCUE</span><span>HALO</span></div><details><summary>VIEW MISSION PROFILE</summary><p class="ase-detail">Direct action, counterinsurgency, special reconnaissance, unconventional warfare, hostage rescue, high-value target missions, and HAHO/HALO insertion.</p></details></div></article>
+<article class="ase-card" data-color="silver"><div class="ase-card-top"><span>FILE 06 // AVIATION</span><strong>VAL</strong></div><div class="ase-logo-box"><img src="assets/img/valkyrie.png" alt="Valkyrie aviation section emblem" loading="lazy"></div><div class="ase-card-body"><h3>VALKYRIE</h3><div class="ase-role">Aviation &amp; aerial support</div><p class="ase-summary">The aviation section providing mobility, air support, reconnaissance, and casualty evacuation for coordinated operations.</p><div class="ase-tags"><span>CAS</span><span>AIR ASSAULT</span><span>MEDEVAC</span><span>CSAR</span></div><details><summary>VIEW MISSION PROFILE</summary><p class="ase-detail">Close air support, air assault, troop transport, medical evacuation, aerial reconnaissance and combat search and rescue.</p></details></div></article>
+</div><div class="ase-bottom"><span>ALPHA SECURITY ELEMENT // YOUR DIVISION. YOUR MISSION.</span><a class="ase-apply" href="join.html">REQUEST ASSIGNMENT ↗</a></div>
+</div></section>
+<section class="cta-strip" data-anim="fade-up"><h2>FIND YOUR PLACE.</h2><a href="join.html" class="btn btn-primary">ENLIST NOW</a></section>
+<footer class="footer"><div class="footer-col"><span class="nav-mark">ASE</span><p>Alpha Security Element<br>Arma Reforger · PvP Only</p></div><div class="footer-col"><h4>UNIT</h4><a href="about.html">About</a><a href="roles.html">Roles</a><a href="training.html">Training</a></div><div class="footer-col"><h4>ENLIST</h4><a href="join.html">Apply</a><a href="https://discord.gg/tNP7dctAjB">Discord</a><a href="rules.html">Server Rules</a></div><div class="footer-bottom"><span>© <span id="year"></span> Alpha Security Element</span><span>Fight. Learn. Improve. Lead.</span></div></footer>
+<script src="js/audio.js"></script><script src="js/cursor.js"></script><script src="js/transitions.js"></script><script src="js/pages.js"></script><script src="js/main.js"></script><script src="js/title-scroll.js"></script>
+</body></html>
