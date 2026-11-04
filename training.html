@@ -13,6 +13,65 @@
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/cursor.css" />
 <link rel="stylesheet" href="css/pages.css" />
+<style>
+.ase-cert-section{position:relative;padding:clamp(55px,7vw,110px) 20px;background:radial-gradient(ellipse at 50% 0%,rgba(30,96,66,.2),transparent 62%),#080d0b;color:#e7ece8;border-block:1px solid #294538}
+.ase-cert-shell{max-width:1500px;margin:auto}.ase-cert-kicker{font:600 11px 'JetBrains Mono',monospace;letter-spacing:.15em;color:#8bc6a2;display:flex;align-items:center;gap:12px;flex-wrap:wrap}.ase-cert-live{width:7px;height:7px;border-radius:50%;background:#53f1a2;box-shadow:0 0 12px #53f1a2}.ase-cert-status{margin-left:auto;color:#66e7a4;border:1px solid #347b54;padding:6px 10px}
+.ase-cert-shell h2{font:700 clamp(35px,5vw,76px)/1.05 'Oswald',sans-serif;letter-spacing:.035em;margin:20px 0}.ase-cert-shell h2 span{color:#83d5a7}.ase-cert-lede{font:400 15px/1.8 'Inter',sans-serif;color:#b7c6bd;max-width:860px;margin-bottom:26px}.ase-cert-art{position:relative;display:block;width:100%;padding:0;border:1px solid #396c50;background:#020504;cursor:zoom-in;overflow:hidden;box-shadow:0 16px 55px #0009}.ase-cert-art img{display:block;width:100%;height:auto;transition:transform .35s ease}.ase-cert-art:hover img{transform:scale(1.012)}.ase-cert-expand{position:absolute;right:12px;bottom:12px;background:#06110de8;border:1px solid #51aa79;color:#c5f6d8;padding:10px 14px;font:600 11px 'JetBrains Mono',monospace;letter-spacing:.05em}
+.ase-cert-progress{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:12px;margin:20px 0}.ase-cert-progress div{background:#111c17;border:1px solid #355343;padding:15px 17px;display:flex;flex-direction:column;gap:5px}.ase-cert-progress div:nth-of-type(1) strong{color:#62e5ab}.ase-cert-progress div:nth-of-type(2) strong{color:#f3d384}.ase-cert-progress div:nth-of-type(3) strong{color:#ff7e80}.ase-cert-progress strong{font:700 21px 'Oswald',sans-serif}.ase-cert-progress span{font:500 10px/1.5 'JetBrains Mono',monospace;color:#b2c1b8}.ase-cert-progress b{color:#63dba0;font-size:28px}
+.ase-cert-links{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:22px 0}.ase-cert-links a{display:flex;justify-content:space-between;align-items:center;gap:10px;border:1px solid #385447;background:#14221a;color:#e6f5e9;text-decoration:none;padding:17px 15px;font:600 11px/1.4 'JetBrains Mono',monospace;transition:background .2s,border-color .2s}.ase-cert-links a:hover,.ase-cert-links a:focus-visible{background:#1e3c2c;border-color:#69dba1}.ase-cert-links a span{color:#6fdda1}.ase-cert-footnote{font:400 12px/1.7 'Inter',sans-serif;color:#92a89b;margin-top:15px}
+.ase-cert-dialog{background:#060a08;border:1px solid #55a778;color:white;padding:55px 12px 12px;max-width:96vw;max-height:94vh;overflow:auto}.ase-cert-dialog::backdrop{background:#000e;backdrop-filter:blur(5px)}.ase-cert-dialog img{display:block;width:min(1700px,90vw);max-width:none;height:auto}.ase-cert-close{position:sticky;top:-55px;float:right;margin-top:-45px;margin-bottom:12px;background:#193c29;color:#fff;border:1px solid #6acb94;padding:9px 15px;cursor:pointer;font:600 12px 'JetBrains Mono',monospace;z-index:2}
+@media(max-width:760px){.ase-cert-links{grid-template-columns:repeat(2,minmax(0,1fr))}.ase-cert-progress{grid-template-columns:1fr;gap:7px}.ase-cert-progress b{text-align:center;line-height:16px;transform:rotate(90deg)}.ase-cert-kicker{font-size:9px}.ase-cert-status{margin-left:0}.ase-cert-expand{font-size:9px;padding:7px}.ase-cert-links a{font-size:10px;padding:13px}}
+@media(max-width:430px){.ase-cert-links{grid-template-columns:1fr}}
+</style>
+
+<style>
+/* ASE TRAINING TERMINAL 2.0 — scoped, no dependencies */
+#ase-terminal{--term:#55e7a0;position:relative;max-width:1220px;margin:42px auto 70px;padding:0 22px;font-family:'JetBrains Mono',monospace;color:#d8e8df}
+#ase-terminal *{box-sizing:border-box}
+#ase-terminal .at-shell{position:relative;overflow:hidden;border:1px solid #315943;background:linear-gradient(135deg,#0c1914,#090e0d 62%,#111915);box-shadow:0 0 35px #13e88c0c}
+#ase-terminal .at-shell:before{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent 0 4px,#8cffba08 5px 6px)}
+#ase-terminal .at-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid #2b4c3b;font-size:10px;letter-spacing:1.5px;color:#8bd7ad}
+#ase-terminal .at-online{color:#60ec9c}
+#ase-terminal .at-online:before{content:"";display:inline-block;width:7px;height:7px;background:#4af49c;border-radius:50%;box-shadow:0 0 12px #4af49c;margin-right:8px}
+#ase-terminal .at-main{padding:25px}
+#ase-terminal .at-eyebrow{font-size:10px;color:#7edca9;letter-spacing:2px}
+#ase-terminal h2{font:700 clamp(27px,4vw,48px)/1.1 Oswald,sans-serif;letter-spacing:1px;color:#f2f6f3;margin:12px 0}
+#ase-terminal .at-desc{max-width:850px;font:14px/1.8 Inter,sans-serif;color:#a9bdb1;margin:0 0 25px}
+#ase-terminal .at-tabs{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:16px}
+#ase-terminal button{cursor:pointer}
+#ase-terminal .at-tab{font:700 17px Oswald,sans-serif;letter-spacing:1px;padding:15px 10px;color:#c8d5cc;background:#14201a;border:1px solid #304337;transition:.2s}
+#ase-terminal .at-tab[aria-selected=true]{background:#1b2b22;border-color:var(--tier-color);color:var(--tier-color);box-shadow:inset 0 3px var(--tier-color),0 0 20px #36ff8c12}
+#ase-terminal .at-panel{--tier-color:#59e7a2;border:1px solid var(--tier-color);background:#0e1713;padding:22px;box-shadow:inset 0 0 45px #0aff7d08}
+#ase-terminal .at-panel-head{display:flex;justify-content:space-between;align-items:center;gap:12px;border-bottom:1px solid #31483b;padding-bottom:15px}
+#ase-terminal .at-panel-head small{color:var(--tier-color);font-size:10px;letter-spacing:1.5px}
+#ase-terminal h3{font:700 clamp(22px,3vw,30px) Oswald,sans-serif;color:#fff;margin:6px 0 0}
+#ase-terminal .at-panel-head svg{width:40px;height:40px;color:var(--tier-color)}
+#ase-terminal .at-items{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:20px 0}
+#ase-terminal .at-item{width:100%;text-align:left;border:1px solid #304a3a;background:#17231c;padding:12px;display:flex;align-items:center;gap:12px;color:#e3ede5;font:12px/1.5 'JetBrains Mono',monospace}
+#ase-terminal .at-item:hover,#ase-terminal .at-item[aria-pressed=true]{border-color:var(--tier-color);background:#203529}
+#ase-terminal .at-item .at-code{color:var(--tier-color);font-size:10px;white-space:nowrap}
+#ase-terminal .at-item .at-arrow{margin-left:auto;color:var(--tier-color)}
+#ase-terminal .at-prereq{color:#b3c5b8;font-size:11px;border-top:1px solid #304337;padding-top:16px}
+#ase-terminal .at-prereq strong{color:var(--tier-color)}
+#ase-terminal .at-dossier{margin-top:15px;border:1px solid #385c47;background:#111e17;padding:18px}
+#ase-terminal .at-dossier-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+#ase-terminal .at-dossier h4{font:700 21px Oswald,sans-serif;color:#fff;margin:7px 0}
+#ase-terminal .at-dossier p{font:13px/1.7 Inter,sans-serif;color:#b5c9bd}
+#ase-terminal .at-dossier .at-label{font-size:10px;color:#76dda5;letter-spacing:1px}
+#ase-terminal .at-check{display:flex;align-items:center;gap:9px;font-size:11px;color:#c7dfd0;cursor:pointer}
+#ase-terminal .at-check input{accent-color:#50e5a0;width:17px;height:17px}
+#ase-terminal .at-progress{display:flex;gap:10px;align-items:center;margin-top:18px;flex-wrap:wrap}
+#ase-terminal .at-progress-track{height:7px;background:#25392c;flex:1;min-width:130px}
+#ase-terminal .at-progress-fill{height:100%;background:#55e7a0;width:0%;transition:width .25s}
+#ase-terminal .at-progress-label{font-size:11px;color:#9ed9b5}
+#ase-terminal .at-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+#ase-terminal .at-actions a,#ase-terminal .at-reset{display:inline-flex;align-items:center;justify-content:center;padding:11px 15px;border:1px solid #47745a;color:#b3f6ce;background:#14251b;text-decoration:none;font:11px 'JetBrains Mono',monospace}
+#ase-terminal .at-actions a:hover,#ase-terminal .at-reset:hover{background:#20452e}
+#ase-terminal .at-notice{font:11px/1.7 Inter,sans-serif;color:#91a69a;margin:16px 0 0}
+#ase-terminal .at-hidden{display:none}
+@media(max-width:640px){#ase-terminal{padding:0 12px;margin:30px auto}#ase-terminal .at-main{padding:15px}#ase-terminal .at-items{grid-template-columns:1fr}#ase-terminal .at-tab{font-size:14px;padding:12px 5px}#ase-terminal .at-top{flex-wrap:wrap}#ase-terminal .at-dossier-top{align-items:flex-start;flex-direction:column}}
+@media(prefers-reduced-motion:reduce){#ase-terminal *{transition:none!important}}
+</style>
 </head>
 <body data-page="training">
 
@@ -59,8 +118,73 @@
   </div>
 </section>
 
+
+<!-- ASE NEW CERTIFICATION SYSTEM: independent of the five-stage intake pipeline -->
+<section class="ase-cert-section" id="certification-system" aria-labelledby="ase-cert-title">
+  <div class="ase-cert-shell">
+    <div class="ase-cert-kicker"><span class="ase-cert-live"></span> ASE TRAINING COMMAND // NEW PERSONNEL QUALIFICATION PROGRAM <span class="ase-cert-status">NOW ACTIVE</span></div>
+    <h2 id="ase-cert-title">TIER CERTIFICATION <span>SYSTEM.</span></h2>
+    <p class="ase-cert-lede">The five-stage selection pipeline earns your ASE Operator status. From there, progress through Tier 3 foundation qualifications, Tier 2 specialist certifications, and Tier 1 advanced pathways. Select the graphic to inspect the full qualification chart.</p>
+    <button class="ase-cert-art" type="button" id="ase-cert-open" aria-label="Enlarge ASE Tier Certification System infographic">
+      <img src="assets/img/ase-tier-certification-system.webp" alt="ASE Tier Certification System infographic: Tier 3 requires LandNav, Transport and CQC; Tier 2 requires Tier 3 plus any two specialist certifications; Tier 1 requires Tier 2 plus SF/ODA or SIGINT/HUMINT." loading="lazy" decoding="async">
+      <span class="ase-cert-expand">⛶ &nbsp; ENLARGE CERTIFICATION CHART</span>
+    </button>
+    <div class="ase-cert-progress" aria-label="Qualification progression">
+      <div><strong>TIER 3</strong><span>LANDNAV · TRANSPORT · CQC</span></div><b aria-hidden="true">›</b>
+      <div><strong>TIER 2</strong><span>TIER 3 + ANY TWO SPECIALIST CERTS</span></div><b aria-hidden="true">›</b>
+      <div><strong>TIER 1</strong><span>TIER 2 + SF/ODA OR SIGINT/HUMINT</span></div>
+    </div>
+    <nav class="ase-cert-links" aria-label="Certification related resources">
+      <a href="#curriculum-reference">TRAINING CURRICULUM <span>↗</span></a>
+      <a href="#selection-pipeline">SELECTION PIPELINE <span>↗</span></a>
+      <a href="roles.html">OPERATOR ROLES <span>↗</span></a>
+      <a href="https://discord.gg/tNP7dctAjB" target="_blank" rel="noopener noreferrer">ASK ABOUT CERTIFICATIONS <span>↗</span></a>
+    </nav>
+    <p class="ase-cert-footnote">Qualifications are awarded following instructor evaluation and recorded on the ASE personnel roster. Certifications represent in-game proficiency; real life comes first.</p>
+  </div>
+</section>
+<dialog class="ase-cert-dialog" id="ase-cert-dialog" aria-label="ASE Tier Certification System enlarged chart">
+  <button type="button" class="ase-cert-close" id="ase-cert-close" aria-label="Close enlarged chart">✕ CLOSE</button>
+  <img src="assets/img/ase-tier-certification-system.webp" alt="Enlarged ASE Tier Certification System infographic">
+</dialog>
+
+
+<!-- INTERACTIVE CERTIFICATION TERMINAL -->
+<section id="ase-terminal" aria-labelledby="at-title" data-anim="fade-up">
+  <div class="at-shell">
+    <div class="at-top"><span>◈ ASE // TRAINING COMMAND // QUALIFICATION DATABASE</span><span class="at-online">TERMINAL ONLINE</span></div>
+    <div class="at-main">
+      <div class="at-eyebrow">PERSONNEL RECORD // INTERACTIVE CERTIFICATION DIRECTORY</div>
+      <h2 id="at-title">OPERATOR TRAINING <span style="color:#61e6a4">TERMINAL.</span></h2>
+      <p class="at-desc">Select a tier to inspect its certification dossiers. Open any qualification to review its in-game training focus, and optionally mark your personal study progress on this device.</p>
+      <div class="at-tabs" role="tablist" aria-label="Certification tier">
+        <button class="at-tab" id="at-tab-3" role="tab" aria-selected="true" aria-controls="at-panel" data-tier="3" style="--tier-color:#59e7a2">TIER 3 // CORE</button>
+        <button class="at-tab" id="at-tab-2" role="tab" aria-selected="false" aria-controls="at-panel" data-tier="2" style="--tier-color:#efca79">TIER 2 // SPECIALIST</button>
+        <button class="at-tab" id="at-tab-1" role="tab" aria-selected="false" aria-controls="at-panel" data-tier="1" style="--tier-color:#f57c7c">TIER 1 // ADVANCED</button>
+      </div>
+      <div id="at-panel" class="at-panel" role="tabpanel" aria-labelledby="at-tab-3">
+        <div class="at-panel-head">
+          <div><small id="at-code">QUALIFICATION BRACKET // 03</small><h3 id="at-heading">CORE COMBAT QUALIFICATIONS</h3></div>
+          <svg viewBox="0 0 48 48" fill="none" aria-hidden="true"><path d="M24 3 42 10v13c0 12-8 18-18 22C14 41 6 35 6 23V10L24 3Z" stroke="currentColor" stroke-width="2"/><path d="m15 24 6 6 13-14" stroke="currentColor" stroke-width="3"/></svg>
+        </div>
+        <div id="at-items" class="at-items" aria-label="Available certifications"></div>
+        <div class="at-prereq" id="at-prereq"></div>
+        <div class="at-dossier" id="at-dossier" aria-live="polite">
+          <div class="at-dossier-top"><span class="at-label" id="at-dossier-id">TRAINING DOSSIER // SELECT A QUALIFICATION</span>
+            <label class="at-check"><input type="checkbox" id="at-completed"> STUDIED / PRACTICED</label></div>
+          <h4 id="at-dossier-title">Select a certification above</h4>
+          <p id="at-dossier-desc">Detailed training focus will appear here.</p>
+          <div class="at-actions"><a href="#curriculum-reference">VIEW TRAINING CURRICULUM ↗</a><a href="https://discord.gg/tNP7dctAjB" target="_blank" rel="noopener noreferrer">CONTACT TRAINING COMMAND ↗</a></div>
+        </div>
+        <div class="at-progress"><span class="at-progress-label" id="at-progress-label">PERSONAL STUDY TRACKER // 0 / 13</span><div class="at-progress-track" role="progressbar" aria-label="Personal study progress" aria-valuemin="0" aria-valuemax="13" aria-valuenow="0" id="at-progress-track"><div class="at-progress-fill" id="at-progress-fill"></div></div><button class="at-reset" type="button" id="at-reset">RESET</button></div>
+        <p class="at-notice">Study checkmarks are stored only in this browser; they do not grant qualifications or update the ASE roster. Official certification requires instructor evaluation. Real life comes first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- SCHEMATIC -->
-<section class="pipeline-schematic-wrap">
+<section class="pipeline-schematic-wrap" id="selection-pipeline">
   <div class="pipeline-schematic" data-anim="fade-up">
     <div class="schem-node">
       <span class="schem-id">S.01</span>
@@ -326,17 +450,17 @@
 </section>
 
 <!-- CURRICULUM REFERENCE -->
-<section class="curriculum-section" data-anim="fade-up">
+<section class="curriculum-section" id="curriculum-reference" data-anim="fade-up">
   <div class="curriculum-head">
     <span class="curriculum-tag">REFERENCE</span>
     <h2>CURRICULUM<br><span class="accent">AT A GLANCE.</span></h2>
-    <p>The modules trained across the pipeline. Stages 01–05 distribute these across the session. This is the index — not the order.</p>
+    <p>Existing selection-pipeline training modules, grouped by subject. These are curriculum categories, not the new Tier 3 → Tier 2 → Tier 1 certification ranks.</p>
   </div>
 
   <div class="training-section">
     <div class="training-tier" data-anim="fade-up">
       <button class="tier-head" type="button" aria-expanded="false">
-        <span class="tier-num">TIER 01</span>
+        <span class="tier-num">MODULE 01</span>
         <span class="tier-title">BASIC</span>
         <span class="tier-sub">Foundation — every member</span>
         <span class="tier-plus">+</span>
@@ -356,7 +480,7 @@
 
     <div class="training-tier" data-anim="fade-up">
       <button class="tier-head" type="button" aria-expanded="false">
-        <span class="tier-num">TIER 02</span>
+        <span class="tier-num">MODULE 02</span>
         <span class="tier-title">COMBAT</span>
         <span class="tier-sub">Applied — PvP execution</span>
         <span class="tier-plus">+</span>
@@ -376,7 +500,7 @@
 
     <div class="training-tier" data-anim="fade-up">
       <button class="tier-head" type="button" aria-expanded="false">
-        <span class="tier-num">TIER 03</span>
+        <span class="tier-num">MODULE 03</span>
         <span class="tier-title">SPECIALIZED</span>
         <span class="tier-sub">Role-specific — by assignment</span>
         <span class="tier-plus">+</span>
@@ -453,5 +577,46 @@
 <script src="js/cursor.js"></script>
 <script src="js/transitions.js"></script>
 <script src="js/main.js"></script>
+<script>
+(()=>{const dialog=document.getElementById('ase-cert-dialog');document.getElementById('ase-cert-open')?.addEventListener('click',()=>{if(dialog?.showModal)dialog.showModal();else window.open('assets/img/ase-tier-certification-system.webp','_blank','noopener');});document.getElementById('ase-cert-close')?.addEventListener('click',()=>dialog.close());dialog?.addEventListener('click',e=>{if(e.target===dialog)dialog.close()});})();
+</script>
+
+<script>
+(function(){
+  const data={
+    "3":{title:"CORE COMBAT QUALIFICATIONS",color:"#59e7a2",req:"Complete all three Tier 3 certifications before progressing to Tier 2.",items:[
+      ["T3-01","LAND NAVIGATION","Map reading, coordinates, compass use, navigation in terrain and route planning."],
+      ["T3-02","TRANSPORT","In-game vehicle operation, logistics transport, convoy procedures and vehicle maintenance."],
+      ["T3-03","CQC","Room clearing, close-range engagements, movement and positioning, and team coordination."]]},
+    "2":{title:"SPECIALIST QUALIFICATIONS",color:"#efca79",req:"Requires Tier 3 qualification plus any two Tier 2 certifications.",items:[
+      ["T2-01","GRENADIER / POINTMAN","Grenade employment, assault element coordination and pointman tactics."],
+      ["T2-02","MG / SUPPORT","Machine gun operation, suppressive fire and ammunition management."],
+      ["T2-03","FPV SPECIALIST / DRONE","FPV operation, reconnaissance, surveillance and target observation."],
+      ["T2-04","DEMO / AT","In-game demolitions, anti-armor systems, breaching and denial."],
+      ["T2-05","SNIPER / MARKSMAN","Long-range engagements, range estimation and target identification."],
+      ["T2-06","BREACHER","Entry techniques, in-game explosive and mechanical breaching, team integration."],
+      ["T2-07","PILOT","Helicopter operation, flight procedures and aerial support."],
+      ["T2-08","LOGISTICS","Supply management, resupply operations and asset coordination."]]},
+    "1":{title:"ADVANCED QUALIFICATIONS",color:"#f57c7c",req:"Requires Tier 2 qualification plus either SF / ODA or SIGINT / HUMINT certification.",items:[
+      ["T1-01","SF / ODA","Advanced combat tactics, small-unit operations, mission planning and leadership coordination."],
+      ["T1-02","SIGINT / HUMINT","Signals intelligence, human intelligence, reconnaissance reporting and intelligence analysis."]]}
+  };
+  const $=id=>document.getElementById(id);
+  const tabs=Array.from(document.querySelectorAll('#ase-terminal .at-tab'));
+  const all=Object.values(data).flatMap(t=>t.items);
+  const storageKey='ase-training-personal-study-v1';
+  let completed={};try{completed=JSON.parse(localStorage.getItem(storageKey)||'{}')||{}}catch(e){}
+  let tier='3', selected='T3-01';
+  function save(){try{localStorage.setItem(storageKey,JSON.stringify(completed))}catch(e){}}
+  function progress(){const count=all.filter(i=>completed[i[0]]).length;$('at-progress-label').textContent='PERSONAL STUDY TRACKER // '+count+' / '+all.length;$('at-progress-fill').style.width=(100*count/all.length)+'%';$('at-progress-track').setAttribute('aria-valuenow',count)}
+  function dossier(){const item=data[tier].items.find(i=>i[0]===selected)||data[tier].items[0];selected=item[0];$('at-dossier-id').textContent='TRAINING DOSSIER // '+item[0];$('at-dossier-title').textContent=item[1];$('at-dossier-desc').textContent=item[2];$('at-completed').checked=!!completed[selected];document.querySelectorAll('#at-items .at-item').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.id===selected)))}
+  function render(next){tier=next;const t=data[tier];$('at-panel').style.setProperty('--tier-color',t.color);$('at-code').textContent='QUALIFICATION BRACKET // 0'+tier;$('at-heading').textContent=t.title;$('at-prereq').innerHTML='<strong>ACCESS REQUIREMENTS //</strong> '+t.req;$('at-items').replaceChildren();t.items.forEach(item=>{const b=document.createElement('button');b.type='button';b.className='at-item';b.dataset.id=item[0];const code=document.createElement('span');code.className='at-code';code.textContent=item[0];const label=document.createElement('span');label.textContent=item[1];const arrow=document.createElement('span');arrow.className='at-arrow';arrow.textContent='↗';b.append(code,label,arrow);b.addEventListener('click',()=>{selected=item[0];dossier()});$('at-items').append(b)});tabs.forEach(b=>{const active=b.dataset.tier===tier;b.setAttribute('aria-selected',String(active));b.tabIndex=active?0:-1;if(active)$('at-panel').setAttribute('aria-labelledby',b.id)});selected=t.items[0][0];dossier();progress()}
+  tabs.forEach(b=>b.addEventListener('click',()=>render(b.dataset.tier)));
+  $('at-completed').addEventListener('change',e=>{completed[selected]=e.target.checked;save();progress()});
+  $('at-reset').addEventListener('click',()=>{if(confirm('Clear all personal study checkmarks on this device?')){completed={};save();dossier();progress()}});
+  render('3');
+})();
+</script>
+
 </body>
 </html>
