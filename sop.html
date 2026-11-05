@@ -13,7 +13,179 @@
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/cursor.css" />
 <link rel="stylesheet" href="css/pages.css" />
+
+<style>
+/* ASE SOP EXTENSION — scoped to new directory */
+#ase-doctrine {
+  --ase-green: #86d7a0;
+  --ase-border: #315443;
+  --ase-panel: #101b17;
+  --ase-muted: #a5b9ac;
+  color: #e7f0e9;
+  margin: 48px auto;
+  padding: 28px;
+  max-width: 1100px;
+  background: #0b130f;
+  border: 1px solid var(--ase-border);
+  font-family: Inter, sans-serif;
+  line-height: 1.65;
+}
+
+#ase-doctrine * { box-sizing: border-box; }
+
+#ase-doctrine .ase-eyebrow {
+  color: var(--ase-green);
+  font-size: 11px;
+  letter-spacing: 2px;
+  font-weight: 700;
+}
+
+#ase-doctrine h2 {
+  font: 700 clamp(25px, 4vw, 38px) Oswald, sans-serif;
+  margin: 10px 0;
+  color: #f0f7f1;
+  text-transform: uppercase;
+}
+
+#ase-doctrine .ase-description {
+  color: var(--ase-muted);
+  max-width: 800px;
+  font-size: 14px;
+}
+
+#ase-doctrine .ase-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 18px 0 24px;
+}
+
+#ase-doctrine .ase-tag {
+  padding: 5px 10px;
+  border: 1px solid var(--ase-border);
+  color: var(--ase-green);
+  font-size: 10px;
+  letter-spacing: 1px;
+}
+
+#ase-doctrine .ase-tools {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+#ase-doctrine .ase-search {
+  flex: 1;
+  min-width: 190px;
+  padding: 12px;
+  color: #fff;
+  background: #101b17;
+  border: 1px solid var(--ase-border);
+  font: inherit;
+}
+
+#ase-doctrine button {
+  cursor: pointer;
+  background: #17291f;
+  color: var(--ase-green);
+  border: 1px solid var(--ase-border);
+  padding: 10px 14px;
+  font: 600 12px Inter, sans-serif;
+}
+
+#ase-doctrine button:hover {
+  background: #244634;
+}
+
+#ase-doctrine .ase-module {
+  border: 1px solid var(--ase-border);
+  background: var(--ase-panel);
+  margin-bottom: 10px;
+}
+
+#ase-doctrine .ase-module summary {
+  cursor: pointer;
+  padding: 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  list-style: none;
+}
+
+#ase-doctrine .ase-module summary::-webkit-details-marker {
+  display: none;
+}
+
+#ase-doctrine .ase-number {
+  color: var(--ase-green);
+  font: 600 13px Oswald, sans-serif;
+  white-space: nowrap;
+}
+
+#ase-doctrine .ase-module-name {
+  flex: 1;
+  font: 600 18px Oswald, sans-serif;
+  letter-spacing: .5px;
+}
+
+#ase-doctrine .ase-chevron {
+  color: var(--ase-green);
+  transition: transform .2s;
+}
+
+#ase-doctrine details[open] .ase-chevron {
+  transform: rotate(180deg);
+}
+
+#ase-doctrine .ase-module-body {
+  padding: 5px 20px 22px;
+  border-top: 1px solid var(--ase-border);
+}
+
+#ase-doctrine .ase-module-body h3 {
+  color: var(--ase-green);
+  font: 600 16px Oswald, sans-serif;
+  text-transform: uppercase;
+  margin: 22px 0 8px;
+}
+
+#ase-doctrine .ase-module-body p,
+#ase-doctrine .ase-module-body li {
+  font-size: 13px;
+  color: #d2ded5;
+}
+
+#ase-doctrine .ase-module-body ul {
+  padding-left: 22px;
+  margin: 10px 0;
+}
+
+#ase-doctrine .ase-note {
+  border-left: 3px solid var(--ase-green);
+  background: #15271d;
+  padding: 14px;
+  margin-top: 20px;
+  color: #d8e8dc;
+  font-size: 12px;
+}
+
+#ase-doctrine .ase-footer {
+  border-top: 1px solid var(--ase-border);
+  padding-top: 18px;
+  margin-top: 24px;
+  font-size: 11px;
+  color: var(--ase-muted);
+  letter-spacing: .5px;
+}
+
+@media(max-width:600px) {
+  #ase-doctrine { padding: 16px; margin: 25px 0; }
+  #ase-doctrine .ase-module summary { padding: 14px; }
+}
+</style>
 </head>
+
 <body data-page="sop">
 
 <div class="cursor-dot"></div>
@@ -45,7 +217,8 @@
   <div class="sop-gate">
     <h1>SOP ACCESS</h1>
     <p>This manual is unit-internal. Enter the unit password to continue.</p>
-    <input type="password" id="sop-password" placeholder="PASSWORD" autocomplete="off" />
+    <input type="password" id="sop-password"
+      placeholder="PASSWORD" autocomplete="off" />
     <button id="sop-submit">UNLOCK</button>
     <div class="error" id="sop-error"></div>
   </div>
@@ -91,11 +264,262 @@
   const btn = document.getElementById('sop-submit');
   const errorEl = document.getElementById('sop-error');
 
+  const modules = [
+    {
+      id: '001-A',
+      title: 'Unit Conduct & Regulations',
+      sections: [
+        ['Professional Conduct',
+          'Every ASE operator represents Alpha Security Element during official operations, training events, allied community activities and public interactions. Respect for fellow members, guests and partner units is mandatory.'],
+        ['Real Life First',
+          'Work, education, family and personal responsibilities take priority over unit activities. Operators should communicate absences when practical. ASE does not expect members to sacrifice real-world obligations for attendance.'],
+        ['Integrity & Accountability',
+          'Harassment, cheating, doxxing, unauthorized disclosure of member information and deliberate disruption are prohibited. Report misconduct through appropriate command channels.'],
+        ['Conflict Resolution',
+          'Disagreements must be handled constructively. Members may respectfully question decisions, provide feedback and request leadership review without retaliation.'],
+        ['Operational Security',
+          'Internal unit materials, personnel information and restricted planning must not be distributed outside authorized ASE channels.']
+      ]
+    },
+    {
+      id: '001-B',
+      title: 'Rules of Engagement',
+      sections: [
+        ['Mission Authority',
+          'The designated Game Master and operational command establish scenario-specific engagement rules. These instructions govern each official event.'],
+        ['Target Identification',
+          'Operators must identify opposing players or scenario-designated hostile entities before engaging. Account for friendly players, neutral characters and protected objectives.'],
+        ['Engagement Restrictions',
+          'Respect surrender mechanics, protected areas, noncombatant roles and scenario-specific restrictions. Avoid unnecessary friendly-fire incidents.'],
+        ['Incident Reporting',
+          'Accidental friendly fire, rule violations and mission disruptions must be reported to the designated event leader.'],
+        ['Community Compliance',
+          'When operating on allied or public servers, ASE personnel must comply with the host community’s published rules.']
+      ]
+    },
+    {
+      id: '001-C',
+      title: 'Equipment & Loadout Standards',
+      sections: [
+        ['Authorized Equipment',
+          'Operators must use approved faction equipment and division-specific loadouts when required by mission command.'],
+        ['Role Assignment',
+          'Equipment selection must reflect the assigned Arma Reforger role, including automatic rifleman, grenadier, combat medic, pilot, logistics or other authorized specializations.'],
+        ['Pre-Operation Inspection',
+          'Verify required modifications, radio operation, ammunition, medical equipment, navigation tools and vehicle availability before deployment.'],
+        ['Equipment Accountability',
+          'Missing assets, mod incompatibilities and equipment issues should be reported before the mission begins.'],
+        ['Standardization',
+          'Consistent equipment improves in-game role recognition, preparation and coordination across ASE divisions.']
+      ]
+    },
+    {
+      id: '001-D',
+      title: 'Command Authority & Rank Responsibilities',
+      sections: [
+        ['Strategic Command',
+          'DNI and DCC provide organizational direction. Executive Directors and Section Chiefs oversee their delegated responsibilities.'],
+        ['Station Leadership',
+          'Station Chiefs, Deputy Chiefs and Unit Chiefs coordinate station personnel, training readiness and operational administration.'],
+        ['Operational Roles',
+          'S3, S2 and S1 responsibilities follow their officially assigned ASE duties. A designation does not automatically confer staff status.'],
+        ['Field Personnel',
+          'Special Agents, Field Agents and Operators carry out assigned responsibilities within the established chain of command.'],
+        ['Squad & Team Leadership',
+          'Squad Leaders may supervise up to three teams. Team Leaders coordinate their assigned fireteam during gameplay. Temporary mission appointments do not change permanent rank.'],
+        ['Command Accountability',
+          'Leadership personnel are expected to communicate clearly, resolve concerns professionally and maintain transparency within their assigned authority.']
+      ]
+    },
+    {
+      id: '001-E',
+      title: 'Operational Readiness & Deployment',
+      sections: [
+        ['Foundational Qualifications',
+          'Tier 3 training includes Land Navigation, Transport and Close Quarters Combat qualifications. Completion is recorded according to ASE training policy.'],
+        ['Pre-Operation Briefing',
+          'Review the mission objective, assigned division, command structure, radio arrangements, equipment requirements and Game Master instructions.'],
+        ['Deployment Readiness',
+          'Confirm participation, assigned role, squad or cell and equipment readiness before the event begins.'],
+        ['After Action Review',
+          'Participate in constructive reviews covering communication, teamwork, gameplay challenges and opportunities for improvement.'],
+        ['Certification Progression',
+          'Tier 2 specializations and Tier 1 advanced qualifications build upon foundational training and authorized instructor evaluation.']
+      ]
+    }
+  ];
+
+  function buildDoctrine() {
+    const root = document.createElement('section');
+    root.id = 'ase-doctrine';
+
+    root.innerHTML = `
+      <div class="ase-eyebrow">
+        ASE // TRAINING COMMAND // DOCTRINE LIBRARY
+      </div>
+      <h2>General Doctrine</h2>
+      <p class="ase-description">
+        Foundational standards, organizational responsibilities,
+        conduct regulations and readiness requirements applicable
+        to every Alpha Security Element operator.
+      </p>
+      <div class="ase-meta">
+        <span class="ase-tag">ASE-DOC-001</span>
+        <span class="ase-tag">ALL DIVISIONS</span>
+        <span class="ase-tag">FOUNDATIONAL TRAINING</span>
+      </div>
+      <div class="ase-tools">
+        <input class="ase-search" type="search"
+          aria-label="Search doctrine modules"
+          placeholder="SEARCH DOCTRINE MODULES...">
+        <button type="button" class="ase-expand">EXPAND ALL</button>
+        <button type="button" class="ase-collapse">COLLAPSE ALL</button>
+      </div>
+      <div class="ase-module-list"></div>
+      <div class="ase-note">
+        <strong>TRAINING STANDARD:</strong>
+        General Doctrine familiarization is required for foundational
+        readiness. Practical Tier 3 qualifications remain separate
+        and require instructor evaluation.
+      </div>
+      <div class="ase-footer">
+        ALPHA SECURITY ELEMENT // INTERNAL TRAINING REFERENCE
+        // ASE-DOC-001
+      </div>
+    `;
+
+    const list = root.querySelector('.ase-module-list');
+
+    modules.forEach(module => {
+      const details = document.createElement('details');
+      details.className = 'ase-module';
+      details.dataset.search = [
+        module.id,
+        module.title,
+        ...module.sections.flat()
+      ].join(' ').toLowerCase();
+
+      const summary = document.createElement('summary');
+
+      const number = document.createElement('span');
+      number.className = 'ase-number';
+      number.textContent = module.id;
+
+      const name = document.createElement('span');
+      name.className = 'ase-module-name';
+      name.textContent = module.title;
+
+      const chevron = document.createElement('span');
+      chevron.className = 'ase-chevron';
+      chevron.textContent = '⌄';
+
+      summary.append(number, name, chevron);
+      details.append(summary);
+
+      const body = document.createElement('div');
+      body.className = 'ase-module-body';
+
+      module.sections.forEach(([heading, description]) => {
+        const h3 = document.createElement('h3');
+        h3.textContent = heading;
+
+        const p = document.createElement('p');
+        p.textContent = description;
+
+        body.append(h3, p);
+      });
+
+      details.append(body);
+      list.append(details);
+    });
+
+    const all = () => [...list.querySelectorAll('details')];
+
+    root.querySelector('.ase-expand').addEventListener(
+      'click', () => all().forEach(el => el.open = true)
+    );
+
+    root.querySelector('.ase-collapse').addEventListener(
+      'click', () => all().forEach(el => el.open = false)
+    );
+
+    root.querySelector('.ase-search').addEventListener(
+      'input', event => {
+        const term = event.target.value.trim().toLowerCase();
+        all().forEach(el => {
+          el.hidden = !el.dataset.search.includes(term);
+        });
+      }
+    );
+
+    return root;
+  }
+
+  function insertDoctrine() {
+    if (content.querySelector('#ase-doctrine')) return;
+
+    const directory = buildDoctrine();
+
+    // Locate the existing Infantry Core heading.
+    const headings = [...content.querySelectorAll(
+      'h1, h2, h3, h4, h5, h6'
+    )];
+
+    const infantry = headings.find(el =>
+      /infantry\s*core/i.test(el.textContent)
+    );
+
+    if (!infantry) {
+      content.append(directory);
+      return;
+    }
+
+    // Prefer a clearly bounded existing section.
+    const section = infantry.closest(
+      'section, article, .sop-section'
+    );
+
+    if (section && section !== content &&
+        !section.contains(
+          headings.find(h =>
+            h !== infantry &&
+            /^general doctrine$/i.test(h.textContent.trim())
+          )
+        )) {
+      section.after(directory);
+      return;
+    }
+
+    // Otherwise find the next heading at the same or higher level.
+    const level = Number(infantry.tagName.substring(1));
+    let next = infantry.nextElementSibling;
+
+    while (next) {
+      const candidate = next;
+      const candidateLevel =
+        /^H[1-6]$/.test(candidate.tagName)
+          ? Number(candidate.tagName.substring(1))
+          : null;
+
+      if (candidateLevel !== null &&
+          candidateLevel <= level) {
+        candidate.before(directory);
+        return;
+      }
+
+      next = candidate.nextElementSibling;
+    }
+
+    // Safe fallback when the Worker HTML structure is unknown.
+    content.append(directory);
+  }
+
   setTimeout(() => input.focus(), 300);
 
   const unlock = async () => {
     const password = input.value.trim();
-    if (!password) return;
+    if (!password || btn.disabled) return;
+
     errorEl.textContent = '';
     btn.disabled = true;
     btn.textContent = 'CHECKING…';
@@ -114,10 +538,21 @@
         input.select();
         return;
       }
+
       if (!r.ok) throw new Error('server error');
 
       const { html } = await r.json();
+
+      if (typeof html !== 'string') {
+        throw new Error('invalid SOP response');
+      }
+
+      // Preserve the original Worker-provided SOP.
       content.innerHTML = html;
+
+      // Add the ASE General Doctrine directory.
+      insertDoctrine();
+
       gate.hidden = true;
       content.hidden = false;
     } catch (err) {
@@ -128,7 +563,9 @@
   };
 
   btn.addEventListener('click', unlock);
-  input.addEventListener('keydown', e => { if (e.key === 'Enter') unlock(); });
+  input.addEventListener('keydown', e => {
+    if (e.key === 'Enter') unlock();
+  });
 })();
 </script>
 </body>
