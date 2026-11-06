@@ -321,9 +321,23 @@
   .share-box input { width: 100%; text-align: center; font-family: var(--font-mono); font-size: 18px; letter-spacing: 0.1em; margin-bottom: 16px; text-transform: uppercase; background: var(--bg); border: 1px solid var(--line); color: var(--ink); padding: 12px; }
   .sync-pane { display: none; }
   .sync-pane.active { display: block; }
+  #ash-nav[hidden], #ash-nav-label[hidden], #ash-approval-tab[hidden], #ash-history-tab[hidden], #ash-tracking-tab[hidden], #ash-participation-tab[hidden] { display: none !important; }
+
+  /* ASH iframe scrolling stays below the portal header. */
+  #view-ash { min-height: 0; overflow: hidden; }
+  #view-ash .intel-wrapper { min-height: 0; height: 100%; }
+  #view-ash .intel-tabs-bar { flex: 0 0 56px; position: relative; z-index: 1; }
+  #view-ash .intel-view { min-height: 0; overflow: hidden; }
+  #view-ash #ash-terminal-frame, #view-ash #command-approval-frame { display: block; width: 100%; height: 100%; border: 0; }
 </style>
 <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;600;700&family=Inter:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
+<style>
+.ase-division-list { display:flex; flex-wrap:wrap; gap:12px; margin-top:8px; }
+.ase-division-card { display:flex; align-items:center; gap:12px; padding:12px; min-width:180px; max-width:100%; background:#101713; border:1px solid rgba(200,169,74,.35); border-radius:5px; }
+.ase-division-card img { width:58px; height:58px; object-fit:contain; flex-shrink:0; }
+.ase-division-card span { color:#c8a94a; font: bold 12px monospace; letter-spacing:1px; overflow-wrap:anywhere; }
+</style>
 </head>
 <body>
 
@@ -387,6 +401,12 @@
     <button class="nav-item" data-view="intel">
       <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       INTELLIGENCE
+    </button>
+
+    <div class="nav-label" id="ash-nav-label" style="margin-top: 16px;" hidden>ASH PROTOCOL</div>
+    <button class="nav-item" data-view="ash" id="ash-nav" hidden aria-hidden="true">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2 3 6v6c0 5 3.5 8.5 9 10 5.5-1.5 9-5 9-10V6z"/><path d="M8 12h8M12 8v8"/></svg>
+      TOC INTELLIGENCE
     </button>
 
     <div class="nav-label" style="margin-top: 16px;">Public Ops</div>
@@ -592,6 +612,32 @@
     </div>
   </section>
 
+  <!-- VIEW: ASH PROTOCOL (two tabs, matching Intelligence layout) -->
+  <section class="view" id="view-ash">
+    <div class="intel-wrapper">
+      <div class="intel-tabs-bar">
+        <div class="intel-tab active" onclick="switchAshTab('toc', this)">TOC INTELLIGENCE</div>
+        <div class="intel-tab" id="ash-approval-tab" onclick="switchAshTab('approvals', this)" hidden>APPROVAL DESK</div>
+        <div class="intel-tab" id="ash-history-tab" onclick="switchAshTab('history', this)" hidden>OPERATION HISTORY</div>
+        <div class="intel-tab" id="ash-tracking-tab" onclick="switchAshTab('tracking', this)" hidden>OP TRACKING / AAR</div>
+        <div class="intel-tab" id="ash-participation-tab" onclick="switchAshTab('participation', this)" hidden>MEMBER PARTICIPATION</div>
+      </div>
+      <div id="ash-view-toc" class="intel-view active">
+        <iframe id="ash-terminal-frame" title="ASH PROTOCOL TOC Intelligence" loading="lazy" data-src="/ase-private/ash-protocol.html"></iframe>
+      </div>
+      <div id="ash-view-approvals" class="intel-view">
+        <iframe id="command-approval-frame" title="ASE Command Approval Desk" loading="lazy" data-src="/ase-private/command-approvals.html"></iframe>
+      </div>
+      <div id="ash-view-history" class="intel-view">
+        <iframe id="command-history-frame" title="ASE Command Operation History" loading="lazy" data-src="/ase-private/operation-history.html"></iframe>
+      </div>
+      <div id="ash-view-participation" class="intel-view"><iframe id="phase8-participation-frame" title="ASE Member Participation" loading="lazy" data-src="/ase-private/phase8-participation.html"></iframe></div>
+      <div id="ash-view-tracking" class="intel-view">
+        <iframe id="operation-tracking-frame" title="ASE Operation Tracking and After-Action Reports" loading="lazy" data-src="/ase-private/operation-tracking.html"></iframe>
+      </div>
+    </div>
+  </section>
+
   <!-- VIEW: SOP -->
   <section class="view" id="view-sop">
     <div class="sop-gate-wrap" id="sop-gate-wrap">
@@ -741,19 +787,87 @@
   window.addEventListener('mouseup', () => ring.classList.remove('click'));
 })();
 
+// Sidebar visibility is cosmetic; Cloudflare Worker enforces actual access.
+let ashAuthorized = false;
+(async () => {
+  try {
+    const res = await fetch('/ase-auth/ash-access', { credentials: 'same-origin', cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.allowed !== true) return;
+    ashAuthorized = true;
+    const button = document.getElementById('ash-nav');
+    const label = document.getElementById('ash-nav-label');
+    button.hidden = false;
+    button.removeAttribute('aria-hidden');
+    label.hidden = false;
+  } catch (_) { /* Fail closed */ }
+})();
+
+// Command visibility is cosmetic. Worker checks roles on the page and API.
+let commandAuthorized = false;
+(async () => {
+  try {
+    const res = await fetch('/ase-auth/operations/access', { credentials: 'same-origin', cache: 'no-store' });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.allowed !== true) return;
+    commandAuthorized = true;
+    // Command approval access also grants visibility of the parent ASH section.
+    // The Worker independently enforces access to each private page and API.
+    ashAuthorized = true;
+    const ashButton = document.getElementById('ash-nav');
+    const ashLabel = document.getElementById('ash-nav-label');
+    ashButton.hidden = false;
+    ashButton.removeAttribute('aria-hidden');
+    ashLabel.hidden = false;
+    document.getElementById('ash-approval-tab').hidden = false;
+    document.getElementById('ash-history-tab').hidden = false;
+  } catch (_) { /* Fail closed */ }
+})();
+
+// Mission-leader or Command visibility; the Worker independently checks permissions.
+let trackingAuthorized = false;
+(async () => {
+  try {
+    const response = await fetch('/ase-auth/operations/tracking-access', { credentials: 'same-origin', cache: 'no-store' });
+    if (!response.ok) return;
+    const data = await response.json();
+    if (data.allowed !== true) return;
+    trackingAuthorized = true;
+    ashAuthorized = true;
+    const nav = document.getElementById('ash-nav');
+    const label = document.getElementById('ash-nav-label');
+    nav.hidden = false; nav.removeAttribute('aria-hidden'); label.hidden = false;
+    document.getElementById('ash-tracking-tab').hidden = false;
+    document.getElementById('ash-participation-tab').hidden = false;
+  } catch (_) { /* Fail closed */ }
+})();
+
 // ───── NAVIGATION ─────
 const viewMeta = {
   dashboard: { title: 'DASHBOARD', crumb: 'MEMBERS PORTAL // ASE OPERATIONS' },
   admin: { title: 'RECRUITMENT ADMIN', crumb: 'PERSONNEL // COMMAND CENTER' },
   intel: { title: 'INTELLIGENCE', crumb: 'OPERATION NIGHTJAR // INTEL SUBMISSION' },
+  ash: { title: 'ASH PROTOCOL', crumb: 'INTELLIGENCE COMMAND // TOC INTELLIGENCE' },
   sop: { title: 'SOP ACCESS', crumb: 'PUBLIC OPS // REFERENCE' },
   ops: { title: 'OPERATIONS DESK', crumb: 'PUBLIC OPS // PLANNING' },
   map: { title: 'TACTICAL MAP', crumb: 'PUBLIC OPS // BOARD' }
 };
 
+document.getElementById('ash-terminal-frame')?.addEventListener('load', function () {
+  try { this.contentWindow.scrollTo(0, 0); } catch (_) {}
+});
+
 document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
   btn.addEventListener('click', () => {
     const v = btn.dataset.view;
+    if (v === 'ash' && !ashAuthorized) return;
+    if (v === 'ash') {
+      const frame = document.getElementById('ash-terminal-frame');
+      if (frame && !frame.src && frame.dataset.src) frame.src = frame.dataset.src;
+      try { frame?.contentWindow?.scrollTo(0, 0); } catch (_) {}
+    }
     document.querySelectorAll('.nav-item[data-view]').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.view').forEach(sec => sec.classList.remove('active'));
     btn.classList.add('active');
@@ -767,10 +881,28 @@ document.querySelectorAll('.nav-item[data-view]').forEach(btn => {
 });
 
 function switchIntelTab(tabName, el) {
-  document.querySelectorAll('.intel-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('#view-intel .intel-tab').forEach(t => t.classList.remove('active'));
   el.classList.add('active');
-  document.querySelectorAll('.intel-view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('#view-intel .intel-view').forEach(v => v.classList.remove('active'));
   document.getElementById('intel-view-' + tabName).classList.add('active');
+}
+
+function switchAshTab(tabName, el) {
+  if (!ashAuthorized) return;
+  if ((tabName === 'approvals' || tabName === 'history') && !commandAuthorized) return;
+  if ((tabName === 'tracking' || tabName === 'participation') && !trackingAuthorized) return;
+  document.querySelectorAll('#view-ash .intel-tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('#view-ash .intel-view').forEach(v => v.classList.remove('active'));
+  document.getElementById('ash-view-' + tabName).classList.add('active');
+  const frame = document.getElementById(tabName === 'approvals' ? 'command-approval-frame' : tabName === 'history' ? 'command-history-frame' : tabName === 'tracking' ? 'operation-tracking-frame' : tabName === 'participation' ? 'phase8-participation-frame' : 'ash-terminal-frame');
+  if (frame && !frame.src && frame.dataset.src) frame.src = frame.dataset.src;
+  document.getElementById('header-crumb').textContent = tabName === 'approvals'
+    ? 'INTELLIGENCE COMMAND // APPROVAL DESK'
+    : tabName === 'history' ? 'INTELLIGENCE COMMAND // OPERATION HISTORY'
+    : tabName === 'tracking' ? 'OPERATIONS COMMAND // TRACKING & AAR'
+    : tabName === 'participation' ? 'OPERATIONS COMMAND // MEMBER PARTICIPATION'
+    : 'INTELLIGENCE COMMAND // TOC INTELLIGENCE';
 }
 
 function logActivity(msg) {
@@ -1644,6 +1776,1273 @@ function setupConnection() {
 
 // INIT
 resizeCanvas();
+</script>
+
+<!-- ============================================
+     ASE // DISCORD OPERATOR IDENTITY
+     Discord OAuth2 + Dynamic Clearance Display
+
+     Uses existing Cloudflare Worker:
+     /ase-auth/me
+
+     Clearance classifications:
+     CONFIDENTIAL
+     SECRET
+     TOP SECRET
+     TOP SECRET // SCI
+
+     DISPLAY ONLY - NO ACCESS RULE CHANGES
+============================================ -->
+
+<style>
+  .ase-operator-identity {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+    margin-bottom: 12px;
+    padding: 22px 24px;
+    background: var(--bg-2, #111513);
+    border: 1px solid rgba(200,169,74,.25);
+    border-left: 3px solid var(--accent, #c8a94a);
+    border-radius: 6px;
+  }
+
+  .ase-operator-avatar {
+    width: 76px;
+    height: 76px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid var(--accent, #c8a94a);
+    background: #151a18;
+    flex-shrink: 0;
+  }
+
+  .ase-operator-details {
+    min-width: 0;
+    flex: 1;
+  }
+
+  .ase-operator-eyebrow {
+    color: var(--accent, #c8a94a);
+    font-family: var(--font-mono, monospace);
+    font-size: 10px;
+    letter-spacing: .16em;
+    margin-bottom: 9px;
+  }
+
+  .ase-operator-identity h1 {
+    color: var(--accent, #c8a94a);
+    font-family: var(--font-head, sans-serif);
+    font-size: clamp(20px, 3vw, 30px);
+    letter-spacing: .06em;
+    margin: 0 0 8px;
+    overflow-wrap: anywhere;
+  }
+
+  .ase-operator-subtitle {
+    color: var(--muted, #8b8f88);
+    font-family: var(--font-mono, monospace);
+    font-size: 11px;
+  }
+
+  .ase-operator-verified {
+    color: var(--green, #3ba55d);
+    font-family: var(--font-mono, monospace);
+    font-size: 10px;
+    letter-spacing: .08em;
+    margin-top: 10px;
+  }
+
+  .ase-clearance-label {
+    color: var(--accent, #c8a94a);
+    font-family: var(--font-head, sans-serif);
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    overflow-wrap: anywhere;
+  }
+
+  .ase-operator-logout {
+    display: inline-block;
+    margin-top: 12px;
+    padding: 7px 12px;
+    border: 1px solid rgba(200,169,74,.35);
+    border-radius: 3px;
+    color: var(--accent, #c8a94a);
+    font-family: var(--font-mono, monospace);
+    font-size: 10px;
+    letter-spacing: .08em;
+    text-decoration: none;
+  }
+
+  .ase-operator-logout:hover {
+    background: rgba(200,169,74,.1);
+  }
+
+  @media (max-width: 600px) {
+    .ase-operator-identity {
+      align-items: flex-start;
+      padding: 16px;
+      gap: 12px;
+    }
+
+    .ase-operator-avatar {
+      width: 52px;
+      height: 52px;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  "use strict";
+
+  const PROFILE_ENDPOINT = "/ase-auth/me";
+
+  const VALID_CLEARANCES = new Set([
+    "CONFIDENTIAL",
+    "SECRET",
+    "TOP SECRET",
+    "TOP SECRET // SCI"
+  ]);
+
+  function element(tag, className, text) {
+    const node = document.createElement(tag);
+
+    if (className) {
+      node.className = className;
+    }
+
+    if (text !== undefined) {
+      node.textContent = text;
+    }
+
+    return node;
+  }
+
+  function validAvatar(url) {
+    try {
+      const parsed = new URL(url);
+
+      return (
+        parsed.protocol === "https:" &&
+        parsed.hostname === "cdn.discordapp.com"
+      );
+    } catch {
+      return false;
+    }
+  }
+
+  async function loadOperatorIdentity() {
+    const welcome = document.querySelector(
+      "#view-dashboard .dash-welcome"
+    );
+
+    const stats = document.querySelectorAll(
+      "#view-dashboard .stat-card"
+    );
+
+    if (!welcome || stats.length < 3) {
+      console.error(
+        "ASE: Dashboard elements not found."
+      );
+      return;
+    }
+
+    let profile;
+
+    try {
+      const response = await fetch(
+        PROFILE_ENDPOINT,
+        {
+          method: "GET",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: {
+            Accept: "application/json"
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Profile request failed: " +
+          response.status
+        );
+      }
+
+      profile = await response.json();
+
+      if (
+        profile.authenticated !== true ||
+        typeof profile.displayName !== "string"
+      ) {
+        throw new Error(
+          "Invalid operator profile"
+        );
+      }
+    } catch (error) {
+      console.error(
+        "ASE: Operator identity unavailable.",
+        error
+      );
+
+      const heading = welcome.querySelector("h1");
+
+      if (heading) {
+        heading.textContent =
+          "OPERATOR IDENTITY UNAVAILABLE";
+      }
+
+      const accessValue = stats[2].querySelector(
+        ".value"
+      );
+
+      if (accessValue) {
+        accessValue.textContent = "—";
+      }
+
+      return;
+    }
+
+    const name =
+      profile.displayName.trim() ||
+      profile.username ||
+      "OPERATOR";
+
+    const username =
+      profile.username || "UNKNOWN";
+
+    const clearance =
+      VALID_CLEARANCES.has(profile.clearance?.name)
+        ? profile.clearance.name
+        : "UNASSIGNED";
+
+    const level =
+      Number.isInteger(profile.clearance?.level)
+        ? profile.clearance.level
+        : 0;
+
+    // Replace the generic welcome section.
+    welcome.replaceChildren();
+
+    const identity = element(
+      "div",
+      "ase-operator-identity"
+    );
+
+    if (validAvatar(profile.avatar)) {
+      const avatar = element(
+        "img",
+        "ase-operator-avatar"
+      );
+
+      avatar.src = profile.avatar;
+      avatar.alt = "Discord operator avatar";
+      avatar.referrerPolicy = "no-referrer";
+
+      identity.appendChild(avatar);
+    }
+
+    const details = element(
+      "div",
+      "ase-operator-details"
+    );
+
+    details.appendChild(
+      element(
+        "div",
+        "ase-operator-eyebrow",
+        "ASE // AUTHENTICATED PERSONNEL"
+      )
+    );
+
+    details.appendChild(
+      element(
+        "h1",
+        "",
+        "WELCOME BACK, " + name.toUpperCase()
+      )
+    );
+
+    details.appendChild(
+      element(
+        "div",
+        "ase-operator-subtitle",
+        "DISCORD // @" + username
+      )
+    );
+
+    details.appendChild(
+      element(
+        "div",
+        "ase-operator-verified",
+        "● IDENTITY VERIFIED VIA DISCORD"
+      )
+    );
+
+    const logout = element(
+      "a",
+      "ase-operator-logout",
+      "SIGN OUT"
+    );
+
+    logout.href = "/ase-auth/logout";
+
+    details.appendChild(logout);
+
+    identity.appendChild(details);
+    welcome.appendChild(identity);
+
+    // Update the existing Access Level card.
+    const accessCard = stats[2];
+
+    const accessHeading =
+      accessCard.querySelector(".label");
+
+    const accessValue =
+      accessCard.querySelector(".value");
+
+    if (accessHeading) {
+      accessHeading.textContent =
+        "SECURITY CLEARANCE";
+    }
+
+    if (accessValue) {
+      accessValue.classList.add(
+        "ase-clearance-label"
+      );
+
+      accessValue.textContent = clearance;
+    }
+
+    let clearanceMeta =
+      accessCard.querySelector(
+        ".ase-clearance-meta"
+      );
+
+    if (!clearanceMeta) {
+      clearanceMeta = element(
+        "div",
+        "ase-clearance-meta"
+      );
+
+      clearanceMeta.style.cssText =
+        "font-size:11px;" +
+        "color:var(--muted);" +
+        "margin-top:8px;";
+
+      accessCard.appendChild(clearanceMeta);
+    }
+
+    clearanceMeta.textContent =
+      "CLASSIFICATION LEVEL " + level +
+      " // DISCORD VERIFIED";
+
+    // Remove the old static Standard Operator caption.
+    for (const child of accessCard.children) {
+      if (
+        child !== accessHeading &&
+        child !== accessValue &&
+        child !== clearanceMeta &&
+        child.textContent.trim() ===
+          "Standard Operator"
+      ) {
+        child.remove();
+      }
+    }
+
+    // Personalize the existing system activity message.
+    const firstLog = document.querySelector(
+      "#view-dashboard .sys-log .log-item .msg"
+    );
+
+    if (firstLog) {
+      firstLog.textContent =
+        "Authentication confirmed. Welcome, " +
+        name +
+        ".";
+    }
+
+    // Add identity information to the top header.
+    const headerCrumb =
+      document.getElementById("header-crumb");
+
+    if (headerCrumb) {
+      headerCrumb.textContent =
+        "ASE // " + clearance;
+    }
+
+    console.info(
+      "ASE: Operator profile loaded successfully."
+    );
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      loadOperatorIdentity,
+      { once: true }
+    );
+  } else {
+    loadOperatorIdentity();
+  }
+})();
+</script>
+
+<!-- ==================================================
+     ASE // OPERATOR PERSONNEL PROFILE
+     Standalone addition for 03951-S18Z.html
+     Reads existing /ase-auth/me API
+     Read-only | Display-only clearance
+================================================== -->
+
+<style>
+  .ase-profile-page {
+    padding: 36px;
+    width: 100%;
+    max-width: 1120px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+
+  .ase-profile-kicker {
+    font: 10px var(--font-mono, monospace);
+    letter-spacing: .2em;
+    color: var(--accent, #c8a94a);
+  }
+
+  .ase-profile-heading {
+    font-family: var(--font-head, sans-serif);
+    font-size: 32px;
+    letter-spacing: .08em;
+    color: var(--ink, #e9e6df);
+  }
+
+  .ase-profile-subheading {
+    color: var(--muted, #8b8f88);
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  .ase-profile-hero {
+    background: var(--bg-2, #111513);
+    border: 1px solid rgba(200,169,74,.3);
+    border-left: 3px solid var(--accent, #c8a94a);
+    border-radius: 6px;
+    padding: 28px;
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    flex-wrap: wrap;
+  }
+
+  .ase-profile-photo {
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    object-fit: cover;
+    border: 2px solid var(--accent, #c8a94a);
+    background: var(--bg, #0a0c0b);
+  }
+
+  .ase-profile-hero-info {
+    flex: 1;
+    min-width: 220px;
+  }
+
+  .ase-profile-name {
+    font-family: var(--font-head, sans-serif);
+    font-size: clamp(24px, 4vw, 38px);
+    color: var(--accent, #c8a94a);
+    letter-spacing: .06em;
+    overflow-wrap: anywhere;
+  }
+
+  .ase-profile-handle {
+    font-family: var(--font-mono, monospace);
+    color: var(--muted, #8b8f88);
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  .ase-profile-verified {
+    font-family: var(--font-mono, monospace);
+    color: var(--green, #3ba55d);
+    font-size: 11px;
+    letter-spacing: .07em;
+    margin-top: 14px;
+  }
+
+  .ase-profile-classification {
+    padding: 14px 18px;
+    border: 1px solid rgba(200,169,74,.35);
+    background: rgba(200,169,74,.06);
+    min-width: 200px;
+  }
+
+  .ase-profile-classification small {
+    display: block;
+    font: 10px var(--font-mono, monospace);
+    color: var(--muted, #8b8f88);
+    letter-spacing: .12em;
+    margin-bottom: 8px;
+  }
+
+  .ase-profile-classification strong {
+    font-family: var(--font-head, sans-serif);
+    color: var(--accent, #c8a94a);
+    font-size: 19px;
+    letter-spacing: .04em;
+  }
+
+  .ase-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+
+  .ase-profile-field {
+    background: var(--bg-2, #111513);
+    border: 1px solid var(--line, #252925);
+    padding: 22px;
+    border-radius: 5px;
+    min-width: 0;
+  }
+
+  .ase-profile-field-label {
+    color: var(--muted, #8b8f88);
+    font: 10px var(--font-mono, monospace);
+    letter-spacing: .14em;
+    margin-bottom: 12px;
+  }
+
+  .ase-profile-field-value {
+    color: var(--ink, #e9e6df);
+    font-family: var(--font-head, sans-serif);
+    font-size: 18px;
+    letter-spacing: .04em;
+    overflow-wrap: anywhere;
+  }
+
+  .ase-profile-field-value.gold {
+    color: var(--accent, #c8a94a);
+  }
+
+  .ase-profile-field-value.green {
+    color: var(--green, #3ba55d);
+  }
+
+  .ase-profile-footer {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    border-top: 1px solid var(--line, #252925);
+    padding-top: 22px;
+  }
+
+  .ase-profile-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 18px;
+    background: transparent;
+    border: 1px solid rgba(200,169,74,.4);
+    color: var(--accent, #c8a94a);
+    font: 11px var(--font-mono, monospace);
+    letter-spacing: .08em;
+    text-decoration: none;
+    border-radius: 3px;
+  }
+
+  .ase-profile-action:hover {
+    background: rgba(200,169,74,.1);
+  }
+
+  .ase-profile-action.danger {
+    color: #ed4245;
+    border-color: rgba(237,66,69,.4);
+  }
+
+  .ase-profile-note {
+    font: 11px var(--font-mono, monospace);
+    color: var(--muted, #8b8f88);
+    line-height: 1.7;
+  }
+
+  @media (max-width: 650px) {
+    .ase-profile-page {
+      padding: 20px;
+    }
+
+    .ase-profile-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .ase-profile-hero {
+      padding: 20px;
+      gap: 18px;
+    }
+
+    .ase-profile-photo {
+      width: 82px;
+      height: 82px;
+    }
+  }
+</style>
+
+<script>
+(() => {
+  "use strict";
+
+  const PROFILE_API = "/ase-auth/me";
+
+  const CLEARANCE_NAMES = new Set([
+    "CONFIDENTIAL",
+    "SECRET",
+    "TOP SECRET",
+    "TOP SECRET // SCI"
+  ]);
+
+  let profileLoaded = false;
+
+  function make(tag, className, text) {
+    const node = document.createElement(tag);
+
+    if (className) {
+      node.className = className;
+    }
+
+    if (text !== undefined) {
+      node.textContent = text;
+    }
+
+    return node;
+  }
+
+  function addField(grid, label, id, color = "") {
+    const field = make(
+      "div",
+      "ase-profile-field"
+    );
+
+    field.appendChild(
+      make(
+        "div",
+        "ase-profile-field-label",
+        label
+      )
+    );
+
+    const value = make(
+      "div",
+      "ase-profile-field-value " + color,
+      "LOADING..."
+    );
+
+    value.id = id;
+
+    field.appendChild(value);
+    grid.appendChild(field);
+  }
+
+  function safeAvatar(value) {
+    try {
+      const url = new URL(value);
+
+      if (
+        url.protocol === "https:" &&
+        url.hostname === "cdn.discordapp.com"
+      ) {
+        return url.href;
+      }
+    } catch {}
+
+    return "";
+  }
+
+  function buildProfilePage() {
+    const sidebar = document.querySelector(
+      ".sidebar-nav"
+    );
+
+    const main = document.querySelector(
+      ".main-content"
+    );
+
+    if (!sidebar || !main) {
+      console.error(
+        "ASE PROFILE: Portal layout unavailable."
+      );
+      return;
+    }
+
+    if (document.getElementById("view-profile")) {
+      return;
+    }
+
+    // ========================================
+    // NEW SIDEBAR NAVIGATION
+    // ========================================
+
+    const navLabel = make(
+      "div",
+      "nav-label",
+      "PERSONNEL"
+    );
+
+    navLabel.style.marginTop = "16px";
+
+    const navButton = make(
+      "button",
+      "nav-item"
+    );
+
+    navButton.type = "button";
+    navButton.dataset.view = "profile";
+
+    const icon = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "svg"
+    );
+
+    icon.setAttribute("class", "icon");
+    icon.setAttribute("viewBox", "0 0 24 24");
+    icon.setAttribute("fill", "none");
+    icon.setAttribute("stroke", "currentColor");
+    icon.setAttribute("stroke-width", "2");
+
+    const circle = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "circle"
+    );
+
+    circle.setAttribute("cx", "12");
+    circle.setAttribute("cy", "8");
+    circle.setAttribute("r", "4");
+
+    const path = document.createElementNS(
+      "http://www.w3.org/2000/svg",
+      "path"
+    );
+
+    path.setAttribute(
+      "d",
+      "M4 21v-2a8 8 0 0 1 16 0v2"
+    );
+
+    icon.append(circle, path);
+
+    navButton.append(
+      icon,
+      document.createTextNode("MY OPERATOR PROFILE")
+    );
+
+    sidebar.append(navLabel, navButton);
+
+    // ========================================
+    // NEW PROFILE VIEW
+    // ========================================
+
+    const section = make("section", "view");
+    section.id = "view-profile";
+
+    const page = make(
+      "div",
+      "ase-profile-page"
+    );
+
+    page.appendChild(
+      make(
+        "div",
+        "ase-profile-kicker",
+        "ALPHA SECURITY ELEMENT // PERSONNEL RECORD"
+      )
+    );
+
+    page.appendChild(
+      make(
+        "h1",
+        "ase-profile-heading",
+        "OPERATOR DOSSIER"
+      )
+    );
+
+    page.appendChild(
+      make(
+        "p",
+        "ase-profile-subheading",
+        "Authenticated personnel identity and " +
+        "Discord-assigned classification."
+      )
+    );
+
+    // ========================================
+    // IDENTITY CARD
+    // ========================================
+
+    const hero = make(
+      "div",
+      "ase-profile-hero"
+    );
+
+    const avatar = make(
+      "img",
+      "ase-profile-photo"
+    );
+
+    avatar.id = "ase-profile-avatar";
+    avatar.alt = "Operator Discord avatar";
+    avatar.referrerPolicy = "no-referrer";
+
+    avatar.style.display = "none";
+
+    const info = make(
+      "div",
+      "ase-profile-hero-info"
+    );
+
+    info.appendChild(
+      make(
+        "div",
+        "ase-profile-kicker",
+        "IDENTITY // VERIFIED PERSONNEL"
+      )
+    );
+
+    const name = make(
+      "h2",
+      "ase-profile-name",
+      "LOADING OPERATOR..."
+    );
+
+    name.id = "ase-profile-name";
+
+    info.appendChild(name);
+
+    const handle = make(
+      "div",
+      "ase-profile-handle",
+      "DISCORD // CONNECTING"
+    );
+
+    handle.id = "ase-profile-handle";
+
+    info.appendChild(handle);
+
+    const verified = make(
+      "div",
+      "ase-profile-verified",
+      "AUTHENTICATION PENDING"
+    );
+
+    verified.id = "ase-profile-verified";
+
+    info.appendChild(verified);
+
+    const classification = make(
+      "div",
+      "ase-profile-classification"
+    );
+
+    classification.appendChild(
+      make(
+        "small",
+        "",
+        "SECURITY CLASSIFICATION"
+      )
+    );
+
+    const classificationName = make(
+      "strong",
+      "",
+      "LOADING..."
+    );
+
+    classificationName.id =
+      "ase-profile-classification";
+
+    classification.appendChild(
+      classificationName
+    );
+
+    hero.append(
+      avatar,
+      info,
+      classification
+    );
+
+    page.appendChild(hero);
+
+    // ========================================
+    // PERSONNEL RECORD FIELDS
+    // ========================================
+
+    const grid = make(
+      "div",
+      "ase-profile-grid"
+    );
+
+    addField(
+      grid,
+      "OPERATOR CALLSIGN",
+      "ase-profile-callsign",
+      "gold"
+    );
+
+    addField(
+      grid,
+      "ASSIGNED DIVISION",
+      "ase-profile-division"
+    );
+
+    addField(
+      grid,
+      "CLEARANCE LEVEL",
+      "ase-profile-level",
+      "gold"
+    );
+
+    addField(
+      grid,
+      "OPERATOR STATUS",
+      "ase-profile-status",
+      "green"
+    );
+
+    addField(
+      grid,
+      "DISCORD USERNAME",
+      "ase-profile-username"
+    );
+
+    addField(
+      grid,
+      "DISCORD ACCOUNT ID",
+      "ase-profile-id"
+    );
+
+    page.appendChild(grid);
+
+    // ========================================
+    // ACTION BUTTONS
+    // ========================================
+
+    const footer = make(
+      "div",
+      "ase-profile-footer"
+    );
+
+    const refresh = make(
+      "button",
+      "ase-profile-action",
+      "REFRESH IDENTITY"
+    );
+
+    refresh.type = "button";
+
+    refresh.addEventListener(
+      "click",
+      () => loadProfile(true)
+    );
+
+    const signout = make(
+      "a",
+      "ase-profile-action danger",
+      "SIGN OUT"
+    );
+
+    signout.href = "/ase-auth/logout";
+
+    footer.append(refresh, signout);
+
+    page.appendChild(footer);
+
+    page.appendChild(
+      make(
+        "p",
+        "ase-profile-note",
+        "ASE // Personnel information is " +
+        "retrieved from your authenticated " +
+        "Discord session. Clearance labels " +
+        "are informational and do not grant " +
+        "additional portal permissions."
+      )
+    );
+
+    section.appendChild(page);
+
+    main.appendChild(section);
+
+    // ========================================
+    // SIDEBAR NAVIGATION HANDLER
+    // ========================================
+
+    navButton.addEventListener(
+      "click",
+      () => {
+        document.querySelectorAll(
+          ".nav-item[data-view]"
+        ).forEach(button => {
+          button.classList.remove("active");
+        });
+
+        document.querySelectorAll(
+          ".view"
+        ).forEach(view => {
+          view.classList.remove("active");
+        });
+
+        navButton.classList.add("active");
+        section.classList.add("active");
+
+        const headerTitle =
+          document.getElementById(
+            "header-title"
+          );
+
+        const headerCrumb =
+          document.getElementById(
+            "header-crumb"
+          );
+
+        if (headerTitle) {
+          headerTitle.textContent =
+            "MY OPERATOR PROFILE";
+        }
+
+        if (headerCrumb) {
+          headerCrumb.textContent =
+            "ASE // PERSONNEL DATABASE";
+        }
+
+        loadProfile();
+      }
+    );
+
+    // Load once on startup.
+    loadProfile();
+  }
+
+  // ==========================================
+  // DISCORD PROFILE FETCH
+  // ==========================================
+
+  // Division roles are supplied by the authenticated Worker.
+  // Display only: this does not change authorization.
+  function renderOperatorDivisions(divisions) {
+    const target = document.getElementById("ase-profile-division");
+    if (!target) return;
+    target.replaceChildren();
+    const logos = {
+      "HADES": "hades.png",
+      "IRON RAIN": "iron-rain.png",
+      "ASH PROTOCOL": "ash-protocol.png",
+      "REAPER": "reaper.png",
+      "VALKYRIE": "valkyrie.png",
+      "FOREIGN ATTACHMENT": "foreign-attachment.png"
+    };
+    const names = new Set();
+    if (Array.isArray(divisions)) {
+      for (const item of divisions) {
+        const name = item && item.name;
+        if (Object.prototype.hasOwnProperty.call(logos, name)) names.add(name);
+      }
+    }
+    if (!names.size) {
+      target.textContent = "UNASSIGNED";
+      return;
+    }
+    const wrap = document.createElement("div");
+    wrap.className = "ase-division-list";
+    for (const name of names) {
+      const card = document.createElement("div");
+      card.className = "ase-division-card";
+      const img = document.createElement("img");
+      img.src = "/ase-private/divisions/" + logos[name];
+      img.alt = name + " insignia";
+      img.loading = "lazy";
+      const label = document.createElement("span");
+      label.textContent = name;
+      card.append(img, label);
+      wrap.append(card);
+    }
+    target.append(wrap);
+  }
+
+  async function loadProfile(force = false) {
+    if (profileLoaded && !force) {
+      return;
+    }
+
+    const verified =
+      document.getElementById(
+        "ase-profile-verified"
+      );
+
+    if (verified) {
+      verified.textContent =
+        "VERIFYING DISCORD IDENTITY...";
+    }
+
+    try {
+      const response = await fetch(
+        PROFILE_API,
+        {
+          method: "GET",
+          credentials: "same-origin",
+          cache: "no-store",
+          headers: {
+            Accept: "application/json"
+          }
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error(
+          "Identity API returned " +
+          response.status
+        );
+      }
+
+      const profile = await response.json();
+
+      if (
+        profile.authenticated !== true ||
+        typeof profile.id !== "string" ||
+        typeof profile.displayName !== "string"
+      ) {
+        throw new Error(
+          "Invalid authenticated profile"
+        );
+      }
+
+      const displayName =
+        profile.displayName.trim() ||
+        "OPERATOR";
+
+      const username =
+        typeof profile.username === "string"
+          ? profile.username
+          : "UNKNOWN";
+
+      const clearance =
+        CLEARANCE_NAMES.has(
+          profile.clearance?.name
+        )
+          ? profile.clearance.name
+          : "UNASSIGNED";
+
+      const level =
+        Number.isInteger(
+          profile.clearance?.level
+        )
+          ? profile.clearance.level
+          : 0;
+
+      const values = {
+        "ase-profile-name":
+          displayName.toUpperCase(),
+
+        "ase-profile-handle":
+          "DISCORD // @" + username,
+
+        "ase-profile-verified":
+          "● IDENTITY VERIFIED VIA DISCORD",
+
+        "ase-profile-classification":
+          clearance,
+
+        "ase-profile-callsign":
+          displayName.toUpperCase(),
+
+        
+
+        "ase-profile-level":
+          "LEVEL " + level,
+
+        "ase-profile-status":
+          "ACTIVE",
+
+        "ase-profile-username":
+          "@" + username,
+
+        "ase-profile-id":
+          profile.id
+      };
+
+      for (const [id, value] of
+        Object.entries(values)) {
+
+        const element =
+          document.getElementById(id);
+
+        if (element) {
+          element.textContent = value;
+        }
+      }
+
+      renderOperatorDivisions(profile.divisions);
+
+      const avatar =
+        document.getElementById(
+          "ase-profile-avatar"
+        );
+
+      const avatarURL = safeAvatar(
+        profile.avatar
+      );
+
+      if (avatar && avatarURL) {
+        avatar.src = avatarURL;
+        avatar.style.display = "block";
+      }
+
+      profileLoaded = true;
+
+      console.info(
+        "ASE PROFILE: Operator verified."
+      );
+
+    } catch (error) {
+      console.error(
+        "ASE PROFILE:",
+        error
+      );
+
+      if (verified) {
+        verified.textContent =
+          "IDENTITY VERIFICATION UNAVAILABLE";
+        verified.style.color =
+          "var(--red, #ed4245)";
+      }
+
+      const status =
+        document.getElementById(
+          "ase-profile-status"
+        );
+
+      if (status) {
+        status.textContent = "UNKNOWN";
+      }
+
+      profileLoaded = false;
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      buildProfilePage,
+      { once: true }
+    );
+  } else {
+    buildProfilePage();
+  }
+
+})();
 </script>
 </body>
 </html>
