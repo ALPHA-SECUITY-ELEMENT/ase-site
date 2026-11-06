@@ -212,6 +212,13 @@
   .intel-view { display: none; flex: 1; width: 100%; height: 100%; }
   .intel-view.active { display: block; }
   .intel-view iframe { width: 100%; height: 100%; border: none; display: block; }
+  .intel-tabs-bar { overflow-x: auto; white-space: nowrap; }
+  .intel-tab { flex-shrink: 0; }
+  #intel-view-skidnet.active { display: flex; flex-direction: column; min-height: 0; }
+  .skidnet-toolbar { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 24px; background: var(--bg-3); border-bottom: 1px solid var(--line); font: 11px var(--font-mono); color: var(--muted); flex-wrap: wrap; }
+  .skidnet-toolbar a { color: var(--accent); border: 1px solid var(--accent); border-radius: 3px; padding: 8px 12px; }
+  .skidnet-toolbar a:hover { background: rgba(200,169,74,.12); }
+  #intel-view-skidnet iframe { flex: 1; min-height: 0; }
 
   /* ───── VIEW: SOP ───── */
   .sop-gate-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 40px; }
@@ -582,12 +589,21 @@
       <div class="intel-tabs-bar">
         <div class="intel-tab active" onclick="switchIntelTab('game', this)">OPERATION NIGHTJAR</div>
         <div class="intel-tab" onclick="switchIntelTab('form', this)">INTEL SUBMISSION</div>
+        <div class="intel-tab" onclick="switchIntelTab('skidnet', this)">SKIDNET-OS | PUBLIC SIMULATION</div>
       </div>
       <div id="intel-view-game" class="intel-view active">
         <iframe src="game.html" title="Game"></iframe>
       </div>
       <div id="intel-view-form" class="intel-view">
         <iframe src="intel.html" title="Intel Form"></iframe>
+      </div>
+      <!-- Public game: no additional authorization or clearance requirements. -->
+      <div id="intel-view-skidnet" class="intel-view">
+        <div class="skidnet-toolbar">
+          <span>SKIDNET-OS // PUBLIC CYBER SIMULATION</span>
+          <a href="https://01357101010.github.io/01357101010-0135710101.io/" target="_blank" rel="noopener noreferrer">OPEN FULL SCREEN ↗</a>
+        </div>
+        <iframe src="https://01357101010.github.io/01357101010-0135710101.io/" title="SKIDNET-OS Cyber Simulation" loading="lazy" referrerpolicy="strict-origin-when-cross-origin" allow="fullscreen"></iframe>
       </div>
     </div>
   </section>
