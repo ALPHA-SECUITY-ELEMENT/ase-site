@@ -13,6 +13,7 @@
 <link rel="stylesheet" href="css/main.css" />
 <link rel="stylesheet" href="css/cursor.css" />
 <link rel="stylesheet" href="css/pages.css" />
+<link rel="stylesheet" href="css/hero-globe.css" />
 <style>
   /* ───── MILSIM WIDGET SECTION ───── */
   .widget-section {
@@ -127,7 +128,6 @@
 
 <!-- HERO -->
 <section class="hero">
-  <canvas id="hero-canvas"></canvas>
   <div class="hero-grid"></div>
   <div class="hero-content">
     <p class="hero-eyebrow" data-anim="fade-up">ARMA REFORGER · PVP ONLY · OLD GUARD REVIVAL</p>
@@ -140,6 +140,26 @@
     <div class="hero-cta" data-anim="fade-up">
       <a href="join.html" class="btn btn-primary">JOIN ASE</a>
       <a href="about.html" class="btn btn-ghost">WHO WE ARE</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-signal" aria-hidden="true">
+      <pre>0ASW:0618  5A 2F A6 0D 18 A4 08 2A 5C 1E
+RX/OMEGA   01 11 00 10 01 10 11 01 00 11
+           AE 0F 28 91 7C 3E 8B D2 F1 06
+ 64 A8 FF  8E 71 4F 3A 29 DE 03 6F CA B7
+           &gt;&gt; CARRIER LOCK / 6F 28 0D
+ 01 D7 C9  10 01 00 11 10 01 00 10 11 00
+SEQ/0042   32 E8 1B 5A 79 26 DF C4 8F 03
+           31 BA 86 0E B2 14 62 30 9A 5C
+ 1A 62 E0  11 01 00 10 01 11 10 00 10 10
+CHK/31F9   91 04 C3 57 A6 F0 25 8D E2 7A</pre>
+    </div>
+    <div class="hero-globe">
+      <div class="hero-globe-disc" aria-hidden="true">
+        <canvas id="hero-canvas" data-hover></canvas>
+      </div>
+      <div class="hero-globe-caption" aria-hidden="true">ASE / OMEGA COMMS</div>
     </div>
   </div>
   <div class="hero-scroll">SCROLL</div>
@@ -252,10 +272,9 @@
   </div>
 </footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r158/three.min.js"></script>
 <script src="js/audio.js"></script>
 <script src="js/cursor.js"></script>
-<script src="js/three-hero.js"></script>
+<script src="js/hero-globe.js" defer></script>
 <script src="js/transitions.js"></script>
 <script src="js/discord.js"></script>
 <script src="js/main.js"></script>
