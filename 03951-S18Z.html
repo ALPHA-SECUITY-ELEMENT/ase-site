@@ -192,16 +192,11 @@
   .admin-section-view { display: none; height: 100%; }
   .admin-section-view.active { display: flex; flex-direction: column; }
 
-  /* ───── ROSTER TABLE ───── */
-  .roster-container { width: 100%; height: 100%; overflow: auto; background: var(--bg-2); border: 1px solid var(--line); border-radius: 4px; margin-top: 20px; }
-  .roster-table { width: 100%; border-collapse: collapse; font-size: 13px; }
-  .roster-table th, .roster-table td { padding: 12px 16px; text-align: left; border: 1px solid var(--line); }
-  .roster-table th { background: var(--bg-3); font-family: var(--font-head); font-size: 12px; letter-spacing: .1em; color: var(--accent); position: sticky; top: 0; z-index: 10; border-bottom: 2px solid var(--accent); text-transform: uppercase; }
-  .roster-table tr:hover td { background: rgba(233,230,223,.03); }
-  .roster-table td { color: var(--muted); }
-  .roster-table td strong { color: var(--ink); }
-  .roster-loading { padding: 40px; text-align: center; font-family: var(--font-mono); color: var(--muted); }
-  .roster-section-header { background: var(--bg-3); font-family: var(--font-head); font-size: 14px; font-weight: 700; color: var(--accent); letter-spacing: .1em; text-transform: uppercase; border-bottom: 2px solid var(--accent) !important; }
+  /* ───── LIVE RAGIC ROSTER ───── */
+  .roster-container { width: 100%; height: 100%; min-height: 70vh; overflow: auto; background: var(--bg-2); border: 1px solid var(--line); border-radius: 4px; margin-top: 20px; }
+  #ragic_webview { width: 100%; min-height: 68vh; }
+  #ragic_webview iframe { max-width: 100%; }
+  #ragic-link { display: inline-block; margin: 12px 16px; color: var(--muted); font-size: 11px; }
 
   /* ───── VIEW: INTELLIGENCE (IFRAME APP) ───── */
   .intel-wrapper { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
@@ -577,10 +572,12 @@
               </div>
             </div>
 
-            <!-- Section: Roster (Native Table) -->
+            <!-- Section: Roster (live Ragic database embed; no cached personnel rows) -->
             <div class="admin-section-view" id="admin-section-roster" style="height: 100%;">
               <div class="roster-container" id="roster-container">
-                <div class="roster-loading">LOADING ROSTER DATA...</div>
+                <div id="ragic_webview" aria-label="Live ASE unit roster"></div>
+                <noscript>Please enable JavaScript to view the <a href="https://www.ragic.com/?ref_noscript">Online database form by Ragic.</a></noscript>
+                <a href="https://www.ragic.com" id="ragic-link" target="_blank" rel="noopener noreferrer">online database form by <span class="logo-ragic">Ragic</span></a>
               </div>
             </div>
 
@@ -917,7 +914,7 @@ function logActivity(msg) {
 }
 
 // ───── ADMIN LOGIC ─────
-let rosterInterval = null;
+let ragicRosterLoaded = false;
 
 function switchAdminSection(section, el) {
   document.querySelectorAll('.admin-nav-item').forEach(t => t.classList.remove('active'));
@@ -925,85 +922,38 @@ function switchAdminSection(section, el) {
   document.querySelectorAll('.admin-section-view').forEach(v => v.classList.remove('active'));
   document.getElementById('admin-section-' + section).classList.add('active');
 
-  if (section === 'roster') {
-    fetchRosterData(); // Fetch immediately
-    if (!rosterInterval) {
-      rosterInterval = setInterval(fetchRosterData, 30000); // Refresh every 30s
-    }
-  } else {
-    if (rosterInterval) {
-      clearInterval(rosterInterval);
-      rosterInterval = null;
-    }
-  }
+  if (section === 'roster') loadRagicRoster();
 }
 
-async function fetchRosterData() {
-  const container = document.getElementById('roster-container');
-  // Only show loading on first load
-  if (!container.dataset.loaded) {
-    container.innerHTML = '<div class="roster-loading">FETCHING DATA FROM GOOGLE SHEETS...</div>';
-  }
-  
-  try {
-    const sheetId = '1R2VbRaVoMNuVdrchM37F-KKisscrJ_Zr';
-    const gid = '2037947315';
-    const targetUrl = `https://docs.google.com/spreadsheets/d/${sheetId}/export?format=csv&gid=${gid}`;
-    
-    // Route through CORS proxy to bypass Google's fetch restrictions
-    const proxyUrl = `https://corsproxy.io/?${encodeURIComponent(targetUrl)}`;
-    
-    const res = await fetch(proxyUrl);
-    if (!res.ok) throw new Error('Failed to fetch CSV');
-    const csvText = await res.text();
-    
-    // Simple CSV parser
-    const rows = csvText.split('\n').map(row => {
-      const matches = row.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-      if (matches) return matches.map(m => m.replace(/^"|"$/g, '').trim());
-      return row.split(',').map(c => c.trim());
-    });
+// Ragic owns the roster data. Do not duplicate member records in this page.
+function loadRagicRoster() {
+  if (ragicRosterLoaded || !document.getElementById('ragic_webview')) return;
+  ragicRosterLoaded = true;
 
-    if (rows.length < 1) throw new Error('Empty sheet');
+  // Configuration supplied by the ASE Ragic embed.
+  window.ragic_url = 'na5.ragic.com/SIGNIT/signit-operations/7';
+  window.ragic_feature = 'view';
+  window.ragic_embedtype = '';
+  window.exactMatch = true;
+  window.pfv = [];
+  window.fieldSummary = true;
+  window.showIndexOfData = true;
+  window.applyDefaultView = false;
+  window.showSheetName = true;
 
-    let html = '<table class="roster-table"><thead><tr>';
-    rows[0].forEach(cell => {
-      if (cell) html += `<th>${cell}</th>`;
-    });
-    html += '</tr></thead><tbody>';
-
-    rows.slice(1).forEach(row => {
-      if (row.join('').trim() === '') return;
-      
-      // Detect section headers (first cell has text, rest are empty)
-      const isHeader = row[0] && row.slice(1).every(cell => !cell);
-      
-      if (isHeader) {
-        html += `<tr><td colspan="5" class="roster-section-header">${row[0]}</td></tr>`;
-      } else {
-        html += '<tr>';
-        row.forEach(cell => {
-          const displayCell = cell ? cell : '&nbsp;';
-          if (cell.toUpperCase() === 'VACANT') {
-            html += `<td style="color: var(--muted); font-style: italic;">${displayCell}</td>`;
-          } else {
-            html += `<td>${displayCell}</td>`;
-          }
-        });
-        html += '</tr>';
-      }
-    });
-    html += '</tbody></table>';
-
-    if (container.innerHTML !== html) {
-      container.innerHTML = html;
-      container.dataset.loaded = true;
+  const loader = document.createElement('script');
+  loader.type = 'text/javascript';
+  loader.async = true;
+  loader.src = 'https://na5.ragic.com/intl/common/load.js';
+  loader.onerror = () => {
+    ragicRosterLoaded = false;
+    const container = document.getElementById('ragic_webview');
+    if (container) {
+      container.textContent = 'Unable to load the live roster from Ragic. Check your connection and Ragic access permissions.';
     }
-  } catch (err) {
-    if (!container.dataset.loaded) {
-      container.innerHTML = `<div class="roster-loading" style="color: var(--red);">ERROR LOADING ROSTER: ${err.message}<br><br>Make sure the sheet is shared with "Anyone with the link can view".</div>`;
-    }
-  }
+    loader.remove();
+  };
+  document.head.appendChild(loader);
 }
 
 (() => {
